@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      arkaplan 2_0: 4526209575372730367
+      arkaplan 2_1: -9004475325433807730
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

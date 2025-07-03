@@ -2994,8 +2994,8 @@ RectTransform:
   - {fileID: 1177720118}
   - {fileID: 729138222}
   - {fileID: 630675360}
-  - {fileID: 34589682}
   - {fileID: 202476511}
+  - {fileID: 34589682}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -11,4 +11,5 @@ public class ProductConfig : ScriptableObject
     public float multiplierGrowth = 1.1f;
     public float costGrowth = 1.5f;
     public int baseLevel = 1;
+    public Sprite icon;
 }

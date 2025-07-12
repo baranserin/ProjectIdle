@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
   m_Name: "\xC7ay"
   m_EditorClassIdentifier: 
-  productName: 
+  productName: "\xC7ay"
   baseMultiplier: 1
   baseUpgradeCost: 10
   multiplierGrowth: 1.1
   costGrowth: 1.5
   baseLevel: 1
-  icon: {fileID: 0}
+  icon: {fileID: -5081744711958562449, guid: 5d9a6a4529c1e7e4fbfa3aed2c1c9974, type: 3}

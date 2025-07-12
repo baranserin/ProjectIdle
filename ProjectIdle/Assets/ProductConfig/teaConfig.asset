@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d58cce3bf4fbbf40b8dd59c7817e3cc, type: 3}
+  m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
   m_Name: teaConfig
   m_EditorClassIdentifier: 
-  productName: Tea
+  productName: 
   baseMultiplier: 1
   baseUpgradeCost: 10
   multiplierGrowth: 1.1
   costGrowth: 1.5
-  baseLevel: 0
+  baseLevel: 1

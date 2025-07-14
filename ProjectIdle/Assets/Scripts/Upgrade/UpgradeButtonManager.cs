@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
-public class ProductButtonManager : MonoBehaviour
+public class UpgradeButtonManager : MonoBehaviour
 {
     [Header("Config Dosyalarý")]
-    public List<ProductConfig> productConfigs;      // ProductConfig listesi
+    public List<UpgradeConfig> upgradeConfig;
 
     [Header("UI Ayarlarý")]
-    public GameObject buttonPrefab;                 // UI prefab (buton)
-    public Transform buttonContainer;               // HorizontalLayoutGroup içeren obje
-    public int maxVisibleButtons = 5;               // Ayný anda gösterilecek maksimum buton sayýsý
+    public GameObject buttonPrefab;
+    public Transform buttonContainer;
+    public int maxVisibleButtons = 5;
 
     private List<GameObject> allButtons = new List<GameObject>();
     private Queue<GameObject> hiddenButtons = new Queue<GameObject>();
@@ -23,45 +23,48 @@ public class ProductButtonManager : MonoBehaviour
 
     void CreateButtonsFromConfigs()
     {
-        foreach (var config in productConfigs)
+        foreach (var config in upgradeConfig)
         {
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
 
-            // 1. Butonun metnini ayarla
+            // Butonun metnini ayarla
             Text buttonText = newButton.GetComponentInChildren<Text>();
             if (buttonText != null)
-                buttonText.text = config.productName;
+                buttonText.text = config.upgradeName;
 
-            // 2. Sprite (ikon) ayarla - prefab içinde "Icon" adýnda bir Image objesi olmalý
+            // Ýkonu ayarla
             Transform iconTransform = newButton.transform.Find("ItemIcon");
             if (iconTransform != null)
             {
                 Image iconImage = iconTransform.GetComponent<Image>();
-                iconImage.sprite = config.icon;
+                if (iconImage != null)
+                    iconImage.sprite = config.icon;
             }
 
-            // 3. Týklama fonksiyonu baðla
+            // Buton týklama fonksiyonu
             Button btn = newButton.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnProductButtonClicked(newButton, config));
+            btn.onClick.AddListener(() => OnUpgradeButtonClicked(newButton, config));
 
-            // 4. Listeye ekle
             allButtons.Add(newButton);
         }
     }
 
-
-    void OnProductButtonClicked(GameObject clickedButton, ProductConfig config)
+    void OnUpgradeButtonClicked(GameObject clickedButton, UpgradeConfig config)
     {
         clickedButton.SetActive(false);
 
+        // Yeni butonu sýradan çýkar ve göster
         if (hiddenButtons.Count > 0)
         {
             GameObject nextButton = hiddenButtons.Dequeue();
             nextButton.SetActive(true);
         }
+
+        // Burada upgrade efekti uygulanabilir
+        Debug.Log($"Upgrade uygulandý: {config.upgradeName}");
     }
 
-        void UpdateVisibleButtons()
+    void UpdateVisibleButtons()
     {
         int visibleCount = 0;
         hiddenButtons.Clear();
@@ -78,18 +81,6 @@ public class ProductButtonManager : MonoBehaviour
                 button.SetActive(false);
                 hiddenButtons.Enqueue(button);
             }
-        }
-    }
-
-    void OnProductButtonClicked(GameObject clickedButton)
-    {
-        clickedButton.SetActive(false);
-
-        // Sýradaki butonu göster
-        if (hiddenButtons.Count > 0)
-        {
-            GameObject nextButton = hiddenButtons.Dequeue();
-            nextButton.SetActive(true);
         }
     }
 }

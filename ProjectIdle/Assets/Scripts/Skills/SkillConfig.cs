@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewSkill", menuName = "IdleGame/SkillConfig")]
+[CreateAssetMenu(fileName = "NewSkill", menuName = "Skill/SkillConfig")]
 public class SkillConfig : ScriptableObject
 {
     public string skillName;

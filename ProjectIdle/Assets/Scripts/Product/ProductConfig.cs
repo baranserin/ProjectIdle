@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProductConfig", menuName = "Idle/ProductConfig")]
+[CreateAssetMenu(fileName = "ProductConfig", menuName = "Product/ProductConfig")]
 
 
 public class ProductConfig : ScriptableObject

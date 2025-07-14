@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro; 
 
 [Serializable]
 public class ProductData
@@ -11,9 +11,9 @@ public class ProductData
     [NonSerialized] public int level;
 
     [Header("UI")]
-    public Text levelText;
-    public Text incomeText;
-    public Text upgradeCostText;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI incomeText;
+    public TextMeshProUGUI upgradeCostText;
 
 
     public double GetMultiplier()
@@ -65,10 +65,10 @@ public class IncomeManager : MonoBehaviour
    
 
     [Header("UI")]
-    public Text moneyText;
-    public Text incomeText;
-    public Text prestigeLevelText;
-    public Text prestigePointText;
+    public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI incomeText;
+    public TextMeshProUGUI prestigeLevelText;
+    public TextMeshProUGUI prestigePointText;
 
     void Awake()
     {

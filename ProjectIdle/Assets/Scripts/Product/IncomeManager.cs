@@ -38,7 +38,7 @@ public class ProductData
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1") + "/s";
         if (upgradeCostText != null)
-            upgradeCostText.text = "Cost: " + IncomeManager.FormatMoneyStatic(GetUpgradeCost());
+            upgradeCostText.text = IncomeManager.FormatMoneyStatic(GetUpgradeCost());
     }
 
     public void ResetToBase()

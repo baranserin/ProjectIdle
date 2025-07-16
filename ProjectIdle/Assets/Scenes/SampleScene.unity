@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 26692264}
   - component: {fileID: 26692268}
   - component: {fileID: 26692267}
+  - component: {fileID: 26692269}
   m_Layer: 5
   m_Name: Tea Upgrade Button
   m_TagString: Untagged
@@ -308,6 +309,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!114 &26692269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26692262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b19e5cc398d6184ea2961a94e2449e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoPanel: {fileID: 0}
+  infoText: {fileID: 0}
+  productData:
+    config: {fileID: 0}
+    levelText: {fileID: 0}
+    incomeText: {fileID: 0}
+    upgradeCostText: {fileID: 0}
 --- !u!1 &34589681
 GameObject:
   m_ObjectHideFlags: 0
@@ -5105,7 +5125,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
   m_sharedMaterial: {fileID: -1740799228980189678, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
@@ -5233,7 +5253,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
   m_sharedMaterial: {fileID: -1740799228980189678, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
@@ -6095,8 +6115,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 2520.3657, y: -315}
-  m_SizeDelta: {x: 52.511513, y: 0}
+  m_AnchoredPosition: {x: 2400.2966, y: -315}
+  m_SizeDelta: {x: 32.499996, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1479174847
 MonoBehaviour:
@@ -7089,8 +7109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 2518.4092, y: -315}
-  m_SizeDelta: {x: 52.511513, y: 0}
+  m_AnchoredPosition: {x: 2398.34, y: -315}
+  m_SizeDelta: {x: 32.499996, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1800197454
 MonoBehaviour:

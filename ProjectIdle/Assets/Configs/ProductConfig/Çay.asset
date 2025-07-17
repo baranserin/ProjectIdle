@@ -15,7 +15,7 @@ MonoBehaviour:
   productName: "\xC7ay"
   baseMultiplier: 1
   baseUpgradeCost: 10
-  multiplierGrowth: 1.1
+  multiplierGrowth: 1
   costGrowth: 1.5
   baseLevel: 0
   icon: {fileID: -5081744711958562449, guid: 5d9a6a4529c1e7e4fbfa3aed2c1c9974, type: 3}

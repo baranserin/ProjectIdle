@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
-  m_Name: Orange Tea
+  m_Name: Coffee
   m_EditorClassIdentifier: 
-  productName: Orange Tea
+  productName: 
   baseMultiplier: 1
-  baseUpgradeCost: 50
-  multiplierGrowth: 1.1
-  costGrowth: 1.7
+  baseUpgradeCost: 100
+  multiplierGrowth: 1.2
+  costGrowth: 2
   baseLevel: 0
-  icon: {fileID: 6019415064621256269, guid: e5aa877322fe0e945a77797a7ee48c74, type: 3}
+  icon: {fileID: -189660664316715620, guid: ba7347cc7ae089d48a2cf79ed9177a1e, type: 3}

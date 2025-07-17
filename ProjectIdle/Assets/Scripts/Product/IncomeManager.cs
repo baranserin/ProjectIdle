@@ -54,14 +54,18 @@ public class IncomeManager : MonoBehaviour
 
     public static IncomeManager Instance;
 
+    public List<UpgradeConfig> upgradeFactor;
+
     [Header("Ürünler")]
     public List<ProductData> products;
+    public ProductConfig upgradeConfig;
 
     [Header("Genel")]
     public double totalMoney = 10f;
     public double prestigeMultiplier = 1.1;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
+    public float upgradeMultiplier = 1.0f;
    
 
     [Header("UI")]
@@ -85,16 +89,25 @@ public class IncomeManager : MonoBehaviour
     private void Update()
     {
         UpdateUI();
+        UpgradeFactor();
     }
 
     private void OnApplicationQuit()
     {
         SaveData();
     }
+    public void UpgradeFactor() // Upgrade Configden gelen çarpanlar
+    {
+        foreach (var factor in upgradeFactor)
+        {
+            if (factor != null)
+                upgradeMultiplier += factor.upgradeFactor;
+        }
+    }
 
     void GeneratePassiveIncome()
     {
-        double income = GetTotalIncome();
+        double income = GetTotalIncome() * upgradeMultiplier;
         totalMoney += income;
 
         if (incomeText != null)

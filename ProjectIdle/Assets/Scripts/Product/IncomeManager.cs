@@ -82,6 +82,7 @@ public class IncomeManager : MonoBehaviour
     void Start()
     {
         LoadData();
+        InactiveIncome();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
     }
@@ -188,6 +189,8 @@ public class IncomeManager : MonoBehaviour
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
         PlayerPrefs.SetInt("PrestigeLevel", prestigeLevel);
+        string timeNow = DateTime.Now.ToString("O");    
+        PlayerPrefs.SetString("lastExitTime", timeNow);
         PlayerPrefs.Save();
     }
 
@@ -210,5 +213,24 @@ public class IncomeManager : MonoBehaviour
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel",0);
+    }
+
+    public void InactiveIncome()
+    {
+        if (PlayerPrefs.HasKey("lastExitTime"))
+        {
+            string lastTimeStr = PlayerPrefs.GetString("lastExitTime");
+            DateTime lastTime = DateTime.Parse(lastTimeStr);
+            TimeSpan fark = DateTime.Now - lastTime;
+
+            double secondsAway = fark.TotalSeconds;
+
+            double incomePerSecond = GetTotalIncome() * upgradeMultiplier * prestigeMultiplier;
+            double offlineEarning = incomePerSecond * secondsAway;
+
+            totalMoney += offlineEarning;
+
+            Debug.Log($"Sen yokken {secondsAway:F0} saniye geçti. Kazanılan para: {FormatMoneyStatic(offlineEarning)}");
+        }
     }
 }

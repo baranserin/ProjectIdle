@@ -82,6 +82,10 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI prestigeLevelText;
     public TextMeshProUGUI prestigePointText;
 
+    [Header("Sesler")]                   
+    public AudioSource successSound;      
+    public AudioSource failSound;
+
     void Awake()
     {
         Instance = this;
@@ -154,6 +158,13 @@ public class IncomeManager : MonoBehaviour
             p.level++;
             p.UpdateUI();
             UpdateUI();
+            if (successSound != null)
+                successSound.Play();
+        }
+        else
+        {
+            if (failSound != null)  
+                failSound.Play();         
         }
     }
 

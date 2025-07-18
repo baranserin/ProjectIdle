@@ -9,6 +9,8 @@ public class ProductConfig : ScriptableObject
     public float baseMultiplier = 1f;
     public float baseUpgradeCost = 10f;
     public float multiplierGrowth = 1.1f;
+    public float baseIncome = 1f;
+    public float incomeGrowth = 1f;
     public float costGrowth = 1.5f;
     public int baseLevel = 1;
     public Sprite icon;

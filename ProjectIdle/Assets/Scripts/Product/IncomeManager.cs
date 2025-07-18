@@ -28,7 +28,15 @@ public class ProductData
 
     public double GetIncome()
     {
-        return level * GetMultiplier();
+        if (level == 0)
+        {
+            return 0;
+        }
+        if(level == 1)
+        {
+            return config.baseIncome;
+        }
+        return config.baseIncome + (config.incomeGrowth * level);
     }
 
     public void UpdateUI()
@@ -61,7 +69,7 @@ public class IncomeManager : MonoBehaviour
     public ProductConfig upgradeConfig;
 
     [Header("Genel")]
-    public double totalMoney = 10f;
+    public double totalMoney = 1000f;
     public double prestigeMultiplier = 1.1;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
@@ -174,7 +182,7 @@ public class IncomeManager : MonoBehaviour
         prestigeLevel++;
         foreach (var p in products)
             p.ResetToBase();
-        totalMoney = 10f;
+        totalMoney = 1000f;
         prestigePoint = 3 * prestigeLevel;
         UpdateUI();
         SaveData();

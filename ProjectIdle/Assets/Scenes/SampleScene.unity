@@ -4201,7 +4201,7 @@ MonoBehaviour:
     incomeText: {fileID: 0}
     upgradeCostText: {fileID: 2090880254}
   upgradeConfig: {fileID: 0}
-  totalMoney: 10
+  totalMoney: 1000
   prestigeMultiplier: 1.1
   prestigeLevel: 0
   prestigePoint: 0

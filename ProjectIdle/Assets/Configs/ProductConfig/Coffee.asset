@@ -16,6 +16,8 @@ MonoBehaviour:
   baseMultiplier: 1
   baseUpgradeCost: 100
   multiplierGrowth: 1.2
-  costGrowth: 2
+  baseIncome: 5
+  incomeGrowth: 6
+  costGrowth: 1.85
   baseLevel: 0
   icon: {fileID: -189660664316715620, guid: ba7347cc7ae089d48a2cf79ed9177a1e, type: 3}

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a055d757d521add4097b128a5ed189da
+guid: 931403e81a78a51479cdbf2a941b5f4b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9164413860136151976
-    second: d-removebg-preview_0
+      213: -7674163301264378601
+    second: "nas\u0131l_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: d-removebg-preview_0
+      name: "nas\u0131l_0"
       rect:
         serializedVersion: 2
-        x: 30
-        y: 37
-        width: 471
-        height: 390
+        x: 1759
+        y: 0
+        width: 4002
+        height: 8192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8541beb362671d080800000000000000
-      internalID: -9164413860136151976
+      spriteID: 7153ccf0325ef7590800000000000000
+      internalID: -7674163301264378601
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      d-removebg-preview_0: -9164413860136151976
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

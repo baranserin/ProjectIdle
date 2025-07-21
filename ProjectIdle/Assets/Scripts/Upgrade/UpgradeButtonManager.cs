@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeButtonManager : MonoBehaviour
 {
-    [Header("Config Dosyalarý")]
+    [Header("Config DosyalarÄ±")]
     public List<UpgradeConfig> upgradeConfig;
 
-    [Header("UI Ayarlarý")]
+    [Header("UI AyarlarÄ±")]
     public GameObject buttonPrefab;
     public Transform buttonContainer;
     public int maxVisibleButtons = 5;
@@ -25,14 +25,17 @@ public class UpgradeButtonManager : MonoBehaviour
     {
         foreach (var config in upgradeConfig)
         {
+            string key = "Upgrade_Buyed_" + config.upgradeName;
+
+            if (PlayerPrefs.GetInt(key, 0) == 1)
+                continue;
+
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
 
-            // Butonun metnini ayarla
             Text buttonText = newButton.GetComponentInChildren<Text>();
             if (buttonText != null)
                 buttonText.text = config.upgradeName;
 
-            // Ýkonu ayarla
             Transform iconTransform = newButton.transform.Find("ItemIcon");
             if (iconTransform != null)
             {
@@ -41,27 +44,24 @@ public class UpgradeButtonManager : MonoBehaviour
                     iconImage.sprite = config.icon;
             }
 
-            // Buton týklama fonksiyonu
+            UpgradeConfig currentConfig = config;
+            GameObject currentButton = newButton;
+
             Button btn = newButton.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnUpgradeButtonClicked(newButton, config));
+            btn.onClick.AddListener(() =>
+            {
+                IncomeManager.Instance.ApplyUpgrade(currentConfig); // ðŸŽ¯
+                currentButton.SetActive(false);
+
+                if (hiddenButtons.Count > 0)
+                {
+                    GameObject nextButton = hiddenButtons.Dequeue();
+                    nextButton.SetActive(true);
+                }
+            });
 
             allButtons.Add(newButton);
         }
-    }
-
-    void OnUpgradeButtonClicked(GameObject clickedButton, UpgradeConfig config)
-    {
-        clickedButton.SetActive(false);
-
-        // Yeni butonu sýradan çýkar ve göster
-        if (hiddenButtons.Count > 0)
-        {
-            GameObject nextButton = hiddenButtons.Dequeue();
-            nextButton.SetActive(true);
-        }
-
-        // Burada upgrade efekti uygulanabilir
-        Debug.Log($"Upgrade uygulandý: {config.upgradeName}");
     }
 
     void UpdateVisibleButtons()

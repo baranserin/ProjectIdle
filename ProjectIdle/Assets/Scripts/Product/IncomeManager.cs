@@ -28,6 +28,7 @@ public class ProductData
 
     public double GetIncome()
     {
+
         if (level == 0)
         {
             return 0;
@@ -36,7 +37,7 @@ public class ProductData
         {
             return config.baseIncome;
         }
-        return config.baseIncome + (config.incomeGrowth * level);
+        return (config.baseIncome + (config.incomeGrowth * level));
     }
 
     public void UpdateUI()
@@ -73,7 +74,7 @@ public class IncomeManager : MonoBehaviour
     public double prestigeMultiplier = 1.1;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
-    public float upgradeMultiplier = 1.0f;
+    public float upgradeMultiplier = 0f;
    
 
     [Header("UI")]
@@ -102,20 +103,11 @@ public class IncomeManager : MonoBehaviour
     private void Update()
     {
         UpdateUI();
-        UpgradeFactor();
     }
 
     private void OnApplicationQuit()
     {
         SaveData();
-    }
-    public void UpgradeFactor() // Upgrade Configden gelen çarpanlar
-    {
-        foreach (var factor in upgradeFactor)
-        {
-            if (factor != null)
-                upgradeMultiplier += factor.upgradeFactor;
-        }
     }
 
     void GeneratePassiveIncome()
@@ -131,6 +123,11 @@ public class IncomeManager : MonoBehaviour
 
     public void ResetAllData()
     {
+        foreach (var config in upgradeFactor)
+        {
+            PlayerPrefs.DeleteKey("Upgrade_Buyed_" + config.upgradeName);
+        }
+
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
         LoadData();
@@ -215,6 +212,16 @@ public class IncomeManager : MonoBehaviour
 
     public void LoadData()
     {
+        // Diğer ürünleri yükledikten sonra:
+        foreach (var config in upgradeFactor)
+        {
+            string key = "Upgrade_Buyed_" + config.upgradeName;
+            if (PlayerPrefs.GetInt(key, 0) == 1)
+            {
+                upgradeMultiplier += config.upgradeFactor;
+            }
+        }
+
         for (int i = 0; i < products.Count; i++)
         {
             string key = $"Product_{i}_Level";
@@ -251,5 +258,22 @@ public class IncomeManager : MonoBehaviour
 
             Debug.Log($"Sen yokken {secondsAway:F0} saniye geçti. Kazanılan para: {FormatMoneyStatic(offlineEarning)}");
         }
+    }
+
+    public void ApplyUpgrade(UpgradeConfig config)
+    {
+        if (!upgradeFactor.Contains(config))
+        {
+            upgradeFactor.Add(config);
+            upgradeMultiplier += config.upgradeFactor;
+            SaveUpgrade(config);
+        }
+    }
+
+    private void SaveUpgrade(UpgradeConfig config)
+    {
+        string key = "Upgrade_Buyed_" + config.upgradeName;
+        PlayerPrefs.SetInt(key, 1);
+        PlayerPrefs.Save();
     }
 }

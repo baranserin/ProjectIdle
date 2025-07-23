@@ -21,3 +21,11 @@ MonoBehaviour:
   costGrowth: 1.6
   baseLevel: 0
   icon: {fileID: 6019415064621256269, guid: e5aa877322fe0e945a77797a7ee48c74, type: 3}
+  isLockedInitially: 1
+  unlockConditions:
+  - requiredProductName: Tea
+    requiredLevel: 5
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0

@@ -11,6 +11,7 @@ public class ProductData
     [NonSerialized] public int level;
 
     [Header("UI")]
+    public GameObject uiObject;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI incomeText;
     public TextMeshProUGUI upgradeCostText;
@@ -56,6 +57,18 @@ public class ProductData
     }
 }
 
+[System.Serializable]
+public class UnlockCondition
+{
+    public string requiredProductName;
+    public int requiredLevel;
+
+    public bool requireTotalMoney = false;
+    public double requiredMoney;
+
+    public bool requirePrestigeLevel = false;
+    public int requiredPrestigeLevel;
+}
 
 
 public class IncomeManager : MonoBehaviour
@@ -100,6 +113,7 @@ public class IncomeManager : MonoBehaviour
     {
         LoadData();
         InactiveIncome();
+        CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
     }
@@ -145,6 +159,56 @@ public class IncomeManager : MonoBehaviour
         return total;
     }
 
+    public void CheckUnlocks()
+    {
+        foreach (var product in products)
+        {
+            var config = product.config;
+
+            if (!config.isLockedInitially || product.uiObject == null)
+                continue;
+
+            if (product.uiObject.activeSelf)
+                continue;
+
+            bool allConditionsMet = true;
+
+            foreach (var condition in config.unlockConditions)
+            {
+                // Check product level condition
+                if (!string.IsNullOrEmpty(condition.requiredProductName))
+                {
+                    var requiredProduct = products.Find(p => p.config.productName == condition.requiredProductName);
+                    if (requiredProduct == null || requiredProduct.level < condition.requiredLevel)
+                    {
+                        allConditionsMet = false;
+                        break;
+                    }
+                }
+
+                // Check total money
+                if (condition.requireTotalMoney && totalMoney < condition.requiredMoney)
+                {
+                    allConditionsMet = false;
+                    break;
+                }
+
+                // Check prestige level
+                if (condition.requirePrestigeLevel && prestigeLevel < condition.requiredPrestigeLevel)
+                {
+                    allConditionsMet = false;
+                    break;
+                }
+            }
+
+            if (allConditionsMet)
+            {
+                product.uiObject.SetActive(true);
+            }
+        }
+    }
+
+
     public void UpgradeProduct(int index)
     {
         if (index < 0 || index >= products.Count)
@@ -158,14 +222,11 @@ public class IncomeManager : MonoBehaviour
             totalMoney -= cost;
             p.level++;
 
-            if(p.config.productName == "Tea" && p.level == 5)
-            {
-                if (orangeTeaUpgradeButton != null && !orangeTeaUpgradeButton.activeSelf)
-                    orangeTeaUpgradeButton.SetActive(true);
-            }
+            CheckUnlocks();
 
             p.UpdateUI();
             UpdateUI();
+
             if (successSound != null)
                 successSound.Play();
         }

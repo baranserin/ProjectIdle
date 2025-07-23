@@ -5293,18 +5293,22 @@ MonoBehaviour:
   upgradeFactor: []
   products:
   - config: {fileID: 11400000, guid: b32afd0e1307abe4bbd627269ed10f80, type: 2}
+    uiObject: {fileID: 0}
     levelText: {fileID: 0}
     incomeText: {fileID: 0}
     upgradeCostText: {fileID: 1267672406}
   - config: {fileID: 11400000, guid: 8fa609420b4531b40a054d96e4b498f5, type: 2}
+    uiObject: {fileID: 472003185}
     levelText: {fileID: 0}
     incomeText: {fileID: 0}
     upgradeCostText: {fileID: 1285970017}
   - config: {fileID: 11400000, guid: 9ff4cff3c2bd7384489da0638280c7fd, type: 2}
+    uiObject: {fileID: 0}
     levelText: {fileID: 0}
     incomeText: {fileID: 0}
     upgradeCostText: {fileID: 2090880254}
   - config: {fileID: 11400000, guid: 595aec5608d8c4f4fb9535c90d525d35, type: 2}
+    uiObject: {fileID: 0}
     levelText: {fileID: 0}
     incomeText: {fileID: 0}
     upgradeCostText: {fileID: 1801572023}

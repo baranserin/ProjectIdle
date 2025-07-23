@@ -87,6 +87,10 @@ public class IncomeManager : MonoBehaviour
     public AudioSource successSound;      
     public AudioSource failSound;
 
+    [Header("Unlockable UI Elements")]
+    public GameObject orangeTeaUpgradeButton;
+
+
     void Awake()
     {
         Instance = this;
@@ -153,6 +157,13 @@ public class IncomeManager : MonoBehaviour
         {
             totalMoney -= cost;
             p.level++;
+
+            if(p.config.productName == "Tea" && p.level == 5)
+            {
+                if (orangeTeaUpgradeButton != null && !orangeTeaUpgradeButton.activeSelf)
+                    orangeTeaUpgradeButton.SetActive(true);
+            }
+
             p.UpdateUI();
             UpdateUI();
             if (successSound != null)

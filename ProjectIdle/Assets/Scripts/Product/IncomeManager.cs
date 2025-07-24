@@ -16,12 +16,6 @@ public class ProductData
     public TextMeshProUGUI incomeText;
     public TextMeshProUGUI upgradeCostText;
 
-
-    public double GetMultiplier()
-    {
-        return config.baseMultiplier * Math.Pow(config.multiplierGrowth, level );
-    }
-
     public double GetUpgradeCost()
     {
         return config.baseUpgradeCost * Math.Pow(config.costGrowth, level);
@@ -29,22 +23,18 @@ public class ProductData
 
     public double GetIncome()
     {
-
-        if (level == 0)
+        if(level == 0)
         {
             return 0;
         }
-        if(level == 1)
-        {
-            return config.baseIncome;
-        }
-        return (config.baseIncome + (config.incomeGrowth * level));
+
+        return config.baseIncome * Math.Pow(config.incomeGrowth, level);
     }
 
     public void UpdateUI()
     {
         if (levelText != null)
-            levelText.text = $"{config.productName} Lv.{level}";
+            levelText.text = $"{level}";
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1") + "/s";
         if (upgradeCostText != null)

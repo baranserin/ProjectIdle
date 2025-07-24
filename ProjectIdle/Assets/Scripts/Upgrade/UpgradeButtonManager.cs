@@ -10,13 +10,14 @@ public class UpgradeButtonManager : MonoBehaviour
     [Header("UI Ayarları")]
     public GameObject buttonPrefab;
     public Transform buttonContainer;
-    public int maxVisibleButtons = 5;
+    public int maxVisibleButtons = 6;
 
     private List<GameObject> allButtons = new List<GameObject>();
     private Queue<GameObject> hiddenButtons = new Queue<GameObject>();
 
     void Start()
     {
+        Debug.Log("Upgrade Config Sayısı: " + upgradeConfig.Count); // 🕵️‍♂️  
         CreateButtonsFromConfigs();
         UpdateVisibleButtons();
     }
@@ -31,6 +32,8 @@ public class UpgradeButtonManager : MonoBehaviour
                 continue;
 
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
+            Debug.Log($"🛠️ Buton prefab instantiate edildi: {config.upgradeName}");
+
 
             Text buttonText = newButton.GetComponentInChildren<Text>();
             if (buttonText != null)
@@ -62,6 +65,7 @@ public class UpgradeButtonManager : MonoBehaviour
 
             allButtons.Add(newButton);
         }
+        UpdateVisibleButtons();
     }
 
     void UpdateVisibleButtons()

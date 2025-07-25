@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "buton_hafif_g\xF6lgeli_0": -2902706972331554726
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

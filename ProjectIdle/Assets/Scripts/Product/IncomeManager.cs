@@ -149,6 +149,12 @@ public class IncomeManager : MonoBehaviour
         return total;
     }
 
+    public void AddMoney(double amount)
+    {
+        totalMoney += amount;
+        UpdateUI();
+    }
+
     public void CheckUnlocks()
     {
         foreach (var product in products)

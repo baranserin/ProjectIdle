@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: 
   baseUpgradeCost: 10
-  costGrowth: 1.5
+  costGrowth: 1.25
   baseIncome: 1
-  incomeGrowth: 1
+  incomeGrowth: 1.1
   baseLevel: 1
   icon: {fileID: 0}
   isLockedInitially: 0

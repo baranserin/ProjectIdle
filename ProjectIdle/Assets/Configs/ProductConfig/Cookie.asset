@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Cookie
   m_EditorClassIdentifier: 
   productName: Cookie
-  baseMultiplier: 1
   baseUpgradeCost: 10
-  multiplierGrowth: 1.1
-  baseIncome: 1
-  incomeGrowth: 1
-  costGrowth: 1.5
+  costGrowth: 1.25
+  baseIncome: 8
+  incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 5541253663642590004, guid: 0ce4ca6491f710b458ca8a5db0eff339, type: 3}
+  isLockedInitially: 0
+  unlockConditions: []

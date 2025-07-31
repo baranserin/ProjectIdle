@@ -1,48 +1,70 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-public class DecorationIncome: MonoBehaviour
+public class DecorationIncome    : MonoBehaviour
 {
-    [Header("Dekorasyon Ayarları")]
-    public List<DecorationConfig> decorationConfigs;
+    [System.Serializable]
+    public class DecorationEntry
+    {
+        public DecorationConfig config;
+        public Button buyButton;
+        public TextMeshProUGUI priceText;
+    }
 
-    [Header("UI Prefabları")]
-    public GameObject buttonPrefab;
-    public Transform buttonParent;
+    [Header("Dekorasyonlar")]
+    public List<DecorationEntry> decorations;
 
     void Start()
     {
-        CreateButtons();
-        ApplySavedDecorations();
-    }
-
-    void CreateButtons()
-    {
-        foreach (var config in decorationConfigs)
+        foreach (var deco in decorations)
         {
-            if (PlayerPrefs.GetInt("Decoration_Buyed_" + config.itemName, 0) == 1)
-                continue;
+            string key = "Decoration_Buyed_" + deco.config.itemName;
 
-            GameObject button = Instantiate(buttonPrefab, buttonParent);
-            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{config.itemName} (${config.upgradeCost})";
-            button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => BuyDecoration(config, button));
+            if (PlayerPrefs.GetInt(key, 0) == 1)
+            {
+                // Satın alınmışsa butonu gizle ve dekorasyonu sahneye koy
+                if (deco.buyButton != null)
+                    deco.buyButton.gameObject.SetActive(false);
+
+                SpawnDecoration(deco.config);
+                ApplyMultiplier(deco.config);
+            }
+            else
+            {
+                // Butonu aktif bırak, işlevini ata
+                if (deco.priceText != null)
+                    deco.priceText.text = $"{deco.config.itemName} (${deco.config.upgradeCost})";
+
+                if (deco.buyButton != null)
+                {
+                    deco.buyButton.onClick.RemoveAllListeners(); // Çakışma önlemi
+                    deco.buyButton.onClick.AddListener(() => BuyDecoration(deco));
+                }
+            }
         }
     }
 
-    void BuyDecoration(DecorationConfig config, GameObject buttonObj)
+    void BuyDecoration(DecorationEntry entry)
     {
+        var config = entry.config;
+
         if (IncomeManager.Instance.totalMoney >= config.upgradeCost)
         {
             IncomeManager.Instance.totalMoney -= config.upgradeCost;
+            IncomeManager.Instance.UpdateUI();
 
-            ApplyDecoration(config);
             PlayerPrefs.SetInt("Decoration_Buyed_" + config.itemName, 1);
             PlayerPrefs.Save();
 
-            Destroy(buttonObj); // Buton gizlenir
-            IncomeManager.Instance.UpdateUI();
+            SpawnDecoration(config);
+            ApplyMultiplier(config);
 
-            Debug.Log($"🎉 {config.itemName} dekorasyonu satın alındı.");
+            if (entry.buyButton != null)
+                entry.buyButton.gameObject.SetActive(false);
+
+            Debug.Log($"✅ {config.itemName} satın alındı!");
         }
         else
         {
@@ -50,30 +72,20 @@ public class DecorationIncome: MonoBehaviour
         }
     }
 
-    void ApplyDecoration(DecorationConfig config)
+    void ApplyMultiplier(DecorationConfig config)
     {
-        // Gelir etkisi uygula
         foreach (var product in IncomeManager.Instance.products)
         {
             product.incomeMultiplier *= config.itemMultiplier;
             product.UpdateUI();
         }
+    }
 
-        // Dekorasyon sahneye yerleştir
+    void SpawnDecoration(DecorationConfig config)
+    {
         if (config.decorationPrefab != null && config.spawnPoint != null)
         {
             Instantiate(config.decorationPrefab, config.spawnPoint.position, config.spawnPoint.rotation);
-        }
-    }
-
-    void ApplySavedDecorations()
-    {
-        foreach (var config in decorationConfigs)
-        {
-            if (PlayerPrefs.GetInt("Decoration_Buyed_" + config.itemName, 0) == 1)
-            {
-                ApplyDecoration(config); // hem gelir hem görünüm
-            }
         }
     }
 }

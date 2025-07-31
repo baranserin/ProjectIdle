@@ -7,6 +7,6 @@ public class DecorationConfig : ScriptableObject
     public int upgradeCost;
     public float itemMultiplier;
 
-    public GameObject decorationPrefab; // Görsel prefab
+    public GameObjects decorationPrefab; // Görsel prefab
     public Transform spawnPoint;        // Konum (sahnede atanacak)
 }

@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04af670fa16ae4b4b821858ceba810cb, type: 3}
-  m_Name: Kurabiye
+  m_Script: {fileID: 11500000, guid: 750233257033cf944af28c5155f37b67, type: 3}
+  m_Name: Lamb
   m_EditorClassIdentifier: 
-  upgradeName: Kurabiye
-  icon: {fileID: 5541253663642590004, guid: 0ce4ca6491f710b458ca8a5db0eff339, type: 3}
-  upgradeFactor: 2
-  targetProductName: 
+  itemName: 
+  upgradeCost: 0
+  itemMultiplier: 0

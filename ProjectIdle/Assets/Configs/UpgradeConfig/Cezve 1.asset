@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Cezve 1
   icon: {fileID: 3275028520990625885, guid: 418c656b50276bd4f8b71b11f8238d16, type: 3}
+  upgradeFactor: 1
+  targetProductName: 

@@ -309,19 +309,18 @@ public class IncomeManager : MonoBehaviour
             if (PlayerPrefs.GetInt(key, 0) == 1)
             {
                 upgradeFactor.Add(config);
-
                 if (!string.IsNullOrEmpty(config.targetProductName))
                 {
                     var product = products.Find(p => p.config.productName == config.targetProductName);
                     if (product != null)
-                    {
                         product.incomeMultiplier *= config.upgradeFactor;
-                    }
                 }
                 else
                 {
-                    upgradeMultiplier += config.upgradeFactor;
+                    foreach (var p in products)
+                        p.incomeMultiplier *= config.upgradeFactor;
                 }
+
             }
         }
     }
@@ -355,25 +354,29 @@ public class IncomeManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(config.targetProductName))
             {
+                // 🔹 Sadece belirli bir ürüne uygula
                 var product = products.Find(p => p.config.productName == config.targetProductName);
                 if (product != null)
                 {
-                    product.incomeMultiplier *= config.upgradeFactor;
-                    Debug.Log($"✅ {product.config.productName} için çarpan uygulandı: {product.incomeMultiplier}");
-                    product.UpdateUI(); // 🔁 UI güncellenir
+                    product.incomeMultiplier += config.upgradeFactor;
+                    Debug.Log($"🔹 Upgrade uygulandı: {product.config.productName} x{config.upgradeFactor}");
+                    product.UpdateUI();
                 }
             }
             else
             {
-                // Eğer hedef belirtilmemişse tüm ürünlere genel çarpan
-                upgradeMultiplier += config.upgradeFactor;
+                // 🔸 Tüm ürünlere uygula
+                foreach (var product in products)
+                {
+                    product.incomeMultiplier *= config.upgradeFactor;
+                    Debug.Log($"🔸 Global upgrade: {product.config.productName} x{config.upgradeFactor}");
+                    product.UpdateUI();
+                }
             }
 
-            UpdateUI(); // Genel UI güncelle
+            UpdateUI(); // genel UI güncelle
         }
     }
-
-
 
     private void SaveUpgrade(UpgradeConfig config)
     {

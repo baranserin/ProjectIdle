@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Silver Coffee
   icon: {fileID: 4377741521725485407, guid: 4645195471a794340ac8a84deea1f615, type: 3}
+  upgradeFactor: 1
+  targetProductName: 

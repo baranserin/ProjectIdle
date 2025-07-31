@@ -15,3 +15,5 @@ MonoBehaviour:
   itemName: 
   upgradeCost: 0
   itemMultiplier: 0
+  decorationPrefab: {fileID: 8799233290705817298, guid: 058002f8a92b5e0468e0d9e4b9635f48, type: 3}
+  spawnPoint: {fileID: 2901084024691858228, guid: 21ccd96f18069f34bb37279a0d8722ac, type: 3}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 750233257033cf944af28c5155f37b67, type: 3}
+  m_Name: Lamb
+  m_EditorClassIdentifier: 
+  itemName: 
+  upgradeCost: 0
+  itemMultiplier: 0
+  decorationPrefab: {fileID: 8799233290705817298, guid: 058002f8a92b5e0468e0d9e4b9635f48, type: 3}
+  spawnPoint: {fileID: 2901084024691858228, guid: 21ccd96f18069f34bb37279a0d8722ac, type: 3}

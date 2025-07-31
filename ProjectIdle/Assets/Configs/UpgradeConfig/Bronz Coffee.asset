@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Bronz Coffee
   icon: {fileID: 7675826601332790545, guid: 70057bd1e888fe744a0496f23c349859, type: 3}
-  upgradeFactor: 0
+  upgradeFactor: 3
+  targetProductName: Tea

@@ -8,4 +8,6 @@ public class UpgradeConfig : ScriptableObject
     public string upgradeName;
     public Sprite icon;
     public float upgradeFactor;
+
+    public string targetProductName; // Etkilenecek ürün ismi
 }

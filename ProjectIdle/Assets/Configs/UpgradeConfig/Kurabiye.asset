@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04af670fa16ae4b4b821858ceba810cb, type: 3}
-  m_Name: Cezve 1
+  m_Name: Kurabiye
   m_EditorClassIdentifier: 
-  upgradeName: Cezve 1
-  icon: {fileID: 3275028520990625885, guid: 418c656b50276bd4f8b71b11f8238d16, type: 3}
-  upgradeFactor: 1
+  upgradeName: Kurabiye
+  icon: {fileID: 5541253663642590004, guid: 0ce4ca6491f710b458ca8a5db0eff339, type: 3}
+  upgradeFactor: 2
   targetProductName: 

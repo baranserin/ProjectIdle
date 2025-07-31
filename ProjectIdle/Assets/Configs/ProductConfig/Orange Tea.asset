@@ -13,12 +13,10 @@ MonoBehaviour:
   m_Name: Orange Tea
   m_EditorClassIdentifier: 
   productName: Orange Tea
-  baseMultiplier: 1
-  baseUpgradeCost: 50
-  multiplierGrowth: 1.1
-  baseIncome: 2
-  incomeGrowth: 2
-  costGrowth: 1.6
+  baseUpgradeCost: 120
+  costGrowth: 1.25
+  baseIncome: 4
+  incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 6019415064621256269, guid: e5aa877322fe0e945a77797a7ee48c74, type: 3}
   isLockedInitially: 1

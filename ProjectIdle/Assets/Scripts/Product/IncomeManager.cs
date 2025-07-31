@@ -9,18 +9,13 @@ public class ProductData
     public ProductConfig config;
 
     [NonSerialized] public int level;
+    [NonSerialized] public float incomeMultiplier = 1f;
 
     [Header("UI")]
     public GameObject uiObject;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI incomeText;
     public TextMeshProUGUI upgradeCostText;
-
-
-    public double GetMultiplier()
-    {
-        return config.baseMultiplier * Math.Pow(config.multiplierGrowth, level );
-    }
 
     public double GetUpgradeCost()
     {
@@ -29,22 +24,18 @@ public class ProductData
 
     public double GetIncome()
     {
-
-        if (level == 0)
+        if(level == 0)
         {
             return 0;
         }
-        if(level == 1)
-        {
-            return config.baseIncome;
-        }
-        return (config.baseIncome + (config.incomeGrowth * level));
+
+        return config.baseIncome * Math.Pow(config.incomeGrowth, level) * incomeMultiplier;
     }
 
     public void UpdateUI()
     {
         if (levelText != null)
-            levelText.text = $"{config.productName} Lv.{level}";
+            levelText.text = $"{level}";
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1") + "/s";
         if (upgradeCostText != null)
@@ -80,7 +71,7 @@ public class IncomeManager : MonoBehaviour
 
     [Header("Ürünler")]
     public List<ProductData> products;
-    public ProductConfig upgradeConfig;
+    public List<UpgradeConfig> upgradeConfig;
 
     [Header("Genel")]
     public double totalMoney = 1000f;
@@ -130,7 +121,7 @@ public class IncomeManager : MonoBehaviour
 
     void GeneratePassiveIncome()
     {
-        double income = GetTotalIncome() * upgradeMultiplier;
+        double income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı
         totalMoney += income;
 
         if (incomeText != null)
@@ -139,9 +130,10 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
+
     public void ResetAllData()
     {
-        foreach (var config in upgradeFactor)
+        foreach (var config in upgradeConfig)
         {
             PlayerPrefs.DeleteKey("Upgrade_Buyed_" + config.upgradeName);
         }
@@ -150,6 +142,7 @@ public class IncomeManager : MonoBehaviour
         PlayerPrefs.Save();
         LoadData();
     }
+
     double GetTotalIncome()
     {
         double total = 0;
@@ -157,6 +150,12 @@ public class IncomeManager : MonoBehaviour
             total += p.GetIncome();
 
         return total;
+    }
+
+    public void AddMoney(double amount)
+    {
+        totalMoney += amount;
+        UpdateUI();
     }
 
     public void CheckUnlocks()
@@ -284,16 +283,6 @@ public class IncomeManager : MonoBehaviour
 
     public void LoadData()
     {
-        // Diğer ürünleri yükledikten sonra:
-        foreach (var config in upgradeFactor)
-        {
-            string key = "Upgrade_Buyed_" + config.upgradeName;
-            if (PlayerPrefs.GetInt(key, 0) == 1)
-            {
-                upgradeMultiplier += config.upgradeFactor;
-            }
-        }
-
         for (int i = 0; i < products.Count; i++)
         {
             string key = $"Product_{i}_Level";
@@ -310,8 +299,32 @@ public class IncomeManager : MonoBehaviour
 
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
-        prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel",0);
+        prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
+
+        // Uygulanan upgrade'leri tekrar yükle
+        foreach (var config in upgradeFactor)
+        {
+            string key = "Upgrade_Buyed_" + config.upgradeName;
+
+            if (PlayerPrefs.GetInt(key, 0) == 1)
+            {
+                upgradeFactor.Add(config);
+                if (!string.IsNullOrEmpty(config.targetProductName))
+                {
+                    var product = products.Find(p => p.config.productName == config.targetProductName);
+                    if (product != null)
+                        product.incomeMultiplier *= config.upgradeFactor;
+                }
+                else
+                {
+                    foreach (var p in products)
+                        p.incomeMultiplier *= config.upgradeFactor;
+                }
+
+            }
+        }
     }
+
 
     public void InactiveIncome()
     {
@@ -337,8 +350,31 @@ public class IncomeManager : MonoBehaviour
         if (!upgradeFactor.Contains(config))
         {
             upgradeFactor.Add(config);
-            upgradeMultiplier += config.upgradeFactor;
             SaveUpgrade(config);
+
+            if (!string.IsNullOrEmpty(config.targetProductName))
+            {
+                // 🔹 Sadece belirli bir ürüne uygula
+                var product = products.Find(p => p.config.productName == config.targetProductName);
+                if (product != null)
+                {
+                    product.incomeMultiplier += config.upgradeFactor;
+                    Debug.Log($"🔹 Upgrade uygulandı: {product.config.productName} x{config.upgradeFactor}");
+                    product.UpdateUI();
+                }
+            }
+            else
+            {
+                // 🔸 Tüm ürünlere uygula
+                foreach (var product in products)
+                {
+                    product.incomeMultiplier *= config.upgradeFactor;
+                    Debug.Log($"🔸 Global upgrade: {product.config.productName} x{config.upgradeFactor}");
+                    product.UpdateUI();
+                }
+            }
+
+            UpdateUI(); // genel UI güncelle
         }
     }
 

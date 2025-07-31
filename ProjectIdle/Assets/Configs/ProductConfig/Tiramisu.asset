@@ -9,10 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04af670fa16ae4b4b821858ceba810cb, type: 3}
-  m_Name: Cezve 1
+  m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
+  m_Name: Tiramisu
   m_EditorClassIdentifier: 
-  upgradeName: Cezve 1
-  icon: {fileID: 3275028520990625885, guid: 418c656b50276bd4f8b71b11f8238d16, type: 3}
-  upgradeFactor: 1
-  targetProductName: 
+  productName: 
+  baseUpgradeCost: 10
+  costGrowth: 1.25
+  baseIncome: 1
+  incomeGrowth: 1.1
+  baseLevel: 1
+  icon: {fileID: 0}
+  isLockedInitially: 0
+  unlockConditions: []

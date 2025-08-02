@@ -378,6 +378,34 @@ public class IncomeManager : MonoBehaviour
         }
     }
 
+    public void AddDecorationMultiplier(DecorationConfig config, GameObject itemObjectInScene)
+    {
+        string key = "Decoration_Buyed_" + config.itemName;
+
+        if (PlayerPrefs.GetInt(key, 0) == 1)
+        {
+            Debug.Log($"Zaten alınmış dekorasyon: {config.itemName}");
+            return;
+        }
+
+        foreach (var product in products)
+        {
+            product.incomeMultiplier *= config.itemMultiplier;
+            product.UpdateUI();
+        }
+
+        if (itemObjectInScene != null)
+            itemObjectInScene.SetActive(true);
+
+        PlayerPrefs.SetInt(key, 1);
+        PlayerPrefs.Save();
+
+        Debug.Log($"✔ Dekorasyon aktif edildi: {config.itemName} (x{config.itemMultiplier})");
+
+        UpdateUI();
+    }
+
+
     private void SaveUpgrade(UpgradeConfig config)
     {
         string key = "Upgrade_Buyed_" + config.upgradeName;

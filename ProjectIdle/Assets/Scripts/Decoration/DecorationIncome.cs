@@ -7,20 +7,27 @@ public class DecorationIncome : MonoBehaviour
     [System.Serializable]
     public class DecorationEntry
     {
-        public DecorationConfig config;
-        public Button buyButton;
+        public string itemName;
+        public GameObject targetObject;   // Sahnedeki dekorasyon objesi (başta gizli)
+        public Button buyButton;          // O objeye ait buton
+        public float itemMultiplier = 1f; // Gelir çarpanı
         private bool isPurchased = false;
 
-        public void Initialize(System.Action<DecorationConfig> onBuy)
+        public void Initialize(System.Action<DecorationEntry> onBuy)
         {
-            if (buyButton != null && config != null)
+            if (targetObject != null)
+            {
+                targetObject.SetActive(false); // Başta görünmesin
+            }
+
+            if (buyButton != null)
             {
                 buyButton.onClick.AddListener(() =>
                 {
                     if (!isPurchased)
                     {
                         isPurchased = true;
-                        onBuy?.Invoke(config);
+                        onBuy?.Invoke(this);
                         buyButton.interactable = false;
                     }
                 });
@@ -28,11 +35,11 @@ public class DecorationIncome : MonoBehaviour
         }
     }
 
-    [Header("Tüm Dekorasyonlar")]
+    [Header("Dekorasyonlar")]
     public List<DecorationEntry> decorations;
 
-    [Header("Gelir Yöneticisi")]
-    public IncomeManager incomeManager; // Varsa, yoksa çıkarılabilir
+    [Header("Gelir Yöneticisi (isteğe bağlı)")]
+    public IncomeManager incomeManager; // İstersen bağlarsın, bağlamazsan null olabilir
 
     private void Start()
     {
@@ -42,20 +49,18 @@ public class DecorationIncome : MonoBehaviour
         }
     }
 
-    private void ApplyDecoration(DecorationConfig config)
+    private void ApplyDecoration(DecorationEntry entry)
     {
-        // 1. Görsel olarak dekorasyonu sahneye (UI) yerleştir
-        if (config.decorationPrefab != null && config.spawnPoint != null)
+        // 1. Sahnedeki objeyi aktif et
+        if (entry.targetObject != null)
         {
-            GameObject instance = Instantiate(config.decorationPrefab, config.spawnPoint.position, Quaternion.identity, config.spawnPoint);
-            instance.transform.localScale = Vector3.one; // UI ölçek düzeltmesi
+            entry.targetObject.SetActive(true);
         }
 
-        // 2. Geliri artır (IncomeManager varsa)
-        /*if (incomeManager != null)
+        // 2. Gelir çarpanını uygula (isteğe bağlı)
+        if (incomeManager != null)
         {
-            incomeManager.AddDecorationMultiplier(config.itemMultiplier);
+            incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
         }
-        */
     }
 }

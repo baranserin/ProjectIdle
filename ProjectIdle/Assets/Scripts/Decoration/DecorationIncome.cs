@@ -4,18 +4,21 @@ using System.Collections.Generic;
 
 public class DecorationIncome : MonoBehaviour
 {
+    
     [System.Serializable]
     public class DecorationEntry
     {
         public string itemName;
         public GameObject targetObject;   // Sahnedeki dekorasyon objesi (başta gizli)
         public Button buyButton;          // O objeye ait buton
+        public int itemCost;
         public float itemMultiplier = 1f; // Gelir çarpanı
 
         [HideInInspector] public bool isPurchased = false;
 
         public void Initialize(System.Action<DecorationEntry> onBuy)
         {
+           
             if (targetObject != null)
             {
                 targetObject.SetActive(false); // Başta gizli
@@ -52,20 +55,20 @@ public class DecorationIncome : MonoBehaviour
 
     private void ApplyDecoration(DecorationEntry entry)
     {
-        // 1. Obje sahnede görünür hale gelsin
-        if (entry.targetObject != null)
+        if (incomeManager.totalMoney >= entry.itemCost)
         {
-            entry.targetObject.SetActive(true);
-        }
+            incomeManager.totalMoney -= entry.itemCost;
 
-        // 2. Gelir çarpanını uygula
-        if (incomeManager != null)
-        {
+            if (entry.targetObject != null)
+            {
+                entry.targetObject.SetActive(true);
+            }
+
             incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
-        }
 
-        // (Opsiyonel) PlayerPrefs ile kalıcı olarak satın alındı bilgisi tutulabilir
-        PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
-        PlayerPrefs.Save();
+            PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
+            PlayerPrefs.Save();
+        }
     }
+
 }

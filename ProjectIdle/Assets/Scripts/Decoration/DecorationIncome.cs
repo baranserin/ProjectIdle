@@ -45,8 +45,7 @@ public class DecorationIncome : MonoBehaviour
     [Header("Dekorasyonlar")]
     public List<DecorationEntry> decorations;
 
-    [Header("Toplam Para")]
-    public float totalMoney = 1000f;
+    public IncomeManager incomeManager;
 
     private void Start()
     {
@@ -58,10 +57,10 @@ public class DecorationIncome : MonoBehaviour
 
     private void ApplyDecoration(DecorationEntry entry)
     {
-        if (entry.itemCost > totalMoney)
+        if (entry.itemCost > incomeManager.totalMoney)
             return;
 
-        totalMoney -= entry.itemCost;
+        incomeManager.totalMoney -= entry.itemCost;
 
         // Tüm dekorasyon objelerini kapat (öncekileri)
         foreach (var deco in decorations)

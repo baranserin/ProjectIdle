@@ -122,6 +122,12 @@ public class IncomeManager : MonoBehaviour
     void GeneratePassiveIncome()
     {
         double income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı
+
+        if (BoostIncome.Instance != null && BoostIncome.Instance.IsBoostActive())
+        {
+            income *= 2;
+        }
+
         totalMoney += income;
 
         if (incomeText != null)

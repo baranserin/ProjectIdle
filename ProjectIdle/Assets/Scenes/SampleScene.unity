@@ -5501,8 +5501,17 @@ MonoBehaviour:
     buyButton: {fileID: 905565620}
     itemCost: 10
     itemMultiplier: 1
+    affectedProducts: []
     isPurchased: 0
-  incomeManager: {fileID: 873625049}
+  - itemName: Clock
+    targetObject: {fileID: 1403645816}
+    buyButton: {fileID: 905565620}
+    itemCost: 10
+    itemMultiplier: 1
+    affectedProducts:
+    - {fileID: 0}
+    isPurchased: 0
+  totalMoney: 1000
 --- !u!4 &845300514
 Transform:
   m_ObjectHideFlags: 0

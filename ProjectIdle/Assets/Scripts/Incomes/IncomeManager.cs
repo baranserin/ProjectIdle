@@ -67,6 +67,7 @@ public class IncomeManager : MonoBehaviour
 {
     public UpgradeButtonManager upgradeButtonManager;
     public static IncomeManager Instance;
+    public DecorationIncome decorationIncome;
 
     public List<UpgradeConfig> upgradeFactor;
 
@@ -136,8 +137,6 @@ public class IncomeManager : MonoBehaviour
 
         UpdateUI();
     }
-
-    [Obsolete]
     public void ResetAllData()
     {
         PlayerPrefs.DeleteAll();
@@ -158,7 +157,7 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
 
         // 💠 Dekorasyonları sıfırla
-        FindObjectOfType<DecorationIncome>()?.ResetDecorations();
+        decorationIncome.ResetDecorations();
 
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }

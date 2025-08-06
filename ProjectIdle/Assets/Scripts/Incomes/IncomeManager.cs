@@ -137,6 +137,7 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
+    [Obsolete]
     public void ResetAllData()
     {
         PlayerPrefs.DeleteAll();
@@ -156,22 +157,11 @@ public class IncomeManager : MonoBehaviour
 
         UpdateUI();
 
-        // Butonları yeniden oluşturmak için RebuildFromScratch çağrısı
-        if (upgradeButtonManager != null)
-        {
-            StartCoroutine(WaitAndRebuildButtons());
-        }
+        // 💠 Dekorasyonları sıfırla
+        FindObjectOfType<DecorationIncome>()?.ResetDecorations();
 
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
-
-    private IEnumerator WaitAndRebuildButtons()
-    {
-        yield return null; // 1 frame bekle
-        upgradeButtonManager.RebuildFromScratch();
-    }
-
-
 
 
     double GetTotalIncome()
@@ -332,11 +322,6 @@ public class IncomeManager : MonoBehaviour
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
-
-        // 🔁 Upgrade kayıtlarını temizle (önce)
-        upgradeFactor.Clear();
-        upgradeButtonManager.CreateButtonsFromConfigs();
-
     }
 
     public void InactiveIncome()
@@ -395,7 +380,7 @@ public class IncomeManager : MonoBehaviour
     {
         foreach (var product in products)
         {
-            product.incomeMultiplier *= multiplier;
+            product.incomeMultiplier += multiplier;
             product.UpdateUI();
         }
 

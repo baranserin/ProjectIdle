@@ -12,10 +12,8 @@ public class DecorationIncome : MonoBehaviour
         public Button buyButton;        // Satın alma butonu
         public int itemCost;
         public float itemMultiplier = 1f;
-
-        public List<GameObject> affectedProducts; // Etkilenecek ürün objeleri
-
-        public DecorationEntry prerequisite; // Ön koşul dekorasyon (bu alınmadan açılamaz)
+        public int groupId;             // Aynı yere konulabilecek objeler için grup ID
+        public DecorationEntry prerequisite; // Ön koşul dekorasyon
 
         [HideInInspector] public bool isPurchased = false;
 
@@ -26,7 +24,7 @@ public class DecorationIncome : MonoBehaviour
 
             if (buyButton != null)
             {
-                // Ön koşul varsa ve alınmamışsa buton başta pasif olsun
+                // Ön koşul varsa, sadece o alındıysa açılır
                 buyButton.interactable = prerequisite == null || prerequisite.isPurchased;
 
                 buyButton.onClick.AddListener(() =>
@@ -35,10 +33,15 @@ public class DecorationIncome : MonoBehaviour
                     {
                         isPurchased = true;
                         onBuy?.Invoke(this);
-                        buyButton.interactable = false;
+                        buyButton.gameObject.SetActive(false); // Butonu gizle
                     }
                 });
             }
+        }
+
+        public override string ToString()
+        {
+            return itemName;
         }
     }
 
@@ -55,46 +58,70 @@ public class DecorationIncome : MonoBehaviour
         }
     }
 
-    private void ApplyDecoration(DecorationEntry entry)
+    private void ApplyDecoration(DecorationEntry selected)
     {
-        if (entry.itemCost > incomeManager.totalMoney)
+        if (selected.itemCost > incomeManager.totalMoney)
             return;
 
-        incomeManager.totalMoney -= entry.itemCost;
+        incomeManager.totalMoney -= selected.itemCost;
 
-        // Tüm dekorasyon objelerini kapat (öncekileri)
+        // Aynı gruptaki diğer dekorasyonları kapat
         foreach (var deco in decorations)
         {
-            if (deco != entry && deco.targetObject != null)
-                deco.targetObject.SetActive(false);
-        }
-
-        // Bu dekorasyon objesini aç
-        if (entry.targetObject != null)
-            entry.targetObject.SetActive(true);
-
-        // Etkilediği objelere çarpanı uygula
-        foreach (var obj in entry.affectedProducts)
-        {
-            var product = obj.GetComponent<ProductData>();
-            if (product != null)
+            if (deco != selected && deco.groupId == selected.groupId)
             {
-                product.incomeMultiplier *= entry.itemMultiplier;
-                product.UpdateUI(); // Eğer varsa UI güncelle
+                if (deco.targetObject != null)
+                    deco.targetObject.SetActive(false);
             }
         }
 
-        // Bu dekorasyonu şart koşan diğerlerinin butonunu aç
+        // Seçilen dekorasyon objesini aç
+        if (selected.targetObject != null)
+            selected.targetObject.SetActive(true);
+
+        // Gelir çarpanını sadece totalMoney’e uygula
+        incomeManager.AddDecorationMultiplier(selected.itemMultiplier);
+
+        // Sonraki dekorasyonların kilidini aç
         foreach (var deco in decorations)
         {
-            if (deco.prerequisite == entry && deco.buyButton != null)
+            if (deco.prerequisite == selected && deco.buyButton != null)
             {
                 deco.buyButton.interactable = true;
             }
         }
 
-        // Kaydet (isteğe bağlı)
-        PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
+        // Kaydetme işlemi (isteğe bağlı)
+        PlayerPrefs.SetInt("Decoration_" + selected.itemName, 1);
         PlayerPrefs.Save();
     }
+
+    public void ResetDecorations()
+    {
+        foreach (var deco in decorations)
+        {
+            // PlayerPrefs temizle
+            PlayerPrefs.DeleteKey("Decoration_" + deco.itemName);
+
+            // Satın alma durumu sıfırla
+            deco.isPurchased = false;
+
+            // Objeyi kapat
+            if (deco.targetObject != null)
+                deco.targetObject.SetActive(false);
+
+            // Butonu aktif et
+            if (deco.buyButton != null)
+            {
+                // Ön koşula göre etkileştir
+                bool canBeActive = deco.prerequisite == null || deco.prerequisite.isPurchased;
+                deco.buyButton.gameObject.SetActive(true);
+                deco.buyButton.interactable = canBeActive;
+            }
+        }
+
+        PlayerPrefs.Save();
+    }
+
+
 }

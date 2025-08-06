@@ -1106,9 +1106,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 873625049}
-        m_TargetAssemblyTypeName: IncomeManager, Assembly-CSharp
-        m_MethodName: ResetAllData
+      - m_Target: {fileID: 1790160066}
+        m_TargetAssemblyTypeName: UpgradeButtonManager, Assembly-CSharp
+        m_MethodName: RefreshButtons
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3414,9 +3414,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12ec32e4bd2a43f4082c883ca39cc88f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomeManager: {fileID: 873625049}
   amount: 1000
   boostDuration: 15
+  cooldownDuration: 60
 --- !u!4 &498711044
 Transform:
   m_ObjectHideFlags: 0
@@ -4307,6 +4307,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599477558}
   m_CullTransparentMesh: 1
+--- !u!1 &603248887
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 603248889}
+  - component: {fileID: 603248888}
+  m_Layer: 0
+  m_Name: MenuGroupController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &603248888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603248887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e551859187fca447b86804ea4ce0d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  categoryMenus: []
+--- !u!4 &603248889
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603248887}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 443.6673, y: 1033.0648, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -5694,7 +5739,7 @@ MonoBehaviour:
     affectedProducts:
     - {fileID: 0}
     isPurchased: 0
-  incomeManager: {fileID: 0}
+  incomeManager: {fileID: 873625049}
 --- !u!4 &845300514
 Transform:
   m_ObjectHideFlags: 0
@@ -5814,6 +5859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0c526e88209ce419d4a0daaf1ba60d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeButtonManager: {fileID: 1790160066}
   upgradeFactor: []
   products:
   - config: {fileID: 11400000, guid: b32afd0e1307abe4bbd627269ed10f80, type: 2}
@@ -5838,7 +5884,7 @@ MonoBehaviour:
     upgradeCostText: {fileID: 1801572023}
   upgradeConfig:
   - {fileID: 11400000, guid: d7883c180936a7b47bfe747243510861, type: 2}
-  totalMoney: 1000
+  totalMoney: 10
   prestigeMultiplier: 1.1
   prestigeLevel: 0
   prestigePoint: 0
@@ -7005,6 +7051,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1104811556}
   m_CullTransparentMesh: 1
+--- !u!1 &1124809549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1124809551}
+  - component: {fileID: 1124809550}
+  m_Layer: 0
+  m_Name: MenuToggleButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1124809550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124809549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6265c16966b00104b957a329fcad84a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuGroupToToggle: {fileID: 0}
+  groupController: {fileID: 603248888}
+--- !u!4 &1124809551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124809549}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 443.6673, y: 1033.0648, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1170086082
 GameObject:
   m_ObjectHideFlags: 0
@@ -9708,6 +9800,59 @@ Transform:
   - {fileID: 1084479306}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1790160065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1790160067}
+  - component: {fileID: 1790160066}
+  m_Layer: 0
+  m_Name: UpgradeButtonManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1790160066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790160065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59003fb509fa8fb4085069d0d9ee0582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeConfig:
+  - {fileID: 11400000, guid: d7883c180936a7b47bfe747243510861, type: 2}
+  - {fileID: 11400000, guid: 240b594017e8ec840b1e943c060c7793, type: 2}
+  - {fileID: 11400000, guid: 718f1d47b87bdb64a85714f0160c9b69, type: 2}
+  - {fileID: 11400000, guid: c592f14b98ba9ff449bc45c4b6dcc980, type: 2}
+  - {fileID: 11400000, guid: b5fc0a736a9c22c4eaadf944b42f6b61, type: 2}
+  buttonPrefab: {fileID: 3149628157598156822, guid: 072ea35477005ed4d9fbd59e78c07fb6, type: 3}
+  buttonContainer: {fileID: 422267552}
+  maxVisibleButtons: 6
+--- !u!4 &1790160067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790160065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 443.6673, y: 1033.0648, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1793410425
 GameObject:
   m_ObjectHideFlags: 0
@@ -11616,3 +11761,6 @@ SceneRoots:
   - {fileID: 312849565}
   - {fileID: 845300514}
   - {fileID: 498711044}
+  - {fileID: 1790160067}
+  - {fileID: 1124809551}
+  - {fileID: 603248889}

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Klima
   icon: {fileID: -632562308268640181, guid: af2fb105e1d044448be0911a2cb77ade, type: 3}
-  upgradeFactor: 1
+  upgradeFactor: 0
   targetProductName: 

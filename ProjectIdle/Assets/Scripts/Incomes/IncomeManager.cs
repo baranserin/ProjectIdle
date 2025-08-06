@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Globalization;
 using TMPro; 
+using UnityEngine;
 
 [Serializable]
 public class ProductData
 {
     public ProductConfig config;
-
     [NonSerialized] public int level;
     [NonSerialized] public float incomeMultiplier = 1f;
 
@@ -29,7 +30,7 @@ public class ProductData
             return 0;
         }
 
-        return config.baseIncome * Math.Pow(config.incomeGrowth, level) * incomeMultiplier;
+        return config.baseIncome * Math.Pow(config.incomeGrowth, level) + incomeMultiplier;
     }
 
     public void UpdateUI()
@@ -37,7 +38,7 @@ public class ProductData
         if (levelText != null)
             levelText.text = $"{level}";
         if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1") + "/s";
+            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
         if (upgradeCostText != null)
             upgradeCostText.text = IncomeManager.FormatMoneyStatic(GetUpgradeCost());
     }
@@ -64,7 +65,7 @@ public class UnlockCondition
 
 public class IncomeManager : MonoBehaviour
 {
-
+    public UpgradeButtonManager upgradeButtonManager;
     public static IncomeManager Instance;
 
     public List<UpgradeConfig> upgradeFactor;
@@ -74,7 +75,7 @@ public class IncomeManager : MonoBehaviour
     public List<UpgradeConfig> upgradeConfig;
 
     [Header("Genel")]
-    public double totalMoney = 1000f;
+    public double totalMoney = 10f;
     public double prestigeMultiplier = 1.1;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
@@ -136,18 +137,42 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
-
     public void ResetAllData()
     {
-        foreach (var config in upgradeConfig)
-        {
-            PlayerPrefs.DeleteKey("Upgrade_Buyed_" + config.upgradeName);
-        }
-
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-        LoadData();
+
+        upgradeFactor.Clear();
+
+        foreach (var p in products)
+        {
+            p.level = p.config.baseLevel;
+            p.incomeMultiplier = 1f;
+        }
+
+        totalMoney = 10f;
+        prestigeLevel = 0;
+        prestigePoint = 0;
+
+        UpdateUI();
+
+        // Butonları yeniden oluşturmak için RebuildFromScratch çağrısı
+        if (upgradeButtonManager != null)
+        {
+            StartCoroutine(WaitAndRebuildButtons());
+        }
+
+        Debug.Log("🔁 ResetAllData tamamlandı.");
     }
+
+    private IEnumerator WaitAndRebuildButtons()
+    {
+        yield return null; // 1 frame bekle
+        upgradeButtonManager.RebuildFromScratch();
+    }
+
+
+
 
     double GetTotalIncome()
     {
@@ -289,6 +314,7 @@ public class IncomeManager : MonoBehaviour
 
     public void LoadData()
     {
+        // Ürün seviyelerini yükle
         for (int i = 0; i < products.Count; i++)
         {
             string key = $"Product_{i}_Level";
@@ -307,30 +333,11 @@ public class IncomeManager : MonoBehaviour
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
 
-        // Uygulanan upgrade'leri tekrar yükle
-        foreach (var config in upgradeFactor)
-        {
-            string key = "Upgrade_Buyed_" + config.upgradeName;
+        // 🔁 Upgrade kayıtlarını temizle (önce)
+        upgradeFactor.Clear();
+        upgradeButtonManager.CreateButtonsFromConfigs();
 
-            if (PlayerPrefs.GetInt(key, 0) == 1)
-            {
-                upgradeFactor.Add(config);
-                if (!string.IsNullOrEmpty(config.targetProductName))
-                {
-                    var product = products.Find(p => p.config.productName == config.targetProductName);
-                    if (product != null)
-                        product.incomeMultiplier *= config.upgradeFactor;
-                }
-                else
-                {
-                    foreach (var p in products)
-                        p.incomeMultiplier *= config.upgradeFactor;
-                }
-
-            }
-        }
     }
-
 
     public void InactiveIncome()
     {

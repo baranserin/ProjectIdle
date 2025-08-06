@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UpgradeButtonManager : MonoBehaviour
 {
     [Header("Config Dosyaları")]
-    public List<UpgradeConfig> upgradeConfig;
+    public List<UpgradeConfig> upgradeConfig; // Inspector'dan atanmalı
 
     [Header("UI Ayarları")]
     public GameObject buttonPrefab;
@@ -15,25 +15,41 @@ public class UpgradeButtonManager : MonoBehaviour
     private List<GameObject> allButtons = new List<GameObject>();
     private Queue<GameObject> hiddenButtons = new Queue<GameObject>();
 
-    void Start()
+    public void RebuildFromScratch()
     {
-        Debug.Log("Upgrade Config Sayısı: " + upgradeConfig.Count); // 🕵️‍♂️  
+        // Eski butonları temizle
+        foreach (Transform child in buttonContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        allButtons.Clear();
+        hiddenButtons.Clear();
+
+        Debug.Log("🔁 RebuildFromScratch çağrıldı, butonlar temizlendi.");
+
+        // Yeni butonları oluştur
         CreateButtonsFromConfigs();
         UpdateVisibleButtons();
     }
 
-    void CreateButtonsFromConfigs()
+    public void CreateButtonsFromConfigs()
     {
+        if (upgradeConfig == null || upgradeConfig.Count == 0)
+        {
+            Debug.LogWarning("⚠️ Upgrade Config listesi boş!");
+            return;
+        }
+
         foreach (var config in upgradeConfig)
         {
             string key = "Upgrade_Buyed_" + config.upgradeName;
 
             if (PlayerPrefs.GetInt(key, 0) == 1)
-                continue;
+                continue; // Zaten alınmışsa gösterme
 
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
-            Debug.Log($"🛠️ Buton prefab instantiate edildi: {config.upgradeName}");
-
+            Debug.Log($"🛠️ Buton oluşturuldu: {config.upgradeName}");
 
             Text buttonText = newButton.GetComponentInChildren<Text>();
             if (buttonText != null)
@@ -47,13 +63,14 @@ public class UpgradeButtonManager : MonoBehaviour
                     iconImage.sprite = config.icon;
             }
 
+            // Local değişkenlere referans al
             UpgradeConfig currentConfig = config;
             GameObject currentButton = newButton;
 
             Button btn = newButton.GetComponent<Button>();
             btn.onClick.AddListener(() =>
             {
-                IncomeManager.Instance.ApplyUpgrade(currentConfig); // 🎯
+                IncomeManager.Instance.ApplyUpgrade(currentConfig);
                 currentButton.SetActive(false);
 
                 if (hiddenButtons.Count > 0)
@@ -65,6 +82,7 @@ public class UpgradeButtonManager : MonoBehaviour
 
             allButtons.Add(newButton);
         }
+
         UpdateVisibleButtons();
     }
 

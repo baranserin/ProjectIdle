@@ -38,7 +38,7 @@ public class ProductData
         if (levelText != null)
             levelText.text = $"{level}";
         if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
+            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture);
         if (upgradeCostText != null)
             upgradeCostText.text = IncomeManager.FormatMoneyStatic(GetUpgradeCost());
     }
@@ -133,7 +133,7 @@ public class IncomeManager : MonoBehaviour
         totalMoney += income;
 
         if (incomeText != null)
-            incomeText.text = FormatMoneyStatic(income) + "/s";
+            incomeText.text = FormatMoneyStatic(income);
 
         UpdateUI();
     }

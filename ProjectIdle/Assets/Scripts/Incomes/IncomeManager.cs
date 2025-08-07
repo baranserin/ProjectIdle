@@ -365,7 +365,7 @@ public class IncomeManager : MonoBehaviour
                 // 🔸 Tüm ürünlere uygula
                 foreach (var product in products)
                 {
-                    product.incomeMultiplier *= config.upgradeFactor;
+                    product.incomeMultiplier += config.upgradeFactor;
                     Debug.Log($"🔸 Global upgrade: {product.config.productName} x{config.upgradeFactor}");
                     product.UpdateUI();
                 }

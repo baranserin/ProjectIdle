@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UpgradeButtonManager : MonoBehaviour
 {
     [Header("Config Dosyaları")]
-    public List<UpgradeConfig> upgradeConfig; // Inspector'dan atanmalı
+    public List<UpgradeConfig> upgradeConfig;
 
     [Header("UI Ayarları")]
     public GameObject buttonPrefab;
@@ -15,23 +15,7 @@ public class UpgradeButtonManager : MonoBehaviour
     private List<GameObject> allButtons = new List<GameObject>();
     private Queue<GameObject> hiddenButtons = new Queue<GameObject>();
 
-    public void RebuildFromScratch()
-    {
-        // Eski butonları temizle
-        foreach (Transform child in buttonContainer)
-        {
-            Destroy(child.gameObject);
-        }
-
-        allButtons.Clear();
-        hiddenButtons.Clear();
-
-        Debug.Log("🔁 RebuildFromScratch çağrıldı, butonlar temizlendi.");
-
-        // Yeni butonları oluştur
-        CreateButtonsFromConfigs();
-        UpdateVisibleButtons();
-    }
+  
 
     public void CreateButtonsFromConfigs()
     {
@@ -46,10 +30,10 @@ public class UpgradeButtonManager : MonoBehaviour
             string key = "Upgrade_Buyed_" + config.upgradeName;
 
             if (PlayerPrefs.GetInt(key, 0) == 1)
-                continue; // Zaten alınmışsa gösterme
+                continue;
 
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
-            Debug.Log($"🛠️ Buton oluşturuldu: {config.upgradeName}");
+            newButton.name = config.upgradeName;
 
             Text buttonText = newButton.GetComponentInChildren<Text>();
             if (buttonText != null)
@@ -63,7 +47,6 @@ public class UpgradeButtonManager : MonoBehaviour
                     iconImage.sprite = config.icon;
             }
 
-            // Local değişkenlere referans al
             UpgradeConfig currentConfig = config;
             GameObject currentButton = newButton;
 
@@ -104,5 +87,31 @@ public class UpgradeButtonManager : MonoBehaviour
                 hiddenButtons.Enqueue(button);
             }
         }
+    }
+
+    // ✅ Basit Reset Fonksiyonu
+    public void ResetButtons()
+    {
+        // Prefs sıfırla
+        foreach (var config in upgradeConfig)
+        {
+            string key = "Upgrade_Buyed_" + config.upgradeName;
+            PlayerPrefs.DeleteKey(key);
+        }
+        PlayerPrefs.Save();
+
+        // Butonları sil
+        foreach (Transform child in buttonContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        allButtons.Clear();
+        hiddenButtons.Clear();
+
+        // Yeniden oluştur
+        CreateButtonsFromConfigs();
+
+        Debug.Log("🔁 Upgrade butonları sıfırlandı.");
     }
 }

@@ -153,11 +153,11 @@ public class IncomeManager : MonoBehaviour
         totalMoney = 10f;
         prestigeLevel = 0;
         prestigePoint = 0;
-
+        decorationIncome.ResetDecorations();
+        upgradeButtonManager.ResetButtons();
         UpdateUI();
 
         // 💠 Dekorasyonları sıfırla
-        decorationIncome.ResetDecorations();
 
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
@@ -317,10 +317,10 @@ public class IncomeManager : MonoBehaviour
                 products[i].level = products[i].config.baseLevel;
             }
         }
-
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
+        upgradeButtonManager.CreateButtonsFromConfigs();
     }
 
     public void InactiveIncome()

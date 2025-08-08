@@ -121,6 +121,15 @@ public class IncomeManager : MonoBehaviour
         SaveData();
     }
 
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            SaveData();
+            Debug.Log("⏸️ Uygulama duraklatıldı, veriler kaydedildi.");
+        }
+    }
+
     void GeneratePassiveIncome()
     {
         double income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı

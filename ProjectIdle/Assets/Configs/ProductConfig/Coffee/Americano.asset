@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
-  m_Name: Espresso
+  m_Name: Americano
   m_EditorClassIdentifier: 
-  productName: Espresso
-  baseUpgradeCost: 1000
+  productName: Americano
+  baseUpgradeCost: 100000
   costGrowth: 1.25
-  baseIncome: 10
+  baseIncome: 100
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 0}

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CounterClickButton : MonoBehaviour
 {
-    public double clickValue = 1;
+    public IncomeManager IncomeManager;
 
     private void Start()
     {
@@ -14,10 +14,10 @@ public class CounterClickButton : MonoBehaviour
     {
         if (IncomeManager.Instance != null)
         {
-            IncomeManager.Instance.AddMoney(clickValue);
+            IncomeManager.Instance.AddMoney(IncomeManager.income);
 
             // Optional: Add animation, sound, or feedback here
-            Debug.Log("Clicked the counter! +" + clickValue);
+            Debug.Log("Clicked the counter! +" + IncomeManager.income);
         }
     }
 }

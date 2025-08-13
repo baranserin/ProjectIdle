@@ -96,6 +96,7 @@ public class IncomeManager : MonoBehaviour
     [Header("Unlockable UI Elements")]
     public GameObject orangeTeaUpgradeButton;
 
+    public double income;
 
     void Awake()
     {
@@ -132,7 +133,7 @@ public class IncomeManager : MonoBehaviour
 
     void GeneratePassiveIncome()
     {
-        double income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı
+        income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı
 
         if (BoostIncome.Instance != null && BoostIncome.Instance.IsBoostActive())
         {
@@ -181,9 +182,9 @@ public class IncomeManager : MonoBehaviour
         return total;
     }
 
-    public void AddMoney(double amount)
+    public void AddMoney(double income)
     {
-        totalMoney += amount;
+        totalMoney += income;
         UpdateUI();
     }
 

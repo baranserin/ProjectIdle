@@ -3457,7 +3457,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.93603855, y: 0.93603855, z: 0.93603855}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1053811251}
   m_Father: {fileID: 1808557971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3477,7 +3478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5712a5e3dcc2a4ebd0c0862f5ef722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickValue: 1
+  IncomeManager: {fileID: 873625049}
 --- !u!114 &373680610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10141,7 +10142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.4195557, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869368020
@@ -10263,6 +10264,7 @@ MonoBehaviour:
   successSound: {fileID: 1976358944}
   failSound: {fileID: 1084479307}
   orangeTeaUpgradeButton: {fileID: 472003185}
+  income: 0
 --- !u!4 &873625050
 Transform:
   m_ObjectHideFlags: 0
@@ -11673,14 +11675,14 @@ RectTransform:
   m_GameObject: {fileID: 1053811250}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0683321, y: 1.0683321, z: 1.0683321}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1808557971}
+  m_Father: {fileID: 373680608}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 43.405083, y: -294.005}
   m_SizeDelta: {x: 1322, y: 677.00006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1053811252
@@ -17247,7 +17249,6 @@ RectTransform:
   m_Children:
   - {fileID: 1740797495}
   - {fileID: 734815459}
-  - {fileID: 1053811251}
   - {fileID: 373680608}
   m_Father: {fileID: 1104811557}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

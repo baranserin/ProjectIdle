@@ -9471,9 +9471,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 893360685}
-        m_TargetAssemblyTypeName: CloseMenu, Assembly-CSharp
-        m_MethodName: ClickClose
+      - m_Target: {fileID: 893360681}
+        m_TargetAssemblyTypeName: SettingController, Assembly-CSharp
+        m_MethodName: MenuyuKapat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10293,7 +10293,6 @@ GameObject:
   - component: {fileID: 893360683}
   - component: {fileID: 893360682}
   - component: {fileID: 893360681}
-  - component: {fileID: 893360685}
   m_Layer: 5
   m_Name: Settings Menu
   m_TagString: Untagged
@@ -10394,19 +10393,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 893360679}
   m_CullTransparentMesh: 1
---- !u!114 &893360685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 893360679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b4b5ac90e04ff94a93f85df2883b615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onClickClose: {fileID: 893360679}
 --- !u!1 &903489960
 GameObject:
   m_ObjectHideFlags: 0

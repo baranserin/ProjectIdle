@@ -1,31 +1,36 @@
-using UnityEngine;
-using UnityEngine.UI; // UI kütüphanesini ekleyin
+ï»¿using UnityEngine;
+using UnityEngine.UI; // UI kÃ¼tÃ¼phanesini ekleyin
 
 public class SettingController : MonoBehaviour
 {
-    // Animasyonu tetiklemek için panelin Animator bileşenini burada tutacağız.
+    // Animasyonu tetiklemek iÃ§in panelin Animator bileÅŸenini burada tutacaÄŸÄ±z.
     public Animator menuPanelAnimator;
 
-    // Menü panelinin açık mı kapalı mı olduğunu kontrol etmek için bir değişken
+    // MenÃ¼ panelinin aÃ§Ä±k mÄ± kapalÄ± mÄ± olduÄŸunu kontrol etmek iÃ§in bir deÄŸiÅŸken
     private bool isMenuAcik = false;
 
-    // Bu fonksiyon butona tıklandığında çağrılacak
+    // Bu fonksiyon butona tÄ±klandÄ±ÄŸÄ±nda Ã§aÄŸrÄ±lacak
     public void MenuyuAcKapa()
     {
-        isMenuAcik = !isMenuAcik; // Değeri tersine çevir
+        isMenuAcik = !isMenuAcik; // DeÄŸeri tersine Ã§evir
 
-        // Eğer menü açık olacaksa
+        // EÄŸer menÃ¼ aÃ§Ä±k olacaksa
         if (isMenuAcik)
         {
-            // Panel objesini görünür yapın
+            // Panel objesini gÃ¶rÃ¼nÃ¼r yapÄ±n
             menuPanelAnimator.gameObject.SetActive(true);
-            // Animasyon tetikleyicisini çağırın
+            // Animasyon tetikleyicisini Ã§aÄŸÄ±rÄ±n
             menuPanelAnimator.SetTrigger("MenuAcil");
         }
-        else // Eğer menü kapanacaksa
+        else // EÄŸer menÃ¼ kapanacaksa
         {
  
             menuPanelAnimator.gameObject.SetActive(false);
         }
+    }
+    public void MenuyuKapat()
+    {
+        isMenuAcik = false;
+        menuPanelAnimator.gameObject.SetActive(false);
     }
 }

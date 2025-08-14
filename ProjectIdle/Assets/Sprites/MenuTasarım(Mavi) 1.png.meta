@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9f2bcbc1e1ef57847a978a78db64ace6
+guid: 6dacf07f948c32a48bf6f4be77cd7c0b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5395449107616793443
-    second: "MenuTasar\u0131m(Mavi)_0"
+      213: -1579447360921854709
+    second: "MenuTasar\u0131m(Mavi) 1_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "MenuTasar\u0131m(Mavi)_0"
+      name: "MenuTasar\u0131m(Mavi) 1_0"
       rect:
         serializedVersion: 2
-        x: 335
-        y: 111
-        width: 386
-        height: 730
+        x: 376
+        y: 288
+        width: 265
+        height: 485
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d9c7dc87f938f15b0800000000000000
-      internalID: -5395449107616793443
+      spriteID: b0d13d65efca41ae0800000000000000
+      internalID: -1579447360921854709
       vertices: []
       indices: 
       edges: []

@@ -4,7 +4,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
 
-    private GameObject currentlyOpenGroup;
+    private MenuToggleButton currentlyOpenButton;
 
     private void Awake()
     {
@@ -14,27 +14,24 @@ public class MenuManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    // Called by buttons to open/close any menu group
-    public void ToggleMenuGroup(GameObject group, MenuGroupController controller)
+    // Butonlar burayý çaðýracak
+    public void ToggleButton(MenuToggleButton clickedButton)
     {
-        bool isAlreadyOpen = currentlyOpenGroup == group;
-
-        CloseCurrentGroup();
-
-        if (!isAlreadyOpen)
+        if (currentlyOpenButton != null && currentlyOpenButton != clickedButton)
         {
-            group.SetActive(true);
-            controller.ShowDefaultCategory();
-            currentlyOpenGroup = group;
+            currentlyOpenButton.CloseSlider();
         }
-    }
 
-    public void CloseCurrentGroup()
-    {
-        if (currentlyOpenGroup != null)
+        if (currentlyOpenButton == clickedButton)
         {
-            currentlyOpenGroup.SetActive(false);
-            currentlyOpenGroup = null;
+            // Ayný butona tekrar basýlýrsa kapat
+            clickedButton.CloseSlider();
+            currentlyOpenButton = null;
+        }
+        else
+        {
+            clickedButton.OpenSlider();
+            currentlyOpenButton = clickedButton;
         }
     }
 }

@@ -14,22 +14,30 @@ public class AudioSettingsController : MonoBehaviour
     public Sprite sfxOnSprite;
     public Sprite sfxOffSprite;
 
+    [Header("Bildirim Ayarlarý")]
+    public Button NtfButton;
+    public Sprite NtfOnSprite;
+    public Sprite NtfOffSprite;
+
     private bool isMusicOn;
     private bool isSfxOn;
+    private bool isNtfOn;
 
     void Start()
     {
         // Kaydedilmiþ deðerleri yükle (Varsayýlan: açýk)
         isMusicOn = PlayerPrefs.GetInt("MusicOn", 1) == 1;
         isSfxOn = PlayerPrefs.GetInt("SfxOn", 1) == 1;
-
+        isNtfOn = PlayerPrefs.GetInt("NtfOn", 1) == 1;
         // Buton ikonlarýný güncelle
         UpdateMusicUI();
         UpdateSfxUI();
+        UpdateNtfUI();
 
         // Butonlara týklama olaylarýný ekle
         musicButton.onClick.AddListener(ToggleMusic);
         sfxButton.onClick.AddListener(ToggleSfx);
+        NtfButton.onClick.AddListener(ToggleNtf);
     }
 
     public void ToggleMusic()
@@ -50,6 +58,14 @@ public class AudioSettingsController : MonoBehaviour
         UpdateSfxUI();
     }
 
+    public void ToggleNtf()
+    {
+        isNtfOn= !isNtfOn;
+        PlayerPrefs.SetInt("NtfOn", isNtfOn ? 1 : 0);
+        PlayerPrefs.Save();
+        UpdateNtfUI();
+    }
+
     private void UpdateMusicUI()
     {
         musicButton.image.sprite = isMusicOn ? musicOnSprite : musicOffSprite;
@@ -63,5 +79,10 @@ public class AudioSettingsController : MonoBehaviour
     {
         sfxButton.image.sprite = isSfxOn ? sfxOnSprite : sfxOffSprite;
         AudioListener.volume = isSfxOn ? 1f : 0f;
+    }
+
+    private void UpdateNtfUI()
+    {
+        NtfButton.image.sprite= isNtfOn ? NtfOnSprite : NtfOffSprite;
     }
 }

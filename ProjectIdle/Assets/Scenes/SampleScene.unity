@@ -3102,15 +3102,15 @@ RectTransform:
   m_GameObject: {fileID: 325098245}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 893360680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 266.00003, y: 355.46994}
-  m_SizeDelta: {x: 160, y: 123.4937}
+  m_AnchoredPosition: {x: 294, y: 355.46994}
+  m_SizeDelta: {x: 640, y: 640}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &325098247
 MonoBehaviour:
@@ -3176,7 +3176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7725957504116542015, guid: 7ea4112577740dd4e8d378ef5c0a4eb2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7ea4112577740dd4e8d378ef5c0a4eb2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12564,7 +12564,7 @@ RectTransform:
   m_GameObject: {fileID: 1071429990}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.36365}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 893360680}
@@ -12572,7 +12572,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 266, y: 514}
-  m_SizeDelta: {x: 160, y: 111.78}
+  m_SizeDelta: {x: 322, y: 422}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1071429992
 MonoBehaviour:
@@ -18089,8 +18089,8 @@ MonoBehaviour:
   musicOffSprite: {fileID: 6665325819524138380, guid: a2761544958e5214badceb79246312a9, type: 3}
   musicSource: {fileID: 1180708694}
   sfxButton: {fileID: 325098247}
-  sfxOnSprite: {fileID: -7725957504116542015, guid: 7ea4112577740dd4e8d378ef5c0a4eb2, type: 3}
-  sfxOffSprite: {fileID: -85553417219488162, guid: dc9b07cc9a593be4e9bb1a9f3b8f57d5, type: 3}
+  sfxOnSprite: {fileID: 21300000, guid: 7ea4112577740dd4e8d378ef5c0a4eb2, type: 3}
+  sfxOffSprite: {fileID: 21300000, guid: dc9b07cc9a593be4e9bb1a9f3b8f57d5, type: 3}
   NtfButton: {fileID: 1568370279}
   NtfOnSprite: {fileID: -151462347755979465, guid: 536addf4a50176244bac41a12ee3890f, type: 3}
   NtfOffSprite: {fileID: 6001052428688304761, guid: d4a53c4edca9eb24388a3a3dc72ab733, type: 3}

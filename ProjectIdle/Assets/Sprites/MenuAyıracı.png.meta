@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 02910941aec4ed64fb49a2f4c0179b0d
+guid: 9a26a0e2a2216fc4db1129c38c24a046
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7756938141759722513
-    second: "ayar.men\xFCs\xFC Ses Ac\u0131k_0"
+      213: 1888819954138014312
+    second: "MenuAy\u0131rac\u0131_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "ayar.men\xFCs\xFC Ses Ac\u0131k_0"
+      name: "MenuAy\u0131rac\u0131_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 104
-        height: 100
+        x: 411
+        y: 506
+        width: 205
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: febabbbabd1d95490800000000000000
-      internalID: -7756938141759722513
+      spriteID: 862e01badbf663a10800000000000000
+      internalID: 1888819954138014312
       vertices: []
       indices: 
       edges: []
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      "ayar.men\xFCs\xFC Ses Ac\u0131k_0": -7756938141759722513
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

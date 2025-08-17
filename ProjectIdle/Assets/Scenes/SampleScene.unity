@@ -3718,6 +3718,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -55.906
       objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1968092819}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LinkedInSayfasiniAc
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LinkedIn, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
       propertyPath: m_Name
       value: LinkedIn
@@ -3733,7 +3761,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1968092819}
   m_SourcePrefab: {fileID: 100100000, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
 --- !u!224 &335794206 stripped
 RectTransform:
@@ -19070,6 +19101,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -55.906
       objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1703603681}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InstagramSayfasiniAc
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: instagram, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433491835035609699, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
       propertyPath: m_Name
       value: Instagram
@@ -19085,13 +19144,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1703603681}
   m_SourcePrefab: {fileID: 100100000, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
 --- !u!224 &1703603679 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1139860546214134386, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
   m_PrefabInstance: {fileID: 1703603678}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1703603680 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+  m_PrefabInstance: {fileID: 1703603678}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1703603681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703603680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922cff194b4770f4096c11aa134ca3ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1734433448
 GameObject:
   m_ObjectHideFlags: 0
@@ -21796,6 +21875,23 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1139860546214134386, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
   m_PrefabInstance: {fileID: 1957885623}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1968092818 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3321042366543835718, guid: 82b5daa318c6aeb40b715fed27fd71e9, type: 3}
+  m_PrefabInstance: {fileID: 335794205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1968092819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968092818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f42bd6cbcf1e0a44dadaf063b2f31709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1971920214
 GameObject:
   m_ObjectHideFlags: 0

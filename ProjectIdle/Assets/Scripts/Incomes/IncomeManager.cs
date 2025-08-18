@@ -97,6 +97,7 @@ public class IncomeManager : MonoBehaviour
     public GameObject orangeTeaUpgradeButton;
 
     public double income;
+    public double clickValue = 1;
 
     void Awake()
     {
@@ -182,9 +183,9 @@ public class IncomeManager : MonoBehaviour
         return total;
     }
 
-    public void AddMoney(double income)
+    public void AddMoney(double clickValue)
     {
-        totalMoney += income;
+        totalMoney += clickValue;
         UpdateUI();
     }
 

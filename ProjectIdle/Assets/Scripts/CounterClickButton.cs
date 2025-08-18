@@ -10,14 +10,12 @@ public class CounterClickButton : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(OnCounterClicked);
     }
 
-    void OnCounterClicked()
+    public void OnCounterClicked()
     {
         if (IncomeManager.Instance != null)
         {
-            IncomeManager.Instance.AddMoney(IncomeManager.income);
+            IncomeManager.Instance.AddMoney(IncomeManager.clickValue);
 
-            // Optional: Add animation, sound, or feedback here
-            Debug.Log("Clicked the counter! +" + IncomeManager.income);
         }
     }
 }

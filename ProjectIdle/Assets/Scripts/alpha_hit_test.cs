@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class alpha_hit_test : MonoBehaviour
 {
-    public Button otherButton;
 
     void Start()
     {
@@ -16,12 +15,5 @@ public class alpha_hit_test : MonoBehaviour
         Debug.Log("Counter clicked!");
 
     }
-    public void OnClickA()
-    {
-        Debug.Log("Object A clicked!");
 
-        // Simulate clicking the other button
-        if (otherButton != null)
-            otherButton.onClick.Invoke();
-    }
 }

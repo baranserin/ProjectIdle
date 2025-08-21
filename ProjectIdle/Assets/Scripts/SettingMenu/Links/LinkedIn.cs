@@ -2,24 +2,33 @@ using UnityEngine;
 
 public class LinkedInButton : MonoBehaviour
 {
-    public void OpenLinkedInCompanyPage()
+    public void OpenLinkedInProfile()
     {
-        // LinkedIn þirket sayfasýnýn URL þemasýný oluþtur.
-        // Genellikle kullanýcý adýný kullanmak daha kolaydýr.
-        string appUrl = "linkedin://company/iku-roverium-club";
+        // LinkedIn sayfa linkin
+        string username = "company/iku-roverium-club/posts/?feedView=all";
 
-        // Uygulama yüklü deðilse veya bir hata oluþursa yedek olarak açýlacak web URL'si.
-        string webUrl = "https://www.linkedin.com/company/iku-roverium-club/posts/?feedView=all";
+        // Açýlacak URL'yi tutan deðiþken
+        string urlToOpen;
 
+        // Platforma göre doðru URL'yi belirle
+#if UNITY_ANDROID
+        urlToOpen = "linkedin://" + username;
+#elif UNITY_IOS
+        urlToOpen = "linkedin://" + username;
+#else
+        // Diðer platformlar için web URL'sini kullan
+        urlToOpen = "https://www.linkedin.com/" + username;
+#endif
+
+        // Uygulamayý açmayý dene
         try
         {
-            // Önce uygulamayý açmayý dene.
-            Application.OpenURL(appUrl);
+            Application.OpenURL(urlToOpen);
         }
         catch (System.Exception)
         {
-            // Uygulama açýlmazsa web sitesini aç.
-            Application.OpenURL(webUrl);
+            // Eðer uygulama açýlmazsa (Android/iOS), web sitesini aç
+            Application.OpenURL("https://www.linkedin.com/" + username);
         }
     }
 }

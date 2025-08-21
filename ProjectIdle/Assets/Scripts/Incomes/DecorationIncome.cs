@@ -32,8 +32,7 @@ public class DecorationIncome : MonoBehaviour
                     if (!isPurchased)
                     {
                         isPurchased = true;
-                        onBuy?.Invoke(this);
-                        buyButton.gameObject.SetActive(false); // Butonu gizle
+                        onBuy?.Invoke(this);               
                     }
                 });
             }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a1b66382825583541abe1df7b03547d4
+guid: c4bc6a18b06ce37438e1f52b0c217461
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6552562575308082740
-    second: Gitar_0
+      213: -3925694006004370334
+    second: "Ediz Amerikano adl\u0131 dosyan\u0131n kopyas\u0131_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -110,19 +110,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gitar_0
+      name: "Ediz Amerikano adl\u0131 dosyan\u0131n kopyas\u0131_0"
       rect:
         serializedVersion: 2
-        x: 328
-        y: 33
-        width: 368
-        height: 975
+        x: 79
+        y: 77
+        width: 58
+        height: 58
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 43ec1cdf1f06fea50800000000000000
-      internalID: 6552562575308082740
+      spriteID: 264ba3bc9122589c0800000000000000
+      internalID: -3925694006004370334
       vertices: []
       indices: 
       edges: []
@@ -173,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Gitar_0: 6552562575308082740
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

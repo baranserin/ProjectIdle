@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 896f30fb48227e84ca42f88918c9e345
+guid: e83180cf00672114e81d95e2b81fc9a6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4379617718315093240
-    second: buton_0
+      213: -5667576653907222485
+    second: Upgrade Cardboard Buy Button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: buton_0
+      name: Upgrade Cardboard Buy Button_0
       rect:
         serializedVersion: 2
-        x: 127
-        y: 535
-        width: 338
-        height: 489
+        x: 0
+        y: 0
+        width: 388
+        height: 164
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8fc8d205c1787cc30800000000000000
-      internalID: 4379617718315093240
+      spriteID: b202096bf09b851b0800000000000000
+      internalID: -5667576653907222485
       vertices: []
       indices: 
       edges: []
@@ -173,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      buton_0: 4379617718315093240
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

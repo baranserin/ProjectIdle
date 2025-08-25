@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3e81dd6ca094ca44bab50c7e62f68848
+guid: 3813fff9b19eedf4b8f7ef4fbd409cfe
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1866697638754286256
-    second: buton 3_0
+      213: -4154931579683949024
+    second: Upgrade Indicator (On)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: buton 3_0
+      name: Upgrade Indicator (On)_0
       rect:
         serializedVersion: 2
-        x: 127
-        y: 535
-        width: 338
-        height: 489
+        x: 27
+        y: 31
+        width: 72
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0558df243682816e0800000000000000
-      internalID: -1866697638754286256
+      spriteID: 026b2e6fdb7b656c0800000000000000
+      internalID: -4154931579683949024
       vertices: []
       indices: 
       edges: []
@@ -173,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      buton 3_0: -1866697638754286256
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

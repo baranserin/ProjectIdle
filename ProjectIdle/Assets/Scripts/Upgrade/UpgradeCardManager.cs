@@ -41,7 +41,7 @@ public class UpgradeCardManager : MonoBehaviour
 
         objectImageUI.sprite = upgrades[index].objectImage;
         objectNameUI.text = upgrades[index].objectName;
-        priceTextUI.text = upgrades[index].price.ToString() + "💰";
+        priceTextUI.text = upgrades[index].price.ToString();
 
         UpdatePageIndicators();
     }

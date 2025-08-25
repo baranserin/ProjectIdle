@@ -9,12 +9,14 @@ public class DecorationIncome : MonoBehaviour
     public class DecorationEntry
     {
         public string itemName;
-        public GameObject targetObject; // Sahnedeki obje
-        public Button buyButton;        // Satın alma butonu
+        public GameObject targetObject;   // Sahnedeki obje
+        public Button buyButton;          // Satın alma butonu
         public int itemCost;
         public float itemMultiplier = 1f;
 
-        public TextMeshProUGUI costText; // ✅ Fiyat yazısı
+        public int groupId;               // ✅ Grup kimliği (aynı grup = aynı yerdeki alternatifler)
+
+        public TextMeshProUGUI costText;  // ✅ Fiyat yazısı
 
         public DecorationEntry prerequisite; // Ön koşul dekorasyon
 
@@ -66,13 +68,18 @@ public class DecorationIncome : MonoBehaviour
 
         incomeManager.totalMoney -= entry.itemCost;
 
-        // Aynı yerdeki diğer dekorasyonları kapat
+        // ✅ Aynı gruptaki diğer dekorasyonları kapat
         foreach (var deco in decorations)
         {
-            if (deco != entry && deco.targetObject != null && deco.targetObject.transform.position == entry.targetObject.transform.position)
+            if (deco != entry && deco.groupId == entry.groupId)
             {
-                deco.targetObject.SetActive(false);
+                if (deco.targetObject != null)
+                    deco.targetObject.SetActive(false);
+
                 deco.isPurchased = false;
+
+                if (deco.buyButton != null)
+                    deco.buyButton.gameObject.SetActive(true);
             }
         }
 
@@ -89,6 +96,10 @@ public class DecorationIncome : MonoBehaviour
             if (deco.prerequisite == entry && deco.buyButton != null)
                 deco.buyButton.interactable = true;
         }
+
+        // Buton gizle
+        if (entry.buyButton != null)
+            entry.buyButton.gameObject.SetActive(false);
 
         // Kaydet
         PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);

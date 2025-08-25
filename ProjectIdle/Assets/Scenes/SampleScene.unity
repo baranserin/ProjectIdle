@@ -13610,6 +13610,7 @@ MonoBehaviour:
     buyButton: {fileID: 823142847}
     itemCost: 15
     itemMultiplier: 1
+    groupId: 0
     costText: {fileID: 424221303}
     isPurchased: 0
   - itemName: Plant
@@ -13617,6 +13618,7 @@ MonoBehaviour:
     buyButton: {fileID: 607163453}
     itemCost: 20
     itemMultiplier: 1
+    groupId: 1
     costText: {fileID: 509250847}
     isPurchased: 0
   - itemName: Acoustic Guitar
@@ -13624,6 +13626,7 @@ MonoBehaviour:
     buyButton: {fileID: 215988798}
     itemCost: 1000
     itemMultiplier: 1
+    groupId: 0
     costText: {fileID: 1874371149}
     isPurchased: 0
   incomeManager: {fileID: 873625049}

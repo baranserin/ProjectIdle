@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Upgrade Cardboard Buy Button_0: -5667576653907222485
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

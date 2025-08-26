@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "Kahve makinesi Upgrade Botton G\xF6rsel_0": 634772324442158694
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

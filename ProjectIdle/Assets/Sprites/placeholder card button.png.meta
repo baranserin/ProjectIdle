@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e83180cf00672114e81d95e2b81fc9a6
+guid: f8e41d3a6a82b99489daabcfe49a88c6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5667576653907222485
-    second: Upgrade Cardboard Buy Button_0
+      213: 6164089424788273403
+    second: placeholder card button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Upgrade Cardboard Buy Button_0
+      name: placeholder card button_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 388
-        height: 164
+        width: 776
+        height: 328
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b202096bf09b851b0800000000000000
-      internalID: -5667576653907222485
+      spriteID: bf83f305cae3b8550800000000000000
+      internalID: 6164089424788273403
       vertices: []
       indices: 
       edges: []

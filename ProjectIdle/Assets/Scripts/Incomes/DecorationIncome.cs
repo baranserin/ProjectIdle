@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using TMPro; // 💠 TMP desteği
+using TMPro;
 
 public class DecorationIncome : MonoBehaviour
 {
@@ -14,23 +14,23 @@ public class DecorationIncome : MonoBehaviour
         public int itemCost;
         public float itemMultiplier = 1f;
 
-        public int groupId;               // ✅ Grup kimliği (aynı grup = aynı yerdeki alternatifler)
-        public TextMeshProUGUI costText;  // ✅ Fiyat yazısı
-
-        public DecorationEntry prerequisite; // Ön koşul dekorasyon
-        [HideInInspector] public bool isPurchased = false;
+        public int groupId;
+        public TextMeshProUGUI costText;
+        public DecorationEntry prerequisite;
 
         [Header("Satın Alındı Prefab")]
-        public GameObject purchasedPrefab;      // ✅ Inspector’dan atanacak
+        public GameObject purchasedPrefab;      // Inspector’dan atanacak
         [HideInInspector] public GameObject spawnedPurchased; // Oluşturulan prefab referansı
+
+        [HideInInspector] public bool isPurchased = false;
 
         public void Initialize(System.Action<DecorationEntry> onBuy)
         {
             if (targetObject != null)
-                targetObject.SetActive(false); // Başta gizli
+                targetObject.SetActive(false);
 
             if (costText != null)
-                costText.text = itemCost.ToString() + " $"; // ✅ fiyat yazdır
+                costText.text = itemCost.ToString() + " $";
 
             if (buyButton != null)
             {
@@ -60,7 +60,7 @@ public class DecorationIncome : MonoBehaviour
             deco.Initialize(ApplyDecoration);
         }
 
-        LoadDecorations(); // ✅ oyun açıldığında yükle
+        LoadDecorations();
     }
 
     private void ApplyDecoration(DecorationEntry entry)
@@ -70,7 +70,7 @@ public class DecorationIncome : MonoBehaviour
 
         incomeManager.totalMoney -= entry.itemCost;
 
-        // ✅ Aynı gruptaki diğer dekorasyonları kapat
+        // Aynı gruptaki diğer dekorasyonları kapat
         foreach (var deco in decorations)
         {
             if (deco != entry && deco.groupId == entry.groupId)
@@ -82,6 +82,12 @@ public class DecorationIncome : MonoBehaviour
 
                 if (deco.buyButton != null)
                     deco.buyButton.gameObject.SetActive(true);
+
+                if (deco.spawnedPurchased != null)
+                {
+                    Destroy(deco.spawnedPurchased);
+                    deco.spawnedPurchased = null;
+                }
             }
         }
 
@@ -89,7 +95,6 @@ public class DecorationIncome : MonoBehaviour
         if (entry.targetObject != null)
             entry.targetObject.SetActive(true);
 
-        // Total income’a çarpanı uygula
         incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
 
         // Ön koşulu geçenlerin butonunu aç
@@ -99,25 +104,20 @@ public class DecorationIncome : MonoBehaviour
                 deco.buyButton.interactable = true;
         }
 
-        // Buton gizle + Prefab oluştur
+        // Buton gizle + prefab oluştur (layout Group uyumlu ve görünür)
         if (entry.buyButton != null)
         {
-            RectTransform btnRect = entry.buyButton.GetComponent<RectTransform>();
             Transform parent = entry.buyButton.transform.parent;
 
+            // Butonu gizle
             entry.buyButton.gameObject.SetActive(false);
 
+            // Prefab instantiate, sibling index ile tam yerde
             if (entry.purchasedPrefab != null)
             {
                 entry.spawnedPurchased = Instantiate(entry.purchasedPrefab, parent, false);
-
-                RectTransform prefabRect = entry.spawnedPurchased.GetComponent<RectTransform>();
-                if (prefabRect != null && btnRect != null)
-                {
-                    prefabRect.anchoredPosition = btnRect.anchoredPosition;
-                    prefabRect.sizeDelta = btnRect.sizeDelta;
-                    prefabRect.localScale = btnRect.localScale;
-                }
+                entry.spawnedPurchased.transform.SetSiblingIndex(entry.buyButton.transform.GetSiblingIndex());
+                entry.spawnedPurchased.transform.localScale = Vector3.one;
             }
             else
             {
@@ -144,21 +144,13 @@ public class DecorationIncome : MonoBehaviour
                 if (deco.buyButton != null)
                     deco.buyButton.gameObject.SetActive(false);
 
-                // Prefab yükle
-                if (deco.purchasedPrefab != null && deco.spawnedPurchased == null)
+                // Prefab oluştur
+                if (deco.purchasedPrefab != null && deco.spawnedPurchased == null && deco.buyButton != null)
                 {
-                    RectTransform btnRect = deco.buyButton != null ? deco.buyButton.GetComponent<RectTransform>() : null;
-                    Transform parent = deco.buyButton != null ? deco.buyButton.transform.parent : null;
-
+                    Transform parent = deco.buyButton.transform.parent;
                     deco.spawnedPurchased = Instantiate(deco.purchasedPrefab, parent, false);
-
-                    if (btnRect != null)
-                    {
-                        RectTransform prefabRect = deco.spawnedPurchased.GetComponent<RectTransform>();
-                        prefabRect.anchoredPosition = btnRect.anchoredPosition;
-                        prefabRect.sizeDelta = btnRect.sizeDelta;
-                        prefabRect.localScale = btnRect.localScale;
-                    }
+                    deco.spawnedPurchased.transform.SetSiblingIndex(deco.buyButton.transform.GetSiblingIndex());
+                    deco.spawnedPurchased.transform.localScale = Vector3.one;
                 }
 
                 incomeManager.AddDecorationMultiplier(deco.itemMultiplier);
@@ -170,9 +162,14 @@ public class DecorationIncome : MonoBehaviour
                     deco.targetObject.SetActive(false);
                 if (deco.buyButton != null)
                     deco.buyButton.gameObject.SetActive(true);
+
+                if (deco.spawnedPurchased != null)
+                {
+                    Destroy(deco.spawnedPurchased);
+                    deco.spawnedPurchased = null;
+                }
             }
 
-            // Cost text güncelle
             if (deco.costText != null)
                 deco.costText.text = deco.itemCost.ToString() + " $";
         }
@@ -191,10 +188,13 @@ public class DecorationIncome : MonoBehaviour
                 deco.buyButton.gameObject.SetActive(true);
 
             if (deco.spawnedPurchased != null)
+            {
                 Destroy(deco.spawnedPurchased);
+                deco.spawnedPurchased = null;
+            }
 
             if (deco.costText != null)
-                deco.costText.text = deco.itemCost.ToString() + " $"; // reset sonrası fiyat geri yaz
+                deco.costText.text = deco.itemCost.ToString() + " $";
         }
         PlayerPrefs.Save();
     }

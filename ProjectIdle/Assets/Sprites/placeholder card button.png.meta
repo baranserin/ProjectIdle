@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 382ab2f0d58f8514b8e0b30971b3fd6c
+guid: f8e41d3a6a82b99489daabcfe49a88c6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4192852839424300702
-    second: Tik_0
+      213: 6164089424788273403
+    second: placeholder card button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tik_0
+      name: placeholder card button_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 73
-        width: 58
-        height: 58
+        x: 0
+        y: 0
+        width: 776
+        height: 328
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e969f595171003a30800000000000000
-      internalID: 4192852839424300702
+      spriteID: bf83f305cae3b8550800000000000000
+      internalID: 6164089424788273403
       vertices: []
       indices: 
       edges: []
@@ -173,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Tik_0: 4192852839424300702
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

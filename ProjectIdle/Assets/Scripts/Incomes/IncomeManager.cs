@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using TMPro; 
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -25,10 +25,8 @@ public class ProductData
 
     public double GetIncome()
     {
-        if(level == 0)
-        {
+        if (level == 0)
             return 0;
-        }
 
         return config.baseIncome * Math.Pow(config.incomeGrowth, level) + incomeMultiplier;
     }
@@ -38,14 +36,14 @@ public class ProductData
         if (levelText != null)
             levelText.text = $"{level}";
         if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture);
+            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
         if (upgradeCostText != null)
             upgradeCostText.text = IncomeManager.FormatMoneyStatic(GetUpgradeCost());
     }
 
     public void ResetToBase()
     {
-        level = config.baseLevel;   
+        level = config.baseLevel;
     }
 }
 
@@ -61,7 +59,6 @@ public class UnlockCondition
     public bool requirePrestigeLevel = false;
     public int requiredPrestigeLevel;
 }
-
 
 public class IncomeManager : MonoBehaviour
 {
@@ -81,7 +78,9 @@ public class IncomeManager : MonoBehaviour
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
     public float upgradeMultiplier = 0f;
-   
+
+    // 🔥 Event sistemi için multiplier
+    public float temporaryMultiplier = 1f;
 
     [Header("UI")]
     public TextMeshProUGUI moneyText;
@@ -89,8 +88,8 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI prestigeLevelText;
     public TextMeshProUGUI prestigePointText;
 
-    [Header("Sesler")]                   
-    public AudioSource successSound;      
+    [Header("Sesler")]
+    public AudioSource successSound;
     public AudioSource failSound;
 
     [Header("Unlockable UI Elements")]
@@ -134,7 +133,7 @@ public class IncomeManager : MonoBehaviour
 
     void GeneratePassiveIncome()
     {
-        income = GetTotalIncome(); // ❌ upgradeMultiplier çarpımı kaldırıldı
+        income = GetTotalIncome();
 
         if (BoostIncome.Instance != null && BoostIncome.Instance.IsBoostActive())
         {
@@ -144,10 +143,11 @@ public class IncomeManager : MonoBehaviour
         totalMoney += income;
 
         if (incomeText != null)
-            incomeText.text = FormatMoneyStatic(income);
+            incomeText.text = FormatMoneyStatic(income) + "/s";
 
         UpdateUI();
     }
+
     public void ResetAllData()
     {
         PlayerPrefs.DeleteAll();
@@ -168,11 +168,8 @@ public class IncomeManager : MonoBehaviour
         upgradeButtonManager.ResetButtons();
         UpdateUI();
 
-        // 💠 Dekorasyonları sıfırla
-
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
-
 
     double GetTotalIncome()
     {
@@ -180,12 +177,13 @@ public class IncomeManager : MonoBehaviour
         foreach (var p in products)
             total += p.GetIncome();
 
-        return total;
+        // 🔥 Event çarpanı da uygula
+        return total * temporaryMultiplier;
     }
 
-    public void AddMoney(double clickValue)
+    public void AddMoney(double amount)
     {
-        totalMoney += clickValue;
+        totalMoney += amount;
         UpdateUI();
     }
 
@@ -205,7 +203,6 @@ public class IncomeManager : MonoBehaviour
 
             foreach (var condition in config.unlockConditions)
             {
-                // Check product level condition
                 if (!string.IsNullOrEmpty(condition.requiredProductName))
                 {
                     var requiredProduct = products.Find(p => p.config.productName == condition.requiredProductName);
@@ -216,14 +213,12 @@ public class IncomeManager : MonoBehaviour
                     }
                 }
 
-                // Check total money
                 if (condition.requireTotalMoney && totalMoney < condition.requiredMoney)
                 {
                     allConditionsMet = false;
                     break;
                 }
 
-                // Check prestige level
                 if (condition.requirePrestigeLevel && prestigeLevel < condition.requiredPrestigeLevel)
                 {
                     allConditionsMet = false;
@@ -237,7 +232,6 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
-
 
     public void UpgradeProduct(int index)
     {
@@ -262,8 +256,8 @@ public class IncomeManager : MonoBehaviour
         }
         else
         {
-            if (failSound != null)  
-                failSound.Play();         
+            if (failSound != null)
+                failSound.Play();
         }
     }
 
@@ -307,27 +301,23 @@ public class IncomeManager : MonoBehaviour
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
         PlayerPrefs.SetInt("PrestigeLevel", prestigeLevel);
-        string timeNow = DateTime.Now.ToString("O");    
+        string timeNow = DateTime.Now.ToString("O");
         PlayerPrefs.SetString("lastExitTime", timeNow);
         PlayerPrefs.Save();
     }
 
     public void LoadData()
     {
-        // Ürün seviyelerini yükle
         for (int i = 0; i < products.Count; i++)
         {
             string key = $"Product_{i}_Level";
 
             if (PlayerPrefs.HasKey(key))
-            {
                 products[i].level = PlayerPrefs.GetInt(key);
-            }
             else
-            {
                 products[i].level = products[i].config.baseLevel;
-            }
         }
+
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
@@ -344,7 +334,7 @@ public class IncomeManager : MonoBehaviour
 
             double secondsAway = fark.TotalSeconds;
 
-            double incomePerSecond = GetTotalIncome() * upgradeMultiplier * prestigeMultiplier;
+            double incomePerSecond = GetTotalIncome() * prestigeMultiplier;
             double offlineEarning = incomePerSecond * secondsAway;
 
             totalMoney += offlineEarning;
@@ -362,7 +352,6 @@ public class IncomeManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(config.targetProductName))
             {
-                // 🔹 Sadece belirli bir ürüne uygula
                 var product = products.Find(p => p.config.productName == config.targetProductName);
                 if (product != null)
                 {
@@ -373,7 +362,6 @@ public class IncomeManager : MonoBehaviour
             }
             else
             {
-                // 🔸 Tüm ürünlere uygula
                 foreach (var product in products)
                 {
                     product.incomeMultiplier += config.upgradeFactor;
@@ -382,7 +370,7 @@ public class IncomeManager : MonoBehaviour
                 }
             }
 
-            UpdateUI(); // genel UI güncelle
+            UpdateUI();
         }
     }
 
@@ -396,8 +384,6 @@ public class IncomeManager : MonoBehaviour
 
         UpdateUI();
     }
-
-
 
     private void SaveUpgrade(UpgradeConfig config)
     {

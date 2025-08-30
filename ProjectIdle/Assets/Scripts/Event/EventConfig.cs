@@ -4,7 +4,6 @@ using UnityEngine;
 public class EventConfig : ScriptableObject
 {
     public string eventName;
-    public Sprite icon;
 
     public bool isInstantReward;
     public double rewardAmount; // Anlýk para ödülü

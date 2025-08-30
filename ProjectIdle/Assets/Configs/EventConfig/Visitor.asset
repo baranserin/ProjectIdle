@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f95e20ab2b059a4c8b928fa8de0d18c, type: 3}
-  m_Name: EventConfig
+  m_Name: Visitor
   m_EditorClassIdentifier: 
-  eventName: C
-  icon: {fileID: 0}
+  eventName: Loto
   isInstantReward: 0
   rewardAmount: 0
   isTimedMultiplier: 1
   multiplier: 2
-  duration: 30
-  description: Buff
+  duration: 10
+  description: 

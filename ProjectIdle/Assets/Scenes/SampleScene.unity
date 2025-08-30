@@ -23381,7 +23381,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -80.00696}
+  m_AnchoredPosition: {x: 0, y: -107.49719}
   m_SizeDelta: {x: 3868.33, y: 2798.018}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104811558
@@ -23470,12 +23470,11 @@ MonoBehaviour:
   possibleEvents:
   - {fileID: 11400000, guid: 6706f5c9ca032bc48b954d11467dade6, type: 2}
   - {fileID: 11400000, guid: b6510466cf3543b47aed5479e8667e8f, type: 2}
-  eventInterval: 2
+  eventInterval: 10
   eventPanel: {fileID: 0}
   eventTitle: {fileID: 0}
   eventDescription: {fileID: 0}
   eventIcon: {fileID: 0}
-  acceptButton: {fileID: 0}
 --- !u!1 &1121694250
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,8 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 
+
+
 [Serializable]
 public class ProductData
 {
@@ -33,13 +35,26 @@ public class ProductData
 
     public void UpdateUI()
     {
-        if (levelText != null)
-            levelText.text = $"{level}";
+        int levelsToBuy = 1;
+        switch (IncomeManager.Instance.currentBuyMode)
+        {
+            case IncomeManager.BuyMode.x10: levelsToBuy = 10; break;
+            case IncomeManager.BuyMode.x50: levelsToBuy = 50; break;
+            case IncomeManager.BuyMode.Max:
+                levelsToBuy = IncomeManager.Instance.CalculateMaxBuyableLevels(this);
+                if (levelsToBuy == 0) levelsToBuy = 1; // Ensure at least 1 level is shown
+                break;
+        }
+        double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
+
+        // Update UI
+        if (levelText != null) levelText.text = $"Lvl {level}";
+        if (upgradeCostText != null)
+            upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
-        if (upgradeCostText != null)
-            upgradeCostText.text = IncomeManager.FormatMoneyStatic(GetUpgradeCost());
     }
+
 
     public void ResetToBase()
     {
@@ -67,6 +82,17 @@ public class IncomeManager : MonoBehaviour
     public DecorationIncome decorationIncome;
 
     public List<UpgradeConfig> upgradeFactor;
+
+    public enum BuyMode
+    {
+        x1,
+        x10,
+        x50,
+        Max
+    }
+
+    public BuyMode currentBuyMode = BuyMode.x1;
+
 
     [Header("Ürünler")]
     public List<ProductData> products;
@@ -232,6 +258,33 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
+    public int CalculateMaxBuyableLevels(ProductData p)
+    {
+        int maxLevels = 0;
+        double availableMoney = totalMoney;
+
+        while (true)
+        {
+            double cost = p.config.baseUpgradeCost * Math.Pow(p.config.costGrowth, p.level + maxLevels);
+            if (availableMoney >= cost)
+            {
+                availableMoney -= cost;
+                maxLevels++;
+            }
+            else break;
+        }
+
+        return maxLevels;
+    }
+    public double CalculateTotalCost(ProductData p, int levelsToBuy)
+    {
+        double totalCost = 0;
+        for (int i = 0; i < levelsToBuy; i++)
+        {
+            totalCost += p.config.baseUpgradeCost * Math.Pow(p.config.costGrowth, p.level + i);
+        }
+        return totalCost;
+    }
 
     public void UpgradeProduct(int index)
     {
@@ -239,15 +292,24 @@ public class IncomeManager : MonoBehaviour
             return;
 
         var p = products[index];
-        double cost = p.GetUpgradeCost();
 
-        if (totalMoney >= cost)
+        int levelsToBuy = 1;
+        switch (currentBuyMode)
         {
-            totalMoney -= cost;
-            p.level++;
+            case BuyMode.x1: levelsToBuy = 1; break;
+            case BuyMode.x10: levelsToBuy = 10; break;
+            case BuyMode.x50: levelsToBuy = 50; break;
+            case BuyMode.Max: levelsToBuy = CalculateMaxBuyableLevels(p); break;
+        }
+
+        double totalCost = CalculateTotalCost(p, levelsToBuy);
+
+        if (totalMoney >= totalCost)
+        {
+            totalMoney -= totalCost;
+            p.level += levelsToBuy;
 
             CheckUnlocks();
-
             p.UpdateUI();
             UpdateUI();
 
@@ -259,6 +321,13 @@ public class IncomeManager : MonoBehaviour
             if (failSound != null)
                 failSound.Play();
         }
+    }
+    public void SetBuyMode(int mode)
+    {
+        mode = Mathf.Clamp(mode, 0, 3);
+        currentBuyMode = (BuyMode)mode;
+        foreach (var p in products)
+            p.UpdateUI();
     }
 
     public void UpdateUI()

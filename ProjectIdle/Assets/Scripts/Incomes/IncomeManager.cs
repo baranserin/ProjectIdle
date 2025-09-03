@@ -35,26 +35,20 @@ public class ProductData
 
     public void UpdateUI()
     {
-        int levelsToBuy = 1;
-        switch (IncomeManager.Instance.currentBuyMode)
-        {
-            case IncomeManager.BuyMode.x10: levelsToBuy = 10; break;
-            case IncomeManager.BuyMode.x50: levelsToBuy = 50; break;
-            case IncomeManager.BuyMode.Max:
-                levelsToBuy = IncomeManager.Instance.CalculateMaxBuyableLevels(this);
-                if (levelsToBuy == 0) levelsToBuy = 1; // Ensure at least 1 level is shown
-                break;
-        }
-        double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
 
-        // Update UI
-        if (levelText != null) levelText.text = $"Lvl {level}";
-        if (upgradeCostText != null)
-            upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
+        if (levelText != null)
+            levelText.text = $"Lvl {level}";
+
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
-    }
 
+        if (upgradeCostText != null)
+        {
+            double nextLevelCost = IncomeManager.Instance.CalculateTotalCost(this, 1);
+            upgradeCostText.text = IncomeManager.FormatMoneyStatic(nextLevelCost);
+        }
+
+    }
 
     public void ResetToBase()
     {

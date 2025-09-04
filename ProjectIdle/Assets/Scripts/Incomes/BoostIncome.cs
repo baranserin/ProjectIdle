@@ -4,6 +4,9 @@ public class BoostIncome : MonoBehaviour
 {
     public static BoostIncome Instance;
 
+    [Header("UI")]
+    public GameObject boostButton;  // Inspector’dan butonu sürükle-bırak
+
     [Header("Instant Cash")]
     public float amount = 1000f;
 
@@ -13,13 +16,18 @@ public class BoostIncome : MonoBehaviour
     private bool boostActive = false;
 
     [Header("Cooldown")]
-    public float cooldownDuration = 15f;  // ⏱️ Boost kullanıldıktan sonra bekleme süresi
+    public float cooldownDuration = 15f;
     private float cooldownTimer = 0f;
     private bool isOnCooldown = false;
 
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        if (boostButton) boostButton.SetActive(true);
     }
 
     void Update()
@@ -30,9 +38,7 @@ public class BoostIncome : MonoBehaviour
             if (boostTimer <= 0f)
             {
                 boostActive = false;
-                isOnCooldown = true;
-                cooldownTimer = cooldownDuration;
-                Debug.Log("🔻 Boost sona erdi. Cooldown başladı.");
+                StartCooldown();
             }
         }
 
@@ -42,18 +48,9 @@ public class BoostIncome : MonoBehaviour
             if (cooldownTimer <= 0f)
             {
                 isOnCooldown = false;
-                Debug.Log("✅ Cooldown bitti. Boost tekrar kullanılabilir.");
+                Debug.Log("✅ Cooldown bitti. Buton tekrar açıldı.");
+                if (boostButton) boostButton.SetActive(true);
             }
-        }
-    }
-
-    public void InstantCash()
-    {
-        if (IncomeManager.Instance != null)
-        {
-            IncomeManager.Instance.totalMoney += amount;
-            IncomeManager.Instance.UpdateUI();
-            Debug.Log("💰 Anında para verildi.");
         }
     }
 
@@ -67,15 +64,26 @@ public class BoostIncome : MonoBehaviour
 
         if (isOnCooldown)
         {
-            Debug.Log($"⏳ Boost beklemede. Kalan: {cooldownTimer:F1} sn");
+            Debug.Log($"⏳ Boost beklemede: {cooldownTimer:F1} sn");
             return;
         }
 
         boostActive = true;
         boostTimer = boostDuration;
-        Debug.Log($"🚀 Boost başladı! Süre: {boostDuration}s");
+        Debug.Log("🚀 Boost başladı!");
+
+        if (boostButton) boostButton.SetActive(false);
     }
 
+    private void StartCooldown()
+    {
+        isOnCooldown = true;
+        cooldownTimer = cooldownDuration;
+        Debug.Log("🔻 Boost bitti, cooldown başladı.");
+        if (boostButton) boostButton.SetActive(false);
+    }
+
+    // --- EKLENECEK PUBLIC YARDIMCI METOTLAR ---
     public bool IsBoostActive()
     {
         return boostActive;
@@ -91,3 +99,4 @@ public class BoostIncome : MonoBehaviour
         return isOnCooldown ? cooldownTimer : 0f;
     }
 }
+

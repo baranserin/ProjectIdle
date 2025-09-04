@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class DecorationIncome : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class DecorationIncome : MonoBehaviour
     public List<DecorationEntry> decorations;
 
     public IncomeManager incomeManager;
+
+    public TextMeshProUGUI popupText; // Inspector'dan bağla
+    public float displayDuration = 3f; // Kaç saniye gözükecek
 
     private void Start()
     {
@@ -197,5 +201,21 @@ public class DecorationIncome : MonoBehaviour
                 deco.costText.text = deco.itemCost.ToString() + " $";
         }
         PlayerPrefs.Save();
+    }
+
+    // Butona tıklandığında çağrılacak fonksiyon
+    public void ShowTimePopup()
+    {
+        string currentTime = System.DateTime.Now.ToString("HH:mm:ss");
+        popupText.text = "Saat: " + currentTime;
+
+        popupText.gameObject.SetActive(true); // Text’i görünür yap
+        StartCoroutine(HidePopupAfterDelay());
+    }
+
+    private IEnumerator HidePopupAfterDelay()
+    {
+        yield return new WaitForSeconds(displayDuration);
+        popupText.gameObject.SetActive(false); // Text’i gizle
     }
 }

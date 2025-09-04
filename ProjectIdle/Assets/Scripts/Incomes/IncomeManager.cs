@@ -32,10 +32,8 @@ public class ProductData
 
         return config.baseIncome * Math.Pow(config.incomeGrowth, level) + incomeMultiplier;
     }
-
     public void UpdateUI()
     {
-
         if (levelText != null)
             levelText.text = $"Lvl {level}";
 
@@ -44,10 +42,18 @@ public class ProductData
 
         if (upgradeCostText != null)
         {
-            double nextLevelCost = IncomeManager.Instance.CalculateTotalCost(this, 1);
-            upgradeCostText.text = IncomeManager.FormatMoneyStatic(nextLevelCost);
-        }
+            int levelsToBuy = IncomeManager.Instance.currentBuyMode switch
+            {
+                IncomeManager.BuyMode.x1 => 1,
+                IncomeManager.BuyMode.x10 => 10,
+                IncomeManager.BuyMode.x50 => 50,
+                IncomeManager.BuyMode.Max => Mathf.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
+                _ => 1
+            };
 
+            double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
+            upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
+        }
     }
 
     public void ResetToBase()

@@ -113,6 +113,7 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI incomeText;
     public TextMeshProUGUI prestigeLevelText;
     public TextMeshProUGUI prestigePointText;
+    public TextMeshProUGUI PassiveIncomeText;
 
     [Header("Sesler")]
     public AudioSource successSound;
@@ -123,6 +124,12 @@ public class IncomeManager : MonoBehaviour
 
     public double income;
     public double clickValue = 1;
+
+    public GameObject PassiveIncomePanel;
+    public GameObject collect1xButton;
+    public GameObject collect2xButton;
+
+    double offlineEarning;
 
     void Awake()
     {
@@ -402,16 +409,50 @@ public class IncomeManager : MonoBehaviour
             TimeSpan fark = DateTime.Now - lastTime;
 
             double secondsAway = fark.TotalSeconds;
-
             double incomePerSecond = GetTotalIncome() * prestigeMultiplier;
-            double offlineEarning = incomePerSecond * secondsAway;
+            offlineEarning = incomePerSecond * secondsAway;
 
-            totalMoney += offlineEarning;
+            // ✅ Doğru kullanım
+            if (PassiveIncomeText != null)
+                PassiveIncomeText.text = "Siz yokken kazanılanlar: " + FormatMoneyStatic(offlineEarning);
 
-            Debug.Log($"Sen yokken {secondsAway:F0} saniye geçti. Kazanılan para: {FormatMoneyStatic(offlineEarning)}");
+            // Paneli aç / kapat
+            if (offlineEarning > 0)
+            {
+                PassiveIncomePanel.SetActive(true);
+            }
+            else
+            {
+                PassiveIncomePanel.SetActive(false);
+            }
         }
     }
 
+
+    public void CollectOffline1x()
+    {
+        totalMoney += offlineEarning;
+        offlineEarning = 0;
+
+        if (PassiveIncomeText != null)
+            PassiveIncomeText.text = "Offline Kazanç toplandı!";
+
+        PassiveIncomePanel.SetActive(false);
+        UpdateUI();
+    }
+
+    // 2x toplama
+    public void CollectOffline2x()
+    {
+        totalMoney += offlineEarning * 2;
+        offlineEarning = 0;
+
+        if (PassiveIncomeText != null)
+            PassiveIncomeText.text = "Offline Kazanç 2x toplandı!";
+
+        PassiveIncomePanel.SetActive(false);
+        UpdateUI();
+    }
     public void ApplyUpgrade(UpgradeConfig config)
     {
         if (!upgradeFactor.Contains(config))

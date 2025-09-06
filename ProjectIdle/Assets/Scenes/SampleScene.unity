@@ -9336,12 +9336,21 @@ MonoBehaviour:
   - objectImage: {fileID: -39299920268886154, guid: 23ee1fb1251f6df49b064f7052536f77, type: 3}
     objectName: COFFEE MACHINE I
     price: 1000
+    targetType: 0
+    multiplier: 2
+    isBought: 0
   - objectImage: {fileID: 2523745336871918170, guid: 357159c6baac5254c9a461d96fbac229, type: 3}
     objectName: COFFEE MACHINE II
     price: 5000
+    targetType: 1
+    multiplier: 0
+    isBought: 0
   - objectImage: {fileID: 634772324442158694, guid: 188b1655972c1a9438460eb80955a13b, type: 3}
     objectName: COFFEE MACHINE III
     price: 10000
+    targetType: 1
+    multiplier: 0
+    isBought: 0
   objectImageUI: {fileID: 1412510864}
   objectNameUI: {fileID: 237551790}
   priceTextUI: {fileID: 2012898977}
@@ -33198,7 +33207,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1658266099}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 411472555}
+        m_TargetAssemblyTypeName: UpgradeCardManager, Assembly-CSharp
+        m_MethodName: BuyUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1658266099
 MonoBehaviour:
   m_ObjectHideFlags: 0

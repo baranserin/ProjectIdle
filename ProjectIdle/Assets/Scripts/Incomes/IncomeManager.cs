@@ -30,8 +30,10 @@ public class ProductData
         if (level == 0)
             return 0;
 
-        return config.baseIncome * Math.Pow(config.incomeGrowth, level) + incomeMultiplier;
+        double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, level);
+        return baseValue * incomeMultiplier;
     }
+
     public void UpdateUI()
     {
         if (levelText != null)
@@ -490,6 +492,19 @@ public class IncomeManager : MonoBehaviour
         {
             product.incomeMultiplier += multiplier;
             product.UpdateUI();
+        }
+
+        UpdateUI();
+    }
+    public void ApplyCategoryUpgrade(ProductType type, float multiplier)
+    {
+        foreach (var p in products)
+        {
+            if (p.config.productType == type)
+            {
+                p.incomeMultiplier *= multiplier;
+                p.UpdateUI();
+            }
         }
 
         UpdateUI();

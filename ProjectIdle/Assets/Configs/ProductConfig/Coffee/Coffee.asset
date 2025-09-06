@@ -19,5 +19,6 @@ MonoBehaviour:
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: -189660664316715620, guid: ba7347cc7ae089d48a2cf79ed9177a1e, type: 3}
+  productType: 1
   isLockedInitially: 0
   unlockConditions: []

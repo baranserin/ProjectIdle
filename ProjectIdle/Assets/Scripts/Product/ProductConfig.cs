@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ProductConfig", menuName = "Product/ProductConfig")]
-
-
 public class ProductConfig : ScriptableObject
 {
     public string productName;
@@ -14,8 +12,17 @@ public class ProductConfig : ScriptableObject
     public int baseLevel = 1;
     public Sprite icon;
 
+    [Header("Category")]
+    public ProductType productType;
+
     [Header("Unlock Condition")]
     public bool isLockedInitially = false;
     public List<UnlockCondition> unlockConditions = new List<UnlockCondition>();
+}
 
+public enum ProductType
+{
+    Tea,
+    Coffee,
+    Dessert
 }

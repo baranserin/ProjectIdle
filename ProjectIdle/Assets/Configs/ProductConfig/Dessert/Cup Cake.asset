@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
   m_Name: Cup Cake
   m_EditorClassIdentifier: 
-  productName: 
+  productName: Cup Cake
   baseUpgradeCost: 10
   costGrowth: 1.25
   baseIncome: 1
   incomeGrowth: 1.1
   baseLevel: 1
   icon: {fileID: 0}
+  productType: 2
   isLockedInitially: 0
   unlockConditions: []

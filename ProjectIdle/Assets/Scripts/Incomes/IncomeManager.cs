@@ -35,7 +35,7 @@ public class ProductData
     public void UpdateUI()
     {
         if (levelText != null)
-            levelText.text = $"Lvl {level}";
+            levelText.text = $"{level}";
 
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";

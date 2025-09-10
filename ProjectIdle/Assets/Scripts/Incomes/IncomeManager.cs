@@ -56,11 +56,25 @@ public class ProductData
             double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
             upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
         }
+
+
     }
 
     public void ResetToBase()
     {
         level = config.baseLevel;
+    }
+
+    public void CheckLevelBoosts()
+    {
+        foreach (var boost in config.levelBoosts)
+        {
+            if (boost != null && !Mathf.Approximately(boost.incomeMultiplier, 0f) && level == boost.requiredLevel)
+            {
+                incomeMultiplier *= boost.incomeMultiplier;
+                Debug.Log($"{config.productName} {boost.requiredLevel} seviyeye ulaştı! Gelir {boost.incomeMultiplier}x oldu.");
+            }
+        }
     }
 }
 
@@ -321,6 +335,7 @@ public class IncomeManager : MonoBehaviour
             CheckUnlocks();
             p.UpdateUI();
             UpdateUI();
+            p.CheckLevelBoosts();
 
             if (successSound != null)
                 successSound.Play();

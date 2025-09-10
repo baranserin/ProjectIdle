@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Ayarlar2_0: -133041258977965662
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

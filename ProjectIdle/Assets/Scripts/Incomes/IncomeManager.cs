@@ -390,6 +390,7 @@ public class IncomeManager : MonoBehaviour
         for (int i = 0; i < products.Count; i++)
         {
             PlayerPrefs.SetInt($"Product_{i}_Level", products[i].level);
+            PlayerPrefs.SetFloat($"Product_{i}_Multiplier", products[i].incomeMultiplier);
         }
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
@@ -409,6 +410,12 @@ public class IncomeManager : MonoBehaviour
                 products[i].level = PlayerPrefs.GetInt(key);
             else
                 products[i].level = products[i].config.baseLevel;
+
+            // 🔹 multiplier da yükle
+            products[i].incomeMultiplier = PlayerPrefs.GetFloat($"Product_{i}_Multiplier", 1f);
+
+            // güvenlik için boost tekrar kontrol et
+            products[i].CheckLevelBoosts();
         }
 
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
@@ -416,6 +423,7 @@ public class IncomeManager : MonoBehaviour
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
         upgradeButtonManager.CreateButtonsFromConfigs();
     }
+
 
     public void InactiveIncome()
     {

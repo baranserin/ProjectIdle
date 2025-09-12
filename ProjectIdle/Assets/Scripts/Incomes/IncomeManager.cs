@@ -414,8 +414,6 @@ public class IncomeManager : MonoBehaviour
             // 🔹 multiplier da yükle
             products[i].incomeMultiplier = PlayerPrefs.GetFloat($"Product_{i}_Multiplier", 1f);
 
-            // güvenlik için boost tekrar kontrol et
-            products[i].CheckLevelBoosts();
         }
 
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));

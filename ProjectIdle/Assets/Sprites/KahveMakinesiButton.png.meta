@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: f6a9b2d6c71306941bb647bc64317e47
+guid: bda3779229474c04fb88945265d9c6f0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2839499120629310446
-    second: "KahveMakinesi(\u015Eim\u015Fekli)Button_0"
+      213: 5555291552298921546
+    second: KahveMakinesiButton_0
   - first:
-      213: -6539280325286095321
-    second: "KahveMakinesi(\u015Eim\u015Fekli)Button_1"
+      213: -2704041953446759722
+    second: KahveMakinesiButton_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "KahveMakinesi(\u015Eim\u015Fekli)Button_0"
+      name: KahveMakinesiButton_0
       rect:
         serializedVersion: 2
-        x: 29
-        y: 40
-        width: 383
-        height: 551
+        x: 188
+        y: 127
+        width: 607
+        height: 876
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,20 +144,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 21c1bd618921898d0800000000000000
-      internalID: -2839499120629310446
+      spriteID: a4e618ecb3c581d40800000000000000
+      internalID: 5555291552298921546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "KahveMakinesi(\u015Eim\u015Fekli)Button_1"
+      name: KahveMakinesiButton_1
       rect:
         serializedVersion: 2
-        x: 417
-        y: 242
-        width: 50
-        height: 81
+        x: 804
+        y: 448
+        width: 78
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,8 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7261f94d03fcf35a0800000000000000
-      internalID: -6539280325286095321
+      spriteID: 6d27d038b20597ad0800000000000000
+      internalID: -2704041953446759722
       vertices: []
       indices: 
       edges: []
@@ -176,7 +176,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -185,7 +185,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      KahveMakinesiButton_0: 5555291552298921546
+      KahveMakinesiButton_1: -2704041953446759722
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: bda3779229474c04fb88945265d9c6f0
+guid: 55ff81ca695c18a41ba4cdbd055bb861
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5555291552298921546
-    second: KahveMakinesiButton_0
+      213: 2082783161501129809
+    second: KahveMakinesiUpgradeButonu(Oklu)_0
   - first:
-      213: -2704041953446759722
-    second: KahveMakinesiButton_1
+      213: 109096335404459984
+    second: KahveMakinesiUpgradeButonu(Oklu)_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,45 +129,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: KahveMakinesiButton_0
+      name: KahveMakinesiUpgradeButonu(Oklu)_0
       rect:
         serializedVersion: 2
         x: 188
-        y: 127
-        width: 607
-        height: 876
+        y: 93
+        width: 705
+        height: 827
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a4e618ecb3c581d40800000000000000
-      internalID: 5555291552298921546
+      spriteID: 15c9075104887ec10800000000000000
+      internalID: 2082783161501129809
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KahveMakinesiButton_1
+      name: KahveMakinesiUpgradeButonu(Oklu)_1
       rect:
         serializedVersion: 2
-        x: 804
-        y: 448
-        width: 78
-        height: 128
+        x: 802
+        y: 479
+        width: 84
+        height: 116
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6d27d038b20597ad0800000000000000
-      internalID: -2704041953446759722
+      spriteID: 0d7641ef986938100800000000000000
+      internalID: 109096335404459984
       vertices: []
       indices: 
       edges: []
@@ -186,8 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      KahveMakinesiButton_0: 5555291552298921546
-      KahveMakinesiButton_1: -2704041953446759722
+      KahveMakinesiUpgradeButonu(Oklu)_0: 2082783161501129809
+      KahveMakinesiUpgradeButonu(Oklu)_1: 109096335404459984
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

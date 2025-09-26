@@ -203,19 +203,4 @@ public class DecorationIncome : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // Butona tıklandığında çağrılacak fonksiyon
-    public void ShowTimePopup()
-    {
-        string currentTime = System.DateTime.Now.ToString("HH:mm:ss");
-        popupText.text = "Saat: " + currentTime;
-
-        popupText.gameObject.SetActive(true); // Text’i görünür yap
-        StartCoroutine(HidePopupAfterDelay());
-    }
-
-    private IEnumerator HidePopupAfterDelay()
-    {
-        yield return new WaitForSeconds(displayDuration);
-        popupText.gameObject.SetActive(false); // Text’i gizle
-    }
 }

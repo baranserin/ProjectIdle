@@ -27,8 +27,8 @@ MonoBehaviour:
     incomeMultiplier: 2
   - requiredLevel: 10
     incomeMultiplier: 2
-  - requiredLevel: 0
-    incomeMultiplier: 0
+  - requiredLevel: 20
+    incomeMultiplier: 2
   - requiredLevel: 0
     incomeMultiplier: 0
   - requiredLevel: 0

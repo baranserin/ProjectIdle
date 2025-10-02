@@ -65,19 +65,35 @@ public class EventManager : MonoBehaviour
 
     private void ApplyEvent(EventConfig config)
     {
-        if (config.isInstantReward)
-        {
-            IncomeManager.Instance.AddMoney(config.rewardAmount);
-            Debug.Log($"💰 Event ödülü: +{config.rewardAmount}");
-        }
-
-        if (config.isTimedMultiplier)
-        {
-            StartCoroutine(ApplyTimedMultiplier(config.multiplier, config.duration));
-        }
+        // Bütün eventler düşen buton üzerinden çalışacak
+        SpawnFallingButton(config);
 
         isEventActive = false;
     }
+
+    private void SpawnFallingButton(EventConfig config)
+    {
+        RectTransform canvas = FindFirstObjectByType<Canvas>().GetComponent<RectTransform>();
+
+        GameObject btnObj = Instantiate(config.fallingButtonPrefab, canvas);
+        RectTransform rt = btnObj.GetComponent<RectTransform>();
+
+        // Rastgele X pozisyonu (canvas genişliği içinde)
+        float randomX = Random.Range(-canvas.rect.width / 2f, canvas.rect.width / 2f);
+
+        // Canvas’ın üst kenarının biraz üstünden spawn et (sanki dışarıdan geliyor gibi)
+        float spawnY = canvas.rect.height / 2f + 100f;
+
+        rt.localPosition = new Vector3(randomX, spawnY, 0);
+
+        // FallingButton scriptini başlat
+        FallingButton fb = btnObj.GetComponent<FallingButton>();
+        if (fb != null)
+        {
+            fb.Init(config);
+        }
+    }   
+
 
     private IEnumerator ApplyTimedMultiplier(float multiplier, float duration)
     {

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class FallingButton : MonoBehaviour
 {
@@ -8,34 +7,48 @@ public class FallingButton : MonoBehaviour
     private RectTransform rectTransform;
     private Button button;
     private Image buttonImage;
+    private RectTransform canvasRect;
 
-    public void Init(EventConfig eventConfig)
+    private bool initialized = false;
+
+    public void Init(EventConfig eventConfig, RectTransform canvas)
     {
         config = eventConfig;
         rectTransform = GetComponent<RectTransform>();
         button = GetComponent<Button>();
         buttonImage = GetComponent<Image>();
+        canvasRect = canvas;
 
         if (button != null)
-            button.onClick.AddListener(OnClick);
-
-        // Eğer ikon varsa butonun görselini ayarla
-        if (buttonImage != null && config.icon != null)
         {
-            buttonImage.sprite = config.icon;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(OnClick);
         }
 
-        // Belirtilen süre sonra otomatik yok et
-        Destroy(gameObject, config.lifeTime);
+        if (buttonImage != null && config.icon != null)
+            buttonImage.sprite = config.icon;
+
+        initialized = true;
     }
 
     void Update()
     {
+        if (!initialized || config == null || rectTransform == null) return;
+
+        // düşür
         rectTransform.localPosition += Vector3.down * config.fallSpeed * Time.deltaTime;
+
+        // canvas dışına çıktı mı?
+        if (rectTransform.localPosition.y < -canvasRect.rect.height / 2f - rectTransform.rect.height)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnClick()
     {
+        if (config == null) return;
+
         switch (config.eventType)
         {
             case EventType.InstantReward:
@@ -44,9 +57,7 @@ public class FallingButton : MonoBehaviour
                 break;
 
             case EventType.TimedMultiplier:
-                IncomeManager.Instance.StartCoroutine(
-                    ApplyTimedMultiplier(config.multiplier, config.duration)
-                );
+                IncomeManager.Instance.StartCoroutine(ApplyTimedMultiplier(config.multiplier, config.duration));
                 Debug.Log($"⚡ Falling Event: {config.multiplier}x gelir başladı!");
                 break;
         }

@@ -15,10 +15,9 @@ MonoBehaviour:
   eventName: C
   description: Buff
   icon: {fileID: -4622323939014429285, guid: 87d64e0f91533d9498e16f9ae76479bf, type: 3}
+  fallingButtonPrefab: {fileID: 2530298582550929778, guid: 361c98f09c01a44429a7bd15f3f44aac, type: 3}
+  fallSpeed: 350
   eventType: 0
-  fallingButtonPrefab: {fileID: 0}
-  fallSpeed: 200
-  lifeTime: 5
   rewardAmount: 1000
   multiplier: 2
   duration: 30

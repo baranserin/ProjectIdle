@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: InstantCash
   m_EditorClassIdentifier: 
   eventName: C
-  isInstantReward: 1
+  description: Buff
+  icon: {fileID: -4622323939014429285, guid: 87d64e0f91533d9498e16f9ae76479bf, type: 3}
+  eventType: 0
+  fallingButtonPrefab: {fileID: 0}
+  fallSpeed: 200
+  lifeTime: 5
   rewardAmount: 1000
-  isTimedMultiplier: 0
   multiplier: 2
   duration: 30
-  description: Buff

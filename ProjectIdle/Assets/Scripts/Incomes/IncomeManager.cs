@@ -437,7 +437,7 @@ public class IncomeManager : MonoBehaviour
 
             // ✅ Doğru kullanım
             if (PassiveIncomeText != null)
-                PassiveIncomeText.text = "Siz yokken kazanılanlar: " + FormatMoneyStatic(offlineEarning);
+                PassiveIncomeText.text = "Coffees were sold, your vault is full! " + FormatMoneyStatic(offlineEarning);
 
             // Paneli aç / kapat
             if (offlineEarning > 0)

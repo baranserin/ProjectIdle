@@ -11,6 +11,7 @@ public class ProductPurchasePanel : MonoBehaviour
     [Header("UI Refs in this popup")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI currentIncomeText;
+    public TextMeshProUGUI incomeIncreaseText;
     public TextMeshProUGUI nextIncomeText;
     public TextMeshProUGUI costText;
     public Button buyButton;
@@ -130,15 +131,40 @@ public class ProductPurchasePanel : MonoBehaviour
             buyButtonLabel.color = canAfford ? affordableTextColor : unaffordableTextColor;
         }
 
-        if (nextIncomeText != null)
-        {
-            int originalLevel = P.level;
-            P.level = originalLevel + levelsToBuy;
-            double newIncome = P.GetIncome();
-            P.level = originalLevel;
+        // Calculate income difference
+        int originalLevel = P.level;
+        P.level = originalLevel + levelsToBuy;
+        double newIncome = P.GetIncome();
+        P.level = originalLevel;
 
-            nextIncomeText.text = $"+{(newIncome - P.GetIncome()):F1}/s";
+        double incomeDiff = newIncome - P.GetIncome();
+
+        // Show current income
+        if (currentIncomeText != null)
+            currentIncomeText.text = $"{P.GetIncome():F1}/s";
+
+        // Show next income difference (like +5/s)
+        if (incomeIncreaseText != null)
+        {
+            if (incomeDiff > 0)
+            {
+                incomeIncreaseText.text = $"+{incomeDiff:F1}/s";
+            Color customGreen;
+            if (ColorUtility.TryParseHtmlString("#1CC717", out customGreen))
+            {
+                incomeIncreaseText.color = customGreen;
+            }
+            }
+            else
+            {
+                incomeIncreaseText.text = string.Empty;
+            }
         }
+
+        // Optionally, show next total income if you like:
+        if (nextIncomeText != null)
+            nextIncomeText.text = $"{newIncome:F1}/s";
+
 
         _lastMoney = im.totalMoney;
         _lastLevel = P.level;

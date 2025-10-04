@@ -8954,7 +8954,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.000061035, y: 0}
   m_SizeDelta: {x: 1000, y: 2048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &406329960
@@ -21620,62 +21620,62 @@ MonoBehaviour:
     upgradeCostText: {fileID: 1545776828}
   - config: {fileID: 11400000, guid: 5e607ad0da0ca7147919b91603741179, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 315550332}
     incomeText: {fileID: 973294796}
     upgradeCostText: {fileID: 1910585309}
   - config: {fileID: 11400000, guid: dadc51433f9ef4548af10a46189681ee, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 1454054922}
     incomeText: {fileID: 590534947}
     upgradeCostText: {fileID: 700635336}
   - config: {fileID: 11400000, guid: f800c158b3ca3d94d89df0340efd57c8, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 1548034811}
     incomeText: {fileID: 434475057}
     upgradeCostText: {fileID: 2126250064}
   - config: {fileID: 11400000, guid: e3fa6e14381f8ec448f8e1a90989bc17, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 581423192}
     incomeText: {fileID: 1698098270}
     upgradeCostText: {fileID: 751642578}
   - config: {fileID: 11400000, guid: 0c6a93377d43f37478f01820046e65c4, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 894673104}
     incomeText: {fileID: 467323161}
     upgradeCostText: {fileID: 1968847248}
   - config: {fileID: 11400000, guid: e36415fb4243c5d4bb1efb04d1c66660, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 1199499070}
     incomeText: {fileID: 1181343069}
     upgradeCostText: {fileID: 954374908}
   - config: {fileID: 11400000, guid: 34deefe508f02f94d930b85881c17fc5, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 391225045}
     incomeText: {fileID: 1039502727}
     upgradeCostText: {fileID: 496220466}
   - config: {fileID: 11400000, guid: 372310213c89d894695c926b53afb321, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 1424232836}
     incomeText: {fileID: 69219021}
     upgradeCostText: {fileID: 887235891}
   - config: {fileID: 11400000, guid: 8b373266b260dee49b1ab33d1bc56a6d, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 744384153}
     incomeText: {fileID: 645343461}
     upgradeCostText: {fileID: 995733699}
   - config: {fileID: 11400000, guid: cc255f6b0dbc9f54a888dffa1cfc68b9, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 2004662476}
     incomeText: {fileID: 872586335}
     upgradeCostText: {fileID: 722587114}
   - config: {fileID: 11400000, guid: 37a21c38f5da2ea4ba9abb9b31c9274a, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 1146571231}
     incomeText: {fileID: 610113311}
     upgradeCostText: {fileID: 2069746826}
   - config: {fileID: 11400000, guid: ee578ee5316cb5949adc4b62ed4b22b0, type: 2}
     uiObject: {fileID: 0}
-    levelText: {fileID: 0}
+    levelText: {fileID: 199999249}
     incomeText: {fileID: 1311596465}
     upgradeCostText: {fileID: 521191265}
   upgradeConfig: []
@@ -26545,7 +26545,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -107.35925}
+  m_AnchoredPosition: {x: 0, y: -94.16333}
   m_SizeDelta: {x: 3868.33, y: 2798.018}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104811558

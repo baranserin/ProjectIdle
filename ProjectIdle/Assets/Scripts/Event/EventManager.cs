@@ -90,22 +90,39 @@ public class EventManager : MonoBehaviour
 
     private void SpawnFallingButton(EventConfig config)
     {
+        // Ana Canvas'ın RectTransform'unu al
         RectTransform canvasRT = targetCanvas.GetComponent<RectTransform>();
 
-        GameObject btnObj = Instantiate(config.fallingButtonPrefab, canvasRT);
+        // 🎯 FallingButtonsLayer objesini bul (Canvas altında olmalı)
+        Transform fallingLayer = targetCanvas.transform.Find("FallingButtonsLayer");
+        if (fallingLayer == null)
+        {
+            Debug.LogWarning("⚠️ 'FallingButtonsLayer' bulunamadı. FallingButton'lar direkt Canvas'a eklenecek.");
+            fallingLayer = targetCanvas.transform; // yedek çözüm
+        }
+
+        // Prefab oluştur ve parent olarak FallingButtonsLayer ata
+        GameObject btnObj = Instantiate(config.fallingButtonPrefab, fallingLayer);
         RectTransform rt = btnObj.GetComponent<RectTransform>();
 
+        // Rastgele yatay pozisyon, ekranın üst kısmında spawn
         float randomX = Random.Range(-canvasRT.rect.width / 2f, canvasRT.rect.width / 2f);
-        float spawnY = canvasRT.rect.height / 2f + 100f; // ekran üstünden spawn
+        float spawnY = canvasRT.rect.height / 2f + 100f;
 
         rt.localPosition = new Vector3(randomX, spawnY, 0);
 
+        // FallingButton scriptini al ve başlat
         FallingButton fb = btnObj.GetComponent<FallingButton>();
         if (fb != null)
         {
             fb.Init(config, canvasRT);
         }
+        else
+        {
+            Debug.LogError("❌ Prefab üzerinde 'FallingButton' scripti yok!");
+        }
     }
+
 
 
     private IEnumerator HideEventPanelAfterDelay(float delay)

@@ -1,8 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-
 using static NUnit.Framework.Internal.OSPlatform;
 
 [System.Serializable]
@@ -73,13 +71,6 @@ public class UpgradeCardManager : MonoBehaviour
             pageIndicators[i].sprite = (i == currentIndex) ? dotOn : dotOff;
         }
     }
-    public static string FormatMoneyStatic(double amount)
-    {
-        if (amount >= 1_000_000_000) return (amount / 1_000_000_000).ToString("F1") + "B";
-        if (amount >= 1_000_000) return (amount / 1_000_000).ToString("F1") + "M";
-        if (amount >= 1_000) return (amount / 1_000).ToString("F1") + "K";
-        return Math.Floor(amount).ToString();
-    }
     public void BuyUpgrade()
     {
         var upgrade = upgrades[currentIndex];
@@ -120,7 +111,7 @@ public class UpgradeCardManager : MonoBehaviour
         }
         else
         {
-            priceTextUI.text = FormatMoneyStatic(upgrade.price);
+            priceTextUI.text = upgrade.price.ToString();
             priceTextUI.color = Color.white;
             objectImageUI.color = Color.white;
         }

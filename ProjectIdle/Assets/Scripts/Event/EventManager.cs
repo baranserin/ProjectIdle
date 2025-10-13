@@ -94,7 +94,7 @@ public class EventManager : MonoBehaviour
         RectTransform canvasRT = targetCanvas.GetComponent<RectTransform>();
 
         // 🎯 FallingButtonsLayer objesini bul (Canvas altında olmalı)
-        Transform fallingLayer = targetCanvas.transform.Find("FallingButtonsLayer");
+        Transform fallingLayer = targetCanvas.transform.Find("Cafe Scroll View");
         if (fallingLayer == null)
         {
             Debug.LogWarning("⚠️ 'FallingButtonsLayer' bulunamadı. FallingButton'lar direkt Canvas'a eklenecek.");

@@ -40,7 +40,7 @@ public class ProductData
         if (levelText != null && levelText2 != null)
         {
             levelText.text = $"{level}";
-            levelText2.text = $"{level}";
+            levelText2.text = "lv\n"+$"{level}";
         }
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
@@ -123,6 +123,10 @@ public class IncomeManager : MonoBehaviour
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
     public float upgradeMultiplier = 0f;
+
+    [Header("Global Multipliers")]
+    public float globalIncomeMultiplier = 1f;   // Barista vb. global etkiler
+
 
     // 🔥 Event sistemi için multiplier
     public float temporaryMultiplier = 1f;
@@ -229,8 +233,12 @@ public class IncomeManager : MonoBehaviour
         foreach (var p in products)
             total += p.GetIncome();
 
-        // 🔥 Event çarpanı da uygula
-        return total * temporaryMultiplier;
+        // Prestige + event + global çarpanları DAHİL
+        total *= prestigeMultiplier;
+        total *= temporaryMultiplier;
+        total *= globalIncomeMultiplier;
+
+        return total;
     }
 
     public void AddMoney(double amount)
@@ -398,6 +406,7 @@ public class IncomeManager : MonoBehaviour
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
         PlayerPrefs.SetInt("PrestigeLevel", prestigeLevel);
+        PlayerPrefs.SetFloat("GlobalIncomeMultiplier", globalIncomeMultiplier);
         string timeNow = DateTime.Now.ToString("O");
         PlayerPrefs.SetString("lastExitTime", timeNow);
         PlayerPrefs.Save();
@@ -422,6 +431,7 @@ public class IncomeManager : MonoBehaviour
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
+        globalIncomeMultiplier = PlayerPrefs.GetFloat("GlobalIncomeMultiplier", 1f);
         upgradeButtonManager.CreateButtonsFromConfigs();
     }
 
@@ -435,7 +445,7 @@ public class IncomeManager : MonoBehaviour
             TimeSpan fark = DateTime.Now - lastTime;
 
             double secondsAway = fark.TotalSeconds;
-            double incomePerSecond = GetTotalIncome() * prestigeMultiplier;
+            double incomePerSecond = GetTotalIncome();
             offlineEarning = incomePerSecond * secondsAway;
 
             // ✅ Doğru kullanım
@@ -520,8 +530,20 @@ public class IncomeManager : MonoBehaviour
 
         UpdateUI();
     }
+    public void ApplyGlobalIncomeMultiplier(float mult)
+    {
+        globalIncomeMultiplier *= mult;   // örn. 1.2f => +%20
+        UpdateUI();
+        SaveData();
+    }
     public void ApplyCategoryUpgrade(ProductType type, float multiplier)
     {
+        if (type == ProductType.Barista)
+        {
+            ApplyGlobalIncomeMultiplier(multiplier);
+            return;
+        }
+
         foreach (var p in products)
         {
             if (p.config.productType == type)

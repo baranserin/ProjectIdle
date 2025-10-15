@@ -34,5 +34,6 @@ public enum ProductType
 {
     Tea,
     Coffee,
-    Dessert
+    Dessert,
+    Barista
 }

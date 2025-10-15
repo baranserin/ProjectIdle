@@ -8,44 +8,36 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton deseni: Sahnede sadece bir tane MenuManager olmasýný saðlar.
+        // Singleton deseninin DOÐRU ve GÜVENLÝ hali
         if (Instance == null)
         {
             Instance = this;
         }
-      
+        else if (Instance != this)
+        {
+            // Eðer sahnede zaten baþka bir yönetici varsa, bu yeni olan kendini yok etsin.
+            Destroy(gameObject);
+            return;
+        }
     }
 
     // Butonlar bu fonksiyonu çaðýracak
     public void ToggleButton(MenuToggleButton clickedButton)
     {
-        // Eðer baþka bir buton açýksa, önce onu kapat
         if (currentlyOpenButton != null && currentlyOpenButton != clickedButton)
         {
             currentlyOpenButton.CloseSlider();
         }
 
-        // Týklanan butonun durumunu deðiþtir
         if (currentlyOpenButton == clickedButton)
-        {
-            // Ayný butona tekrar basýlýrsa kapat
-            CloseCurrentlyOpenMenu();
-        }
-        else
-        {
-            // Yeni butonu aç
-            clickedButton.OpenSlider();
-            currentlyOpenButton = clickedButton;
-        }
-    }
-
-    // O an açýk olan menüyü kapatmak için kullanýlýr
-    public void CloseCurrentlyOpenMenu()
-    {
-        if (currentlyOpenButton != null)
         {
             currentlyOpenButton.CloseSlider();
             currentlyOpenButton = null;
+        }
+        else
+        {
+            clickedButton.OpenSlider();
+            currentlyOpenButton = clickedButton;
         }
     }
 }

@@ -2,28 +2,28 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public static MenuManager Instance;
+    public static MenuManager Instance { get; private set; }
 
-    private MenuToggleButton currentlyOpenButton;
+    [HideInInspector] public MenuToggleButton currentlyOpenButton;
 
     private void Awake()
     {
-        // Singleton deseninin DOÐRU ve GÜVENLÝ hali
+        // Singleton güvenli
         if (Instance == null)
         {
             Instance = this;
         }
         else if (Instance != this)
         {
-            // Eðer sahnede zaten baþka bir yönetici varsa, bu yeni olan kendini yok etsin.
-            Destroy(gameObject);
+            Destroy(this); // duplicate varsa sadece bu script yok olur, objeler silinmez
             return;
         }
     }
 
-    // Butonlar bu fonksiyonu çaðýracak
+    // Menü açma butonlarý bu fonksiyonu çaðýracak
     public void ToggleButton(MenuToggleButton clickedButton)
     {
+        // Eðer baþka bir menü açýksa kapat
         if (currentlyOpenButton != null && currentlyOpenButton != clickedButton)
         {
             currentlyOpenButton.CloseSlider();
@@ -31,13 +31,23 @@ public class MenuManager : MonoBehaviour
 
         if (currentlyOpenButton == clickedButton)
         {
-            currentlyOpenButton.CloseSlider();
-            currentlyOpenButton = null;
+            // Ayný menüye tekrar basýlýrsa kapat
+            CloseCurrentlyOpenMenu();
         }
         else
         {
             clickedButton.OpenSlider();
             currentlyOpenButton = clickedButton;
+        }
+    }
+
+    // Açýk menüyü kapat
+    public void CloseCurrentlyOpenMenu()
+    {
+        if (currentlyOpenButton != null)
+        {
+            currentlyOpenButton.CloseSlider();
+            currentlyOpenButton = null;
         }
     }
 }

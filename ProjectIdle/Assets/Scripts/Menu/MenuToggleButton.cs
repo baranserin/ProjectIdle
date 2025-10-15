@@ -2,42 +2,43 @@ using UnityEngine;
 
 public class MenuToggleButton : MonoBehaviour
 {
-    // Inspector'dan bu butona ait Animator'ü sürükle
     public Animator animator;
-
     [HideInInspector] public bool isOpen = false;
 
-    // Butonun OnClick eventi bu fonksiyonu çaðýracak
-    public void OnToggleMenu()
+    private MenuManager menuManager;
+
+    private void Awake()
     {
-        // Orkestra þefine haber ver: "Bana týklandý!"
-        if (MenuManager.Instance != null)
-        {
-            MenuManager.Instance.ToggleButton(this);
-        }
-        else
-        {
+        // Unity 2023+ için güncel referans alma
+        menuManager = GameObject.FindFirstObjectByType<MenuManager>();
+
+        if (menuManager == null)
             Debug.LogError("Sahnede MenuManager bulunamadý!");
-        }
     }
 
-    // Slider'ý AÇ (Sadece bu menüye ait)
+    public void OnToggleMenu()
+    {
+        if (menuManager != null)
+            menuManager.ToggleButton(this);
+    }
+
     public void OpenSlider()
     {
         if (animator != null && !isOpen)
         {
             animator.SetTrigger("Open");
             isOpen = true;
+            animator.ResetTrigger("Close");
         }
     }
 
-    // Slider'ý KAPAT (Sadece bu menüye ait)
     public void CloseSlider()
     {
         if (animator != null && isOpen)
         {
             animator.SetTrigger("Close");
             isOpen = false;
+            animator.ResetTrigger("Open");
         }
     }
 }

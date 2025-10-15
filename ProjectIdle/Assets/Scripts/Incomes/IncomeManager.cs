@@ -17,7 +17,6 @@ public class ProductData
     [Header("UI")]
     public GameObject uiObject;
     public TextMeshProUGUI levelText;
-    public TextMeshProUGUI levelText2;
     public TextMeshProUGUI incomeText;
     public TextMeshProUGUI upgradeCostText;
 
@@ -39,7 +38,6 @@ public class ProductData
     {
         if (levelText != null)
             levelText.text = $"{level}";
-            levelText2.text = $"{level}";
 
         if (incomeText != null)
             incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";

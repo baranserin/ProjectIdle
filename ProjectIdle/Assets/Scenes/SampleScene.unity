@@ -14814,7 +14814,7 @@ MonoBehaviour:
   m_Content: {fileID: 1043353469}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 0
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -25288,19 +25288,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgrades:
   - objectImage: {fileID: 3573036208370857778, guid: ee3267134907c824da9ff9f8e0098568, type: 3}
-    objectName: TEA MACHINE I
+    objectName: Barista1
     price: 2000
     targetType: 3
     multiplier: 2
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
-    objectName: TEA MACHINE II
+    objectName: Barista2
     price: 5000
     targetType: 3
     multiplier: 2
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
-    objectName: TEA MACHINE III
+    objectName: Barista3
     price: 1000000
     targetType: 3
     multiplier: 2
@@ -25979,7 +25979,7 @@ GameObject:
   - component: {fileID: 1319467615}
   - component: {fileID: 1319467614}
   m_Layer: 5
-  m_Name: Buy Button 2
+  m_Name: Buy Button 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26048,7 +26048,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1319467615}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 411472555}
+        m_TargetAssemblyTypeName: UpgradeCardManager, Assembly-CSharp
+        m_MethodName: BuyUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1319467615
 MonoBehaviour:
   m_ObjectHideFlags: 0

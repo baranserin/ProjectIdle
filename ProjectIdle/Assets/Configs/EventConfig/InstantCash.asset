@@ -19,10 +19,10 @@ MonoBehaviour:
   multiplier: 2
   duration: 30
   fallSpeed: 350
-  icon: {fileID: 1177578112082225661, guid: cbff5aa01d0c20d43afb6c68bfec532c, type: 3}
+  icon: {fileID: -2401161032488342882, guid: cbff5aa01d0c20d43afb6c68bfec532c, type: 3}
   animationFrames:
-  - {fileID: 1177578112082225661, guid: cbff5aa01d0c20d43afb6c68bfec532c, type: 3}
-  - {fileID: 4093529123795720158, guid: ac20de03dba18c2479e8a782e83f8871, type: 3}
-  - {fileID: 1563620848058282944, guid: cd1986856ec0ad147b772a233135e612, type: 3}
-  - {fileID: -3218644999118768396, guid: eaa4fb9716d84304bb4ef691e7a9705d, type: 3}
+  - {fileID: 21300000, guid: ac20de03dba18c2479e8a782e83f8871, type: 3}
+  - {fileID: 21300000, guid: eaa4fb9716d84304bb4ef691e7a9705d, type: 3}
+  - {fileID: 21300000, guid: cbff5aa01d0c20d43afb6c68bfec532c, type: 3}
+  - {fileID: 21300000, guid: cd1986856ec0ad147b772a233135e612, type: 3}
   fallingButtonPrefab: {fileID: 2125420316090727626, guid: a9028f20fd8ceb241b73e01efacc6ef8, type: 3}

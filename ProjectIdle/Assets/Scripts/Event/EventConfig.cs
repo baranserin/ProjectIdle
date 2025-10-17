@@ -1,28 +1,34 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
-public enum EventType { InstantReward, TimedMultiplier }
+public enum EventType
+{
+    InstantReward,
+    TimedMultiplier
+}
 
-[CreateAssetMenu(fileName = "EventConfig", menuName = "Events/Event Config")]
+[CreateAssetMenu(fileName = "EventConfig", menuName = "Event/New Event")]
 public class EventConfig : ScriptableObject
 {
-    [Header("Temel")]
     public string eventName;
     public string description;
-    public Sprite icon;
 
-    [Header("Falling Button")]
-    public GameObject fallingButtonPrefab; // UI Button prefabý
-    public float fallSpeed = 200f;         // düþme hýzý (px/s)
+    [Header("Event Type")]
+    public EventType eventType;
 
-    [Header("Etki")]
-    public EventType eventType = EventType.InstantReward;
+    [Header("Instant Reward")]
+    public double rewardAmount;
 
-    [Tooltip("InstantReward için miktar, TimedMultiplier için baþlangýç çarpaný")]
-    public double rewardAmount = 50;
-
-    [Tooltip("TimedMultiplier çarpan deðeri")]
+    [Header("Timed Multiplier")]
     public float multiplier = 2f;
+    public float duration = 5f;
 
-    [Tooltip("TimedMultiplier süresi (saniye)")]
-    public float duration = 15f;
+    [Header("Fall Settings")]
+    public float fallSpeed = 200f;
+
+    [Header("UI")]
+    public Sprite icon;                  // âœ… Eklendi
+    public Sprite[] animationFrames;     // ðŸ”¥ Ã‡ok kareli sprite animasyonu
+
+    [Header("Prefab Reference")]
+    public GameObject fallingButtonPrefab;
 }

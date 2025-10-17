@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class FallingButton : MonoBehaviour
+public class FallingButton : MonoBehaviour, IPointerClickHandler
 {
     private EventConfig config;
     private RectTransform rectTransform;
@@ -9,15 +12,23 @@ public class FallingButton : MonoBehaviour
     private Image buttonImage;
     private RectTransform canvasRect;
 
-    private bool initialized = false;
+    // 🔥 Config’ten gelen animasyon kareleri
+    private Sprite[] frames;
+    private int frameIndex = 0;
+    private float frameTimer = 0f;
+    public float framesPerSecond = 10f;
+    private bool hasAnimation = false;
+
+    private bool consumed = false;
 
     public void Init(EventConfig eventConfig, RectTransform canvas)
     {
         config = eventConfig;
+        canvasRect = canvas;
+
         rectTransform = GetComponent<RectTransform>();
         button = GetComponent<Button>();
         buttonImage = GetComponent<Image>();
-        canvasRect = canvas;
 
         if (button != null)
         {
@@ -25,51 +36,78 @@ public class FallingButton : MonoBehaviour
             button.onClick.AddListener(OnClick);
         }
 
-        if (buttonImage != null && config.icon != null)
+        // Animasyon kareleri config’ten al
+        if (config.animationFrames != null && config.animationFrames.Length > 0)
+        {
+            frames = config.animationFrames;
+            hasAnimation = true;
+            buttonImage.sprite = frames[0];
+        }
+        else if (config != null && config.fallingButtonPrefab != null)
+        {
+            // fallback tek ikon
             buttonImage.sprite = config.icon;
+        }
 
-        initialized = true;
+        // Spawn pozisyon
+        frameIndex = 0;
     }
 
     void Update()
     {
-        if (!initialized || config == null || rectTransform == null) return;
+        if (config == null || rectTransform == null) return;
 
-        // düşür
+        // Düşme
         rectTransform.localPosition += Vector3.down * config.fallSpeed * Time.deltaTime;
 
-        // canvas dışına çıktı mı?
+        // Canvas dışına çıktıysa yok et
         if (rectTransform.localPosition.y < -canvasRect.rect.height / 2f - rectTransform.rect.height)
         {
             Destroy(gameObject);
+            return;
+        }
+
+        // Kare animasyonu
+        if (hasAnimation && frames != null && frames.Length > 1)
+        {
+            frameTimer += Time.deltaTime;
+            if (frameTimer >= 1f / framesPerSecond)
+            {
+                frameTimer = 0f;
+                frameIndex = (frameIndex + 1) % frames.Length;
+                buttonImage.sprite = frames[frameIndex];
+            }
         }
     }
 
-    void OnClick()
+    private void OnClick()
     {
-        if (config == null) return;
+        if (consumed) return;
+        consumed = true;
 
         switch (config.eventType)
         {
             case EventType.InstantReward:
                 IncomeManager.Instance.AddMoney(config.rewardAmount);
-                Debug.Log($"💰 Falling Event: +{config.rewardAmount} money!");
                 break;
 
             case EventType.TimedMultiplier:
                 IncomeManager.Instance.StartCoroutine(ApplyTimedMultiplier(config.multiplier, config.duration));
-                Debug.Log($"⚡ Falling Event: {config.multiplier}x gelir başladı!");
                 break;
         }
 
         Destroy(gameObject);
     }
 
-    private System.Collections.IEnumerator ApplyTimedMultiplier(float multiplier, float duration)
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick();
+    }
+
+    private IEnumerator ApplyTimedMultiplier(float multiplier, float duration)
     {
         IncomeManager.Instance.temporaryMultiplier *= multiplier;
         yield return new WaitForSeconds(duration);
         IncomeManager.Instance.temporaryMultiplier /= multiplier;
-        Debug.Log("⏳ Multiplier süresi bitti.");
     }
 }

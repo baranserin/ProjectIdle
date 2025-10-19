@@ -43,7 +43,7 @@ public class ProductData
             levelText2.text = "lv\n"+$"{level}";
         }
         if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) + "/s";
+            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) ;
 
         if (upgradeCostText != null)
         {

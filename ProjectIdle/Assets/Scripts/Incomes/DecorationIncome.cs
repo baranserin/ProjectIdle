@@ -11,7 +11,7 @@ public class DecorationIncome : MonoBehaviour
     {
         public string itemName;
         public GameObject targetObject;   // Sahnedeki obje
-        public Button buyButton;          // Satın alma butonu
+        public Button buyButton;          // Satın alma / Seç butonu
         public int itemCost;
         public float itemMultiplier = 1f;
 
@@ -23,7 +23,8 @@ public class DecorationIncome : MonoBehaviour
         public GameObject purchasedPrefab;      // Inspector’dan atanacak
         [HideInInspector] public GameObject spawnedPurchased; // Oluşturulan prefab referansı
 
-        [HideInInspector] public bool isPurchased = false;
+        [HideInInspector] public bool isPurchased = false; // Satın alındı mı?
+        [HideInInspector] public bool isSelected = false;  // Seçili mi?
 
         public void Initialize(System.Action<DecorationEntry> onBuy)
         {
@@ -35,15 +36,9 @@ public class DecorationIncome : MonoBehaviour
 
             if (buyButton != null)
             {
-                buyButton.interactable = prerequisite == null || prerequisite.isPurchased;
-
                 buyButton.onClick.AddListener(() =>
                 {
-                    if (!isPurchased)
-                    {
-                        isPurchased = true;
-                        onBuy?.Invoke(this);
-                    }
+                    onBuy?.Invoke(this);
                 });
             }
         }
@@ -69,69 +64,84 @@ public class DecorationIncome : MonoBehaviour
 
     private void ApplyDecoration(DecorationEntry entry)
     {
-        if (entry.itemCost > incomeManager.totalMoney)
-            return;
-
-        incomeManager.totalMoney -= entry.itemCost;
-
-        // Aynı gruptaki diğer dekorasyonları kapat
-        foreach (var deco in decorations)
+        // Eğer satın alınmamışsa para kontrolü
+        if (!entry.isPurchased)
         {
-            if (deco != entry && deco.groupId == entry.groupId)
+            if (entry.itemCost > incomeManager.totalMoney)
+                return;
+
+            incomeManager.totalMoney -= entry.itemCost;
+            entry.isPurchased = true;
+            incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
+            PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
+            PlayerPrefs.Save();
+
+            // Prefab oluştur
+            if (entry.purchasedPrefab != null && entry.spawnedPurchased == null && entry.buyButton != null)
             {
-                if (deco.targetObject != null)
-                    deco.targetObject.SetActive(false);
-
-                deco.isPurchased = false;
-
-                if (deco.buyButton != null)
-                    deco.buyButton.gameObject.SetActive(true);
-
-                if (deco.spawnedPurchased != null)
-                {
-                    Destroy(deco.spawnedPurchased);
-                    deco.spawnedPurchased = null;
-                }
-            }
-        }
-
-        // Bu dekorasyonu aç
-        if (entry.targetObject != null)
-            entry.targetObject.SetActive(true);
-
-        incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
-
-        // Ön koşulu geçenlerin butonunu aç
-        foreach (var deco in decorations)
-        {
-            if (deco.prerequisite == entry && deco.buyButton != null)
-                deco.buyButton.interactable = true;
-        }
-
-        // Buton gizle + prefab oluştur (layout Group uyumlu ve görünür)
-        if (entry.buyButton != null)
-        {
-            Transform parent = entry.buyButton.transform.parent;
-
-            // Butonu gizle
-            entry.buyButton.gameObject.SetActive(false);
-
-            // Prefab instantiate, sibling index ile tam yerde
-            if (entry.purchasedPrefab != null)
-            {
+                Transform parent = entry.buyButton.transform.parent;
                 entry.spawnedPurchased = Instantiate(entry.purchasedPrefab, parent, false);
                 entry.spawnedPurchased.transform.SetSiblingIndex(entry.buyButton.transform.GetSiblingIndex());
                 entry.spawnedPurchased.transform.localScale = Vector3.one;
             }
-            else
+        }
+
+        // Aynı gruptaki diğer dekorasyonları deselect et
+        foreach (var deco in decorations)
+        {
+            if (deco != entry && deco.groupId == entry.groupId)
             {
-                Debug.LogWarning($"Purchased Prefab atanmadı: {entry.itemName}");
+                deco.isSelected = false;
+                if (deco.targetObject != null)
+                    deco.targetObject.SetActive(false);
             }
         }
 
-        // Kaydet
-        PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
-        PlayerPrefs.Save();
+        // Bu dekorasyonu seçili yap
+        entry.isSelected = true;
+        if (entry.targetObject != null)
+            entry.targetObject.SetActive(true);
+
+        // Buton metinlerini ve interactivity'yi güncelle
+        UpdateDecorationButtons();
+    }
+
+    private void UpdateDecorationButtons()
+    {
+        foreach (var deco in decorations)
+        {
+            if (!deco.isPurchased)
+            {
+                if (deco.buyButton != null)
+                {
+                    deco.buyButton.gameObject.SetActive(true);
+                    deco.buyButton.GetComponentInChildren<TextMeshProUGUI>().text = "BUY";
+                    deco.buyButton.interactable = deco.prerequisite == null || deco.prerequisite.isPurchased;
+                }
+            }
+            else
+            {
+                if (deco.buyButton != null)
+                {
+                    deco.buyButton.gameObject.SetActive(true);
+
+                    if (deco.isSelected)
+                    {
+                        deco.buyButton.GetComponentInChildren<TextMeshProUGUI>().text = "SELECTED";
+                        deco.buyButton.interactable = false;
+                    }
+                    else
+                    {
+                        deco.buyButton.GetComponentInChildren<TextMeshProUGUI>().text = "SELECT";
+                        deco.buyButton.interactable = true;
+                    }
+                }
+            }
+
+            // Fiyat text
+            if (deco.costText != null)
+                deco.costText.text = deco.itemCost.ToString() + " $";
+        }
     }
 
     public void LoadDecorations()
@@ -143,40 +153,12 @@ public class DecorationIncome : MonoBehaviour
             if (saved == 1)
             {
                 deco.isPurchased = true;
-                if (deco.targetObject != null)
-                    deco.targetObject.SetActive(true);
-                if (deco.buyButton != null)
-                    deco.buyButton.gameObject.SetActive(false);
-
-                // Prefab oluştur
-                if (deco.purchasedPrefab != null && deco.spawnedPurchased == null && deco.buyButton != null)
-                {
-                    Transform parent = deco.buyButton.transform.parent;
-                    deco.spawnedPurchased = Instantiate(deco.purchasedPrefab, parent, false);
-                    deco.spawnedPurchased.transform.SetSiblingIndex(deco.buyButton.transform.GetSiblingIndex());
-                    deco.spawnedPurchased.transform.localScale = Vector3.one;
-                }
-
-                incomeManager.AddDecorationMultiplier(deco.itemMultiplier);
-            }
-            else
-            {
-                deco.isPurchased = false;
-                if (deco.targetObject != null)
-                    deco.targetObject.SetActive(false);
-                if (deco.buyButton != null)
-                    deco.buyButton.gameObject.SetActive(true);
-
-                if (deco.spawnedPurchased != null)
-                {
-                    Destroy(deco.spawnedPurchased);
-                    deco.spawnedPurchased = null;
-                }
             }
 
-            if (deco.costText != null)
-                deco.costText.text = deco.itemCost.ToString() + " $";
+            deco.isSelected = false;
         }
+
+        UpdateDecorationButtons();
     }
 
     public void ResetDecorations()
@@ -185,6 +167,7 @@ public class DecorationIncome : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("Decoration_" + deco.itemName);
             deco.isPurchased = false;
+            deco.isSelected = false;
 
             if (deco.targetObject != null)
                 deco.targetObject.SetActive(false);
@@ -202,5 +185,4 @@ public class DecorationIncome : MonoBehaviour
         }
         PlayerPrefs.Save();
     }
-
 }

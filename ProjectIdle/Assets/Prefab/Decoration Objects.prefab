@@ -364,8 +364,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 7146835166352070939}
   - component: {fileID: 5332356238692698354}
   - component: {fileID: 3017610444335695632}
+  - component: {fileID: 3696918831668804484}
   m_Layer: 5
   m_Name: Clock Button
   m_TagString: Untagged
@@ -436,7 +437,7 @@ RectTransform:
   m_GameObject: {fileID: 6342934484684411288}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9352, y: 0.9352, z: 0.9352}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4081421862144885836}
@@ -444,8 +445,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 789, y: -87.978}
-  m_SizeDelta: {x: 166.144, y: 88.483}
+  m_AnchoredPosition: {x: 778.6448, y: -87.978}
+  m_SizeDelta: {x: 188.29, y: 88.483}
   m_Pivot: {x: 0.5, y: 0.4999997}
 --- !u!222 &7146835166352070939
 CanvasRenderer:
@@ -516,7 +517,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 6164089424788273403, guid: f8e41d3a6a82b99489daabcfe49a88c6, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -529,6 +530,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3696918831668804484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6342934484684411288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8553f3fe88cd2b74ab1fd6714f5a0afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuGroup: {fileID: 0}
+  fadeButton: {fileID: 0}
 --- !u!1 &7884818552291398912
 GameObject:
   m_ObjectHideFlags: 0

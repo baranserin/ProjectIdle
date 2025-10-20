@@ -47,17 +47,21 @@ public class ProductData
 
         if (upgradeCostText != null)
         {
-            int levelsToBuy = IncomeManager.Instance.currentBuyMode switch
+            if (IncomeManager.Instance != null)
             {
-                IncomeManager.BuyMode.x1 => 1,
-                IncomeManager.BuyMode.x10 => 10,
-                IncomeManager.BuyMode.x50 => 50,
-                IncomeManager.BuyMode.Max => Mathf.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
-                _ => 1
-            };
+                int levelsToBuy = IncomeManager.Instance.currentBuyMode switch
+                {
+                    IncomeManager.BuyMode.x1 => 1,
+                    IncomeManager.BuyMode.x10 => 10,
+                    IncomeManager.BuyMode.x50 => 50,
+                    // Line 50 is here, and now it's safe because we checked Instance above
+                    IncomeManager.BuyMode.Max => Mathf.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
+                    _ => 1
+                };
 
-            double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
-            upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
+                double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
+                upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
+            }
         }
 
 
@@ -96,11 +100,9 @@ public class UnlockCondition
 
 public class IncomeManager : MonoBehaviour
 {
-    public UpgradeButtonManager upgradeButtonManager;
     public static IncomeManager Instance;
     public DecorationIncome decorationIncome;
 
-    public List<UpgradeConfig> upgradeFactor;
 
     public enum BuyMode
     {
@@ -115,7 +117,6 @@ public class IncomeManager : MonoBehaviour
 
     [Header("Ürünler")]
     public List<ProductData> products;
-    public List<UpgradeConfig> upgradeConfig;
 
     [Header("Genel")]
     public double totalMoney = 10f;
@@ -209,8 +210,6 @@ public class IncomeManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
 
-        upgradeFactor.Clear();
-
         foreach (var p in products)
         {
             p.level = p.config.baseLevel;
@@ -221,7 +220,6 @@ public class IncomeManager : MonoBehaviour
         prestigeLevel = 0;
         prestigePoint = 0;
         decorationIncome.ResetDecorations();
-        upgradeButtonManager.ResetButtons();
         UpdateUI();
 
         Debug.Log("🔁 ResetAllData tamamlandı.");
@@ -432,7 +430,6 @@ public class IncomeManager : MonoBehaviour
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
         globalIncomeMultiplier = PlayerPrefs.GetFloat("GlobalIncomeMultiplier", 1f);
-        upgradeButtonManager.CreateButtonsFromConfigs();
     }
 
 
@@ -489,36 +486,6 @@ public class IncomeManager : MonoBehaviour
         PassiveIncomePanel.SetActive(false);
         UpdateUI();
     }
-    public void ApplyUpgrade(UpgradeConfig config)
-    {
-        if (!upgradeFactor.Contains(config))
-        {
-            upgradeFactor.Add(config);
-            SaveUpgrade(config);
-
-            if (!string.IsNullOrEmpty(config.targetProductName))
-            {
-                var product = products.Find(p => p.config.productName == config.targetProductName);
-                if (product != null)
-                {
-                    product.incomeMultiplier += config.upgradeFactor;
-                    Debug.Log($"🔹 Upgrade uygulandı: {product.config.productName} x{config.upgradeFactor}");
-                    product.UpdateUI();
-                }
-            }
-            else
-            {
-                foreach (var product in products)
-                {
-                    product.incomeMultiplier += config.upgradeFactor;
-                    Debug.Log($"🔸 Global upgrade: {product.config.productName} x{config.upgradeFactor}");
-                    product.UpdateUI();
-                }
-            }
-
-            UpdateUI();
-        }
-    }
 
     public void AddDecorationMultiplier(float multiplier)
     {
@@ -554,12 +521,5 @@ public class IncomeManager : MonoBehaviour
         }
 
         UpdateUI();
-    }
-
-    private void SaveUpgrade(UpgradeConfig config)
-    {
-        string key = "Upgrade_Buyed_" + config.upgradeName;
-        PlayerPrefs.SetInt(key, 1);
-        PlayerPrefs.Save();
     }
 }

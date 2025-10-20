@@ -22,8 +22,8 @@ public class FallingButton : MonoBehaviour, IPointerClickHandler
     // --- Yumuşak düşüş & görsel efektler ---
     [Header("Motion")]
     public AnimationCurve fallEase = AnimationCurve.EaseInOut(0, 0, 1, 1); // 0→1 ease
-    public float swayAmplitude = 12f;     // sağ-sol esneme
-    public float swayFrequency = 1.5f;    // Hz
+    public float swayAmplitude = 2f;     // sağ-sol esneme
+    public float swayFrequency = 0.8f;    // Hz
     public float pulseAmplitude = 0.06f;  // scale nefes (0.0–0.1)
     public float pulseFrequency = 2.0f;
 

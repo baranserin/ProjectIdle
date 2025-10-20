@@ -13,8 +13,11 @@ public class UpgradeCardData
     public ProductType targetType;
     public float multiplier;
 
+    public TMP_Text descriptionText;
+
     [HideInInspector] public bool isBought = false;
 }
+
 public class UpgradeCardManager : MonoBehaviour
 {
     [Header("Card Data")]
@@ -44,13 +47,25 @@ public class UpgradeCardManager : MonoBehaviour
 
         currentIndex = index;
 
-        objectImageUI.sprite = upgrades[index].objectImage;
-        objectNameUI.text = upgrades[index].objectName;
-        priceTextUI.text = upgrades[index].price.ToString();
+        var upgrade = upgrades[index];
+
+        objectImageUI.sprite = upgrade.objectImage;
+        objectNameUI.text = upgrade.objectName;
+        priceTextUI.text = upgrade.price.ToString();
+
+        foreach (var upg in upgrades)
+        {
+            if (upg.descriptionText != null)
+                upg.descriptionText.gameObject.SetActive(false);
+        }
+
+        if (upgrade.descriptionText != null)
+            upgrade.descriptionText.gameObject.SetActive(true);
 
         UpdatePageIndicators();
-        UpdateCardVisual(upgrades[index]);
+        UpdateCardVisual(upgrade);
     }
+
 
     public void NextCard()
     {

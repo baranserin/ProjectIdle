@@ -40,7 +40,6 @@ public class DecorationIncome : MonoBehaviour
 
             if (buyButton != null)
             {
-                buyButton.onClick.RemoveAllListeners();
                 buyButton.onClick.AddListener(() =>
                 {
                     onBuy?.Invoke(this);
@@ -68,12 +67,11 @@ public class DecorationIncome : MonoBehaviour
 
     private void Start()
     {
-        // Başlat
         foreach (var deco in decorations)
             deco.Initialize(ApplyDecoration);
 
-        LoadDecorations();          // Kaydedilmiş satın alma durumlarını yükle
-        UpdateDecorationButtons();  // UI ilk durum
+        LoadDecorations();
+        UpdateDecorationButtons();
     }
 
     private void Update()
@@ -87,7 +85,6 @@ public class DecorationIncome : MonoBehaviour
         }
     }
 
-    // ---- Helpers ----
     private bool CanAfford(DecorationEntry d)
     {
         return incomeManager != null && incomeManager.totalMoney >= d.itemCost;
@@ -108,7 +105,6 @@ public class DecorationIncome : MonoBehaviour
         popupText.gameObject.SetActive(false);
     }
 
-    // ---- Ana Akış ----
     private void ApplyDecoration(DecorationEntry entry)
     {
         if (incomeManager == null)
@@ -120,40 +116,31 @@ public class DecorationIncome : MonoBehaviour
         // Satın alma akışı
         if (!entry.isPurchased)
         {
-            // Önkoşul
             if (!PrereqOk(entry))
             {
-                // İsteğe bağlı: kullanıcıya bilgi ver
                 if (popupRoutine != null) StopCoroutine(popupRoutine);
                 popupRoutine = StartCoroutine(ShowPopup("Önce gerekli dekorasyonu satın al."));
                 return;
             }
 
-            // Para kontrolü
             if (!CanAfford(entry))
             {
-                // İsteğe bağlı uyarı
                 if (popupRoutine != null) StopCoroutine(popupRoutine);
                 popupRoutine = StartCoroutine(ShowPopup("Yetersiz para!"));
                 return;
             }
 
-            // Satın al
             incomeManager.totalMoney -= entry.itemCost;
             entry.isPurchased = true;
-
-            // Gelire etkisini uygula
             incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
 
-            // Kaydet
             PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
             PlayerPrefs.Save();
 
-            // Purchased prefab’ı oluştur
             TrySpawnPurchasedPrefab(entry);
         }
 
-        // Seçim akışı: Aynı gruptaki diğerlerini deselect et
+        // Seçim akışı
         foreach (var deco in decorations)
         {
             if (deco != entry && deco.groupId == entry.groupId)
@@ -169,7 +156,10 @@ public class DecorationIncome : MonoBehaviour
         if (entry.targetObject != null)
             entry.targetObject.SetActive(true);
 
-        // UI güncelle
+        // 🔹 Seçilen ürünü kaydet
+        PlayerPrefs.SetString("SelectedDecoration_Group_" + entry.groupId, entry.itemName);
+        PlayerPrefs.Save();
+
         UpdateDecorationButtons();
     }
 
@@ -188,7 +178,6 @@ public class DecorationIncome : MonoBehaviour
     {
         foreach (var deco in decorations)
         {
-            // Fiyat yazısı
             if (deco.costText != null)
                 deco.costText.text = deco.itemCost.ToString() + " $";
 
@@ -197,15 +186,12 @@ public class DecorationIncome : MonoBehaviour
                 if (deco.buyButton != null)
                 {
                     deco.buyButton.gameObject.SetActive(true);
-
                     var label = deco.buyButton.GetComponentInChildren<TextMeshProUGUI>();
                     if (label != null) label.text = "BUY";
 
-                    // Satın alınmamışsa: hem önkoşul sağlanmalı hem para yetmeli
                     bool interact = PrereqOk(deco) && CanAfford(deco);
                     deco.buyButton.interactable = interact;
 
-                    // Görsel feedback: para yetmiyorsa fiyat yazısı kırmızı
                     if (deco.costText != null)
                         deco.costText.color = CanAfford(deco) ? Color.white : Color.red;
                 }
@@ -225,7 +211,7 @@ public class DecorationIncome : MonoBehaviour
                     else
                     {
                         if (label != null) label.text = "SELECT";
-                        deco.buyButton.interactable = true; // Seçmek ücretsiz
+                        deco.buyButton.interactable = true;
                     }
 
                     if (deco.costText != null)
@@ -235,7 +221,6 @@ public class DecorationIncome : MonoBehaviour
         }
     }
 
-    // ---- Persist ----
     public void LoadDecorations()
     {
         foreach (var deco in decorations)
@@ -244,13 +229,26 @@ public class DecorationIncome : MonoBehaviour
             deco.isPurchased = (saved == 1);
             deco.isSelected = false;
 
-            // Satın alınmışsa "Purchased" prefab'ını yeniden üret
             if (deco.isPurchased)
                 TrySpawnPurchasedPrefab(deco);
 
-            // Sahne objesini başlangıçta kapalı tut (seçim yapılınca açılır)
             if (deco.targetObject != null)
                 deco.targetObject.SetActive(false);
+        }
+
+        // 🔹 Daha önce seçilmiş dekorasyonu geri yükle
+        foreach (var deco in decorations)
+        {
+            if (deco.isPurchased)
+            {
+                string selectedName = PlayerPrefs.GetString("SelectedDecoration_Group_" + deco.groupId, "");
+                if (selectedName == deco.itemName)
+                {
+                    deco.isSelected = true;
+                    if (deco.targetObject != null)
+                        deco.targetObject.SetActive(true);
+                }
+            }
         }
 
         UpdateDecorationButtons();
@@ -261,6 +259,8 @@ public class DecorationIncome : MonoBehaviour
         foreach (var deco in decorations)
         {
             PlayerPrefs.DeleteKey("Decoration_" + deco.itemName);
+            PlayerPrefs.DeleteKey("SelectedDecoration_Group_" + deco.groupId);
+
             deco.isPurchased = false;
             deco.isSelected = false;
 

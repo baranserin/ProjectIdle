@@ -1,41 +1,43 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+ï»¿    using UnityEngine;
+    using UnityEngine.UI;
+    using System.Collections;
+    using System.Collections.Generic;
 
-public class MenuFadeController : MonoBehaviour
-{
-    public CanvasGroup menuGroup; // Menü paneline ekle
-    public Button fadeButton;     // Butonu baðla
-
-    private void Start()
+    public class MenuFadeController : MonoBehaviour
     {
-        fadeButton.onClick.AddListener(OnFadeButtonClick);
-    }
+        public CanvasGroup menuGroup;          // Fade yapÄ±lacak panel
+        public List<Button> fadeButtons;       // Birden fazla buton
+        public float fadeDuration = 1f;
+        public float waitTime = 1f;
 
-    private void OnFadeButtonClick()
-    {
-        StartCoroutine(FadeMenuCoroutine());
-    }
-
-    private IEnumerator FadeMenuCoroutine()
-    {
-        // Fade out (1'den 0'a yumuþak geçiþ)
-        for (float t = 0; t < 1f; t += Time.deltaTime)
+        private void Start()
         {
-            menuGroup.alpha = Mathf.Lerp(1f, 0f, t);
-            yield return null;
+            foreach (Button btn in fadeButtons)
+            {
+                if (btn != null)
+                    btn.onClick.AddListener(() => StartCoroutine(FadeMenuCoroutine()));
+            }
         }
-        menuGroup.alpha = 0f;
 
-        // 2 saniye bekle
-        yield return new WaitForSeconds(1f);
-
-        // Fade in (0'dan 1'e yumuþak geçiþ)
-        for (float t = 0; t < 1f; t += Time.deltaTime)
+        private IEnumerator FadeMenuCoroutine()
         {
-            menuGroup.alpha = Mathf.Lerp(0f, 1f, t);
-            yield return null;
+            // Fade out
+            for (float t = 0; t < 1f; t += Time.deltaTime / fadeDuration)
+            {
+                menuGroup.alpha = Mathf.Lerp(1f, 0f, t);
+                yield return null;
+            }
+            menuGroup.alpha = 0f;
+
+            // Bekleme sÃ¼resi
+            yield return new WaitForSeconds(waitTime);
+
+            // Fade in
+            for (float t = 0; t < 1f; t += Time.deltaTime / fadeDuration)
+            {
+                menuGroup.alpha = Mathf.Lerp(0f, 1f, t);
+                yield return null;
+            }
+            menuGroup.alpha = 1f;
         }
-        menuGroup.alpha = 1f;
     }
-}

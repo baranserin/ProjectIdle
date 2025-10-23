@@ -215,7 +215,7 @@ public class DecorationIncome : MonoBehaviour
                 {
                     deco.buyButton.gameObject.SetActive(true);
                     var label = deco.buyButton.GetComponentInChildren<TextMeshProUGUI>();
-
+                    deco.costText.gameObject.SetActive(false);
                     if (deco.isSelected)
                     {
                         if (label != null) label.text = "SELECTED";
@@ -294,7 +294,7 @@ public class DecorationIncome : MonoBehaviour
 
             deco.isPurchased = false;
             deco.isSelected = false;
-
+            deco.costText.gameObject.SetActive(true);
             if (deco.targetObject != null)
                 deco.targetObject.SetActive(false);
 

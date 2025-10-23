@@ -27,10 +27,13 @@ public class DecorationIncome : MonoBehaviour
         public GameObject purchasedPrefab;      // Inspector’dan atanacak
         [HideInInspector] public GameObject spawnedPurchased; // Oluşturulan prefab referansı
 
+        [Header("Ek Butonlar")]
+        public Button deselectButton;           // Inspector’dan bağlanacak
+
         [HideInInspector] public bool isPurchased = false; // Satın alındı mı?
         [HideInInspector] public bool isSelected = false;  // Seçili mi?
 
-        public void Initialize(System.Action<DecorationEntry> onBuy)
+        public void Initialize(System.Action<DecorationEntry> onBuy, System.Action<DecorationEntry> onDeselect)
         {
             if (targetObject != null)
                 targetObject.SetActive(false);
@@ -45,8 +48,17 @@ public class DecorationIncome : MonoBehaviour
                     onBuy?.Invoke(this);
                 });
             }
+
+            if (deselectButton != null)
+            {
+                deselectButton.onClick.AddListener(() =>
+                {
+                    onDeselect?.Invoke(this);
+                });
+            }
         }
     }
+
 
     [Header("Dekorasyonlar")]
     public List<DecorationEntry> decorations = new List<DecorationEntry>();
@@ -68,11 +80,12 @@ public class DecorationIncome : MonoBehaviour
     private void Start()
     {
         foreach (var deco in decorations)
-            deco.Initialize(ApplyDecoration);
+            deco.Initialize(ApplyDecoration, DeselectDecoration);
 
         LoadDecorations();
         UpdateDecorationButtons();
     }
+
 
     private void Update()
     {
@@ -218,8 +231,13 @@ public class DecorationIncome : MonoBehaviour
                         deco.costText.color = Color.white;
                 }
             }
+
+            // 🔹 Deselect buton görünürlüğü
+            if (deco.deselectButton != null)
+                deco.deselectButton.gameObject.SetActive(deco.isSelected);
         }
     }
+
 
     public void LoadDecorations()
     {
@@ -250,6 +268,19 @@ public class DecorationIncome : MonoBehaviour
                 }
             }
         }
+
+        UpdateDecorationButtons();
+    }
+    private void DeselectDecoration(DecorationEntry entry)
+    {
+        if (!entry.isSelected) return;
+
+        entry.isSelected = false;
+        if (entry.targetObject != null)
+            entry.targetObject.SetActive(false);
+
+        PlayerPrefs.DeleteKey("SelectedDecoration_Group_" + entry.groupId);
+        PlayerPrefs.Save();
 
         UpdateDecorationButtons();
     }

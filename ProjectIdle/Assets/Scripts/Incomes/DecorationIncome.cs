@@ -234,7 +234,7 @@ public class DecorationIncome : MonoBehaviour
                     if (deco.itemNameRect != null)
                     {
                         Vector2 newPos = deco.originalItemNamePos;
-                        newPos.y -= 40f;
+                        newPos.y -= 35f;
                         deco.itemNameRect.anchoredPosition = newPos;
                     }
 

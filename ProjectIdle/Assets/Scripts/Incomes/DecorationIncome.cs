@@ -30,6 +30,11 @@ public class DecorationIncome : MonoBehaviour
         [Header("Ek Butonlar")]
         public Button deselectButton;           // Inspector’dan bağlanacak
 
+        // 🔹 YENİ EKLENDİ
+        [Header("Ek UI Elemanları")]
+        public RectTransform itemNameRect;      // itemName yazısının RectTransform’u (Inspector’dan bağla)
+        [HideInInspector] public Vector2 originalItemNamePos; // Orijinal pozisyonu sakla
+
         [HideInInspector] public bool isPurchased = false; // Satın alındı mı?
         [HideInInspector] public bool isSelected = false;  // Seçili mi?
 
@@ -56,6 +61,10 @@ public class DecorationIncome : MonoBehaviour
                     onDeselect?.Invoke(this);
                 });
             }
+
+            // 🔹 YENİ EKLENDİ — Başlangıç pozisyonunu kaydet
+            if (itemNameRect != null)
+                originalItemNamePos = itemNameRect.anchoredPosition;
         }
     }
 
@@ -208,6 +217,10 @@ public class DecorationIncome : MonoBehaviour
                     if (deco.costText != null)
                         deco.costText.color = CanAfford(deco) ? Color.white : Color.red;
                 }
+
+                // 🔹 YENİ EKLENDİ — cost görünüyorsa itemName eski konumda
+                if (deco.itemNameRect != null)
+                    deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
             }
             else
             {
@@ -216,6 +229,15 @@ public class DecorationIncome : MonoBehaviour
                     deco.buyButton.gameObject.SetActive(true);
                     var label = deco.buyButton.GetComponentInChildren<TextMeshProUGUI>();
                     deco.costText.gameObject.SetActive(false);
+
+                    // 🔹 YENİ EKLENDİ — cost kapandığında itemName 20px aşağı
+                    if (deco.itemNameRect != null)
+                    {
+                        Vector2 newPos = deco.originalItemNamePos;
+                        newPos.y -= 40f;
+                        deco.itemNameRect.anchoredPosition = newPos;
+                    }
+
                     if (deco.isSelected)
                     {
                         if (label != null) label.text = "SELECTED";
@@ -312,6 +334,10 @@ public class DecorationIncome : MonoBehaviour
                 deco.costText.text = deco.itemCost.ToString() + " $";
                 deco.costText.color = Color.white;
             }
+
+            // 🔹 Reset sırasında pozisyonu da geri al
+            if (deco.itemNameRect != null)
+                deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
         }
         PlayerPrefs.Save();
 

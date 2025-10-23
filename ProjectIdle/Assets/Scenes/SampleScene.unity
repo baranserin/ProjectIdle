@@ -1741,6 +1741,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 48487159}
   m_CullTransparentMesh: 1
+--- !u!224 &50500938 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 851648388}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &51232712
 GameObject:
   m_ObjectHideFlags: 0
@@ -14582,6 +14587,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 864045394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &500857345 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4777509460496428301, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 218119392}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &508013671
 GameObject:
   m_ObjectHideFlags: 0
@@ -18699,6 +18709,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 646315698}
   m_CullTransparentMesh: 1
+--- !u!224 &652347135 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 664123196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &656275552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20000,6 +20015,16 @@ RectTransform:
   m_AnchoredPosition: {x: 598, y: -29}
   m_SizeDelta: {x: 219.4, y: 139.3}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &739062233 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 2127637337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &740685654 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 1775199245}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &744329145
 GameObject:
   m_ObjectHideFlags: 0
@@ -22049,6 +22074,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 298994299}
+    itemNameRect: {fileID: 1988169678}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Plant
@@ -22061,6 +22088,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 123809890}
+    itemNameRect: {fileID: 1076758642}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Newspaper
@@ -22073,6 +22102,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 573817672}
+    itemNameRect: {fileID: 50500938}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Acoustic Guitar
@@ -22085,6 +22116,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 1331384159}
+    itemNameRect: {fileID: 1879355917}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Statue
@@ -22097,6 +22130,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 657907523}
+    itemNameRect: {fileID: 739062233}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: BookShelf
@@ -22109,6 +22144,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 25951126}
+    itemNameRect: {fileID: 1552148834}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: CoffeTable
@@ -22121,6 +22158,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 896208338}
+    itemNameRect: {fileID: 740685654}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Seat
@@ -22133,6 +22172,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 9389015}
+    itemNameRect: {fileID: 923012435}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Miowlisa
@@ -22145,6 +22186,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 998756603}
+    itemNameRect: {fileID: 1314181713}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: NatureTable
@@ -22154,9 +22197,11 @@ MonoBehaviour:
     buyButton: {fileID: 847934400}
     costText: {fileID: 823180066}
     groupId: 8
-    purchasedPrefab: {fileID: 0}
+    purchasedPrefab: {fileID: 500857345}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 228947917}
+    itemNameRect: {fileID: 0}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Stand
@@ -22169,6 +22214,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 37145679}
+    itemNameRect: {fileID: 652347135}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   - itemName: Fireplace
@@ -22181,6 +22228,8 @@ MonoBehaviour:
     purchasedPrefab: {fileID: 0}
     spawnedPurchased: {fileID: 0}
     deselectButton: {fileID: 1106605476}
+    itemNameRect: {fileID: 980354843}
+    originalItemNamePos: {x: 0, y: 0}
     isPurchased: 0
     isSelected: 0
   incomeManager: {fileID: 873625049}
@@ -24826,6 +24875,11 @@ MonoBehaviour:
   unaffordableTextColor: {r: 1, g: 0, b: 0, a: 1}
   affordableButtonColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
   unaffordableButtonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+--- !u!224 &923012435 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 2096321442}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &924051829
 GameObject:
   m_ObjectHideFlags: 0
@@ -26057,6 +26111,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 974761303}
   m_CullTransparentMesh: 1
+--- !u!224 &980354843 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 243988142}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &980483863
 GameObject:
   m_ObjectHideFlags: 0
@@ -28179,6 +28238,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067329237}
   m_CullTransparentMesh: 1
+--- !u!224 &1076758642 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 594254998}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1077177032
 GameObject:
   m_ObjectHideFlags: 0
@@ -34133,6 +34197,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308539059}
   m_CullTransparentMesh: 1
+--- !u!224 &1314181713 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 953478598}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1315353109 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 618139571665522640, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
@@ -37730,6 +37799,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1548034809}
   m_CullTransparentMesh: 1
+--- !u!224 &1552148834 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 1400117648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1553536802
 GameObject:
   m_ObjectHideFlags: 0
@@ -44439,6 +44513,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877699595}
   m_CullTransparentMesh: 1
+--- !u!224 &1879355917 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 1465397646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1890091776 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3263368563805424086, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
@@ -46153,6 +46232,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1988169678 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1683353520338269935, guid: 6db645fdfae03c94594575fe65a1dc73, type: 3}
+  m_PrefabInstance: {fileID: 1139179505}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1990510004
 GameObject:
   m_ObjectHideFlags: 0

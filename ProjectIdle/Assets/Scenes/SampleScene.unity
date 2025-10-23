@@ -610,6 +610,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -617,6 +618,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -624,6 +626,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 1104935338}
   objectNameUI: {fileID: 1703070119}
@@ -959,6 +962,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -966,6 +970,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -973,6 +978,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 803186896}
   objectNameUI: {fileID: 1486331657}
@@ -5359,6 +5365,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -5366,6 +5373,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -5373,6 +5381,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 1021379367}
   objectNameUI: {fileID: 142413627}
@@ -6647,6 +6656,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -6654,6 +6664,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -6661,6 +6672,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 889214551}
   objectNameUI: {fileID: 964027110}
@@ -12148,26 +12160,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgrades:
-  - objectImage: {fileID: -39299920268886154, guid: 23ee1fb1251f6df49b064f7052536f77, type: 3}
+  - objectImage: {fileID: 3969537563082433000, guid: bf407c4f7ed611e46ace444223367af9, type: 3}
     objectName: COFFEE MACHINE I
     price: 1000
     targetType: 1
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 10
     isBought: 0
-  - objectImage: {fileID: 2523745336871918170, guid: 357159c6baac5254c9a461d96fbac229, type: 3}
+  - objectImage: {fileID: -3446601908824515954, guid: 5057137496db37c469c28c8a3643ce5b, type: 3}
     objectName: COFFEE MACHINE II
     price: 5000
     targetType: 1
     multiplier: 0
     descriptionText: {fileID: 0}
+    imageOffsetX: 5
     isBought: 0
-  - objectImage: {fileID: 634772324442158694, guid: 188b1655972c1a9438460eb80955a13b, type: 3}
+  - objectImage: {fileID: -2600894350202472182, guid: 37bd1cbb2b2dac141b9b5cf96db5411f, type: 3}
     objectName: COFFEE MACHINE III
     price: 10000
     targetType: 1
     multiplier: 0
     descriptionText: {fileID: 0}
+    imageOffsetX: -15
     isBought: 0
   objectImageUI: {fileID: 1412510864}
   objectNameUI: {fileID: 237551790}
@@ -18435,7 +18450,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -688}
+  m_AnchoredPosition: {x: 0, y: 897}
   m_SizeDelta: {x: 1002, y: 1362}
   m_Pivot: {x: 0.49999994, y: 0.5}
 --- !u!114 &630675361
@@ -29176,7 +29191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -107.35925}
+  m_AnchoredPosition: {x: 0, y: -80.00708}
   m_SizeDelta: {x: 3787.7, y: 2781}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104811558
@@ -31400,6 +31415,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -31407,6 +31423,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -31414,6 +31431,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 1038059606}
   objectNameUI: {fileID: 1722966136}
@@ -33306,6 +33324,7 @@ MonoBehaviour:
     targetType: 3
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: Barista2
@@ -33313,6 +33332,7 @@ MonoBehaviour:
     targetType: 3
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: Barista3
@@ -33320,6 +33340,7 @@ MonoBehaviour:
     targetType: 3
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 1462610611}
   objectNameUI: {fileID: 495239967}
@@ -35493,7 +35514,7 @@ RectTransform:
   m_GameObject: {fileID: 1412510862}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0}
+  m_LocalScale: {x: 0.33, y: 0.33, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 411472554}
@@ -35501,7 +35522,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 300}
-  m_SizeDelta: {x: 522, y: 622}
+  m_SizeDelta: {x: 762.0633, y: 1162}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1412510864
 MonoBehaviour:
@@ -35523,9 +35544,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -39299920268886154, guid: 23ee1fb1251f6df49b064f7052536f77, type: 3}
+  m_Sprite: {fileID: 3969537563082433000, guid: bf407c4f7ed611e46ace444223367af9, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -47521,6 +47542,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -47528,6 +47550,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   - objectImage: {fileID: -7366582923573813746, guid: 041cb06b9bef2e04aa070ca952e09f10, type: 3}
     objectName: TEA MACHINE III
@@ -47535,6 +47558,7 @@ MonoBehaviour:
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
+    imageOffsetX: 0
     isBought: 0
   objectImageUI: {fileID: 1334691763}
   objectNameUI: {fileID: 280847516}

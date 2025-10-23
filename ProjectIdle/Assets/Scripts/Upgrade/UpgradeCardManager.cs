@@ -15,6 +15,8 @@ public class UpgradeCardData
 
     public TMP_Text descriptionText;
 
+    public float imageOffsetX = 0f;
+
     [HideInInspector] public bool isBought = false;
 }
 
@@ -50,6 +52,9 @@ public class UpgradeCardManager : MonoBehaviour
         var upgrade = upgrades[index];
 
         objectImageUI.sprite = upgrade.objectImage;
+        objectImageUI.SetNativeSize();
+        RectTransform rt = objectImageUI.rectTransform;
+        rt.anchoredPosition = new Vector2(upgrade.imageOffsetX, rt.anchoredPosition.y);
         objectNameUI.text = upgrade.objectName;
         priceTextUI.text = upgrade.price.ToString();
 

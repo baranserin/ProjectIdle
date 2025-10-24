@@ -15,7 +15,10 @@ public class UpgradeCardData
 
     public TMP_Text descriptionText;
 
-    public float imageOffsetX = 0f;
+    [Header("Image Adjustments")]
+    public Vector2 imageOffset = Vector2.zero;
+    public float imageScale = 0.33f;
+
 
     [HideInInspector] public bool isBought = false;
 }
@@ -54,7 +57,9 @@ public class UpgradeCardManager : MonoBehaviour
         objectImageUI.sprite = upgrade.objectImage;
         objectImageUI.SetNativeSize();
         RectTransform rt = objectImageUI.rectTransform;
-        rt.anchoredPosition = new Vector2(upgrade.imageOffsetX, rt.anchoredPosition.y);
+        rt.anchoredPosition = upgrade.imageOffset;
+        rt.localScale = Vector3.one * upgrade.imageScale;
+
         objectNameUI.text = upgrade.objectName;
         priceTextUI.text = upgrade.price.ToString();
 
@@ -136,6 +141,4 @@ public class UpgradeCardManager : MonoBehaviour
             objectImageUI.color = Color.white;
         }
     }
-
-
 }

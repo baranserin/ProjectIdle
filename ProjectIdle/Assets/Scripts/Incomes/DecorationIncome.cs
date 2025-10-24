@@ -30,7 +30,12 @@ public class DecorationIncome : MonoBehaviour
         [Header("Ek Butonlar")]
         public Button deselectButton;           // Inspector’dan bağlanacak
 
-        // 🔹 YENİ EKLENDİ
+        // 🔹 YENİ: Tür hedefleme
+        [Header("Hedef Türler (ProductType)")]
+        public bool applyToAllTypes = false;           // Hepsine etki etsin
+        public List<ProductType> affectedTypes = new(); // Sadece bu tür(ler)e etki etsin
+
+        // 🔹 YENİ: İsim etiketinin pozisyonunu yönetmek için
         [Header("Ek UI Elemanları")]
         public RectTransform itemNameRect;      // itemName yazısının RectTransform’u (Inspector’dan bağla)
         [HideInInspector] public Vector2 originalItemNamePos; // Orijinal pozisyonu sakla
@@ -48,6 +53,7 @@ public class DecorationIncome : MonoBehaviour
 
             if (buyButton != null)
             {
+                buyButton.onClick.RemoveAllListeners();
                 buyButton.onClick.AddListener(() =>
                 {
                     onBuy?.Invoke(this);
@@ -56,18 +62,17 @@ public class DecorationIncome : MonoBehaviour
 
             if (deselectButton != null)
             {
+                deselectButton.onClick.RemoveAllListeners();
                 deselectButton.onClick.AddListener(() =>
                 {
                     onDeselect?.Invoke(this);
                 });
             }
 
-            // 🔹 YENİ EKLENDİ — Başlangıç pozisyonunu kaydet
             if (itemNameRect != null)
                 originalItemNamePos = itemNameRect.anchoredPosition;
         }
     }
-
 
     [Header("Dekorasyonlar")]
     public List<DecorationEntry> decorations = new List<DecorationEntry>();
@@ -91,10 +96,13 @@ public class DecorationIncome : MonoBehaviour
         foreach (var deco in decorations)
             deco.Initialize(ApplyDecoration, DeselectDecoration);
 
+        // Tür-bazlı çarpan tablosunu temizle ve yükle
+        if (incomeManager != null)
+            incomeManager.ResetDecorationMultipliers();
+
         LoadDecorations();
         UpdateDecorationButtons();
     }
-
 
     private void Update()
     {
@@ -154,7 +162,9 @@ public class DecorationIncome : MonoBehaviour
 
             incomeManager.totalMoney -= entry.itemCost;
             entry.isPurchased = true;
-            incomeManager.AddDecorationMultiplier(entry.itemMultiplier);
+
+            // 🔸 Tür-bazlı çarpanı uygula
+            incomeManager.AddDecorationMultiplier(entry.itemMultiplier, entry.affectedTypes, entry.applyToAllTypes);
 
             PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
             PlayerPrefs.Save();
@@ -162,7 +172,7 @@ public class DecorationIncome : MonoBehaviour
             TrySpawnPurchasedPrefab(entry);
         }
 
-        // Seçim akışı
+        // Seçim akışı: aynı grupta sadece biri seçili
         foreach (var deco in decorations)
         {
             if (deco != entry && deco.groupId == entry.groupId)
@@ -178,7 +188,7 @@ public class DecorationIncome : MonoBehaviour
         if (entry.targetObject != null)
             entry.targetObject.SetActive(true);
 
-        // 🔹 Seçilen ürünü kaydet
+        // Seçimi kaydet
         PlayerPrefs.SetString("SelectedDecoration_Group_" + entry.groupId, entry.itemName);
         PlayerPrefs.Save();
 
@@ -218,7 +228,7 @@ public class DecorationIncome : MonoBehaviour
                         deco.costText.color = CanAfford(deco) ? Color.white : Color.red;
                 }
 
-                // 🔹 YENİ EKLENDİ — cost görünüyorsa itemName eski konumda
+                // Cost görünüyorsa itemName eski konumda
                 if (deco.itemNameRect != null)
                     deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
             }
@@ -228,9 +238,11 @@ public class DecorationIncome : MonoBehaviour
                 {
                     deco.buyButton.gameObject.SetActive(true);
                     var label = deco.buyButton.GetComponentInChildren<TextMeshProUGUI>();
-                    deco.costText.gameObject.SetActive(false);
 
-                    // 🔹 YENİ EKLENDİ — cost kapandığında itemName 20px aşağı
+                    if (deco.costText != null)
+                        deco.costText.gameObject.SetActive(false);
+
+                    // Cost kapandığında itemName aşağı insin
                     if (deco.itemNameRect != null)
                     {
                         Vector2 newPos = deco.originalItemNamePos;
@@ -254,15 +266,19 @@ public class DecorationIncome : MonoBehaviour
                 }
             }
 
-            // 🔹 Deselect buton görünürlüğü
+            // Deselect buton görünürlüğü
             if (deco.deselectButton != null)
                 deco.deselectButton.gameObject.SetActive(deco.isSelected);
         }
     }
 
-
     public void LoadDecorations()
     {
+        // Tür-bazlı çarpanları resetle, sonra satın alınanları tekrar uygula
+        if (incomeManager != null)
+            incomeManager.ResetDecorationMultipliers();
+
+        // Satın alma durumlarını yükle
         foreach (var deco in decorations)
         {
             int saved = PlayerPrefs.GetInt("Decoration_" + deco.itemName, 0);
@@ -270,13 +286,20 @@ public class DecorationIncome : MonoBehaviour
             deco.isSelected = false;
 
             if (deco.isPurchased)
+            {
+                // Satın alınmışsa prefab’ı çıkar
                 TrySpawnPurchasedPrefab(deco);
+
+                // 🔸 Tür-bazlı çarpanı tekrar uygula
+                if (incomeManager != null)
+                    incomeManager.AddDecorationMultiplier(deco.itemMultiplier, deco.affectedTypes, deco.applyToAllTypes);
+            }
 
             if (deco.targetObject != null)
                 deco.targetObject.SetActive(false);
         }
 
-        // 🔹 Daha önce seçilmiş dekorasyonu geri yükle
+        // Daha önce seçilmiş dekorasyonu geri yükle
         foreach (var deco in decorations)
         {
             if (deco.isPurchased)
@@ -293,6 +316,7 @@ public class DecorationIncome : MonoBehaviour
 
         UpdateDecorationButtons();
     }
+
     private void DeselectDecoration(DecorationEntry entry)
     {
         if (!entry.isSelected) return;
@@ -309,6 +333,7 @@ public class DecorationIncome : MonoBehaviour
 
     public void ResetDecorations()
     {
+        // PlayerPrefs ve görselleri sıfırla
         foreach (var deco in decorations)
         {
             PlayerPrefs.DeleteKey("Decoration_" + deco.itemName);
@@ -316,7 +341,14 @@ public class DecorationIncome : MonoBehaviour
 
             deco.isPurchased = false;
             deco.isSelected = false;
-            deco.costText.gameObject.SetActive(true);
+
+            if (deco.costText != null)
+            {
+                deco.costText.gameObject.SetActive(true);
+                deco.costText.text = deco.itemCost.ToString() + " $";
+                deco.costText.color = Color.white;
+            }
+
             if (deco.targetObject != null)
                 deco.targetObject.SetActive(false);
 
@@ -329,17 +361,15 @@ public class DecorationIncome : MonoBehaviour
                 deco.spawnedPurchased = null;
             }
 
-            if (deco.costText != null)
-            {
-                deco.costText.text = deco.itemCost.ToString() + " $";
-                deco.costText.color = Color.white;
-            }
-
-            // 🔹 Reset sırasında pozisyonu da geri al
             if (deco.itemNameRect != null)
                 deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
         }
+
         PlayerPrefs.Save();
+
+        // 🔸 Tür-bazlı çarpanları da sıfırla
+        if (incomeManager != null)
+            incomeManager.ResetDecorationMultipliers();
 
         UpdateDecorationButtons();
     }

@@ -5,14 +5,17 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 
+#region ProductData & UnlockCondition (AYNI DOSYADA)
 
+// ProductType enum'un ProductConfig'te tanımlı olduğundan emin olun:
+// public enum ProductType { Tea, Coffee, Dessert, Barista }
 
 [Serializable]
 public class ProductData
 {
     public ProductConfig config;
     [NonSerialized] public int level;
-    [NonSerialized] public float incomeMultiplier = 1f;
+    [NonSerialized] public float incomeMultiplier = 1f; // LevelBoost vb. ürün-özel çarpan
 
     [Header("UI")]
     public GameObject uiObject;
@@ -31,8 +34,18 @@ public class ProductData
         if (level == 0)
             return 0;
 
+        // Temel gelir (seviye büyümesi)
         double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, level);
-        return baseValue * incomeMultiplier;
+
+        // Ürüne özel yerel çarpan (level boost vb.)
+        double localMul = incomeMultiplier;
+
+        // Tür-bazlı dekorasyon çarpanı
+        float decoMul = 1f;
+        if (IncomeManager.Instance != null)
+            decoMul = IncomeManager.Instance.GetEffectiveDecorationMultiplier(config.productType);
+
+        return baseValue * localMul * decoMul;
     }
 
     public void UpdateUI()
@@ -40,10 +53,11 @@ public class ProductData
         if (levelText != null && levelText2 != null)
         {
             levelText.text = $"{level}";
-            levelText2.text = "lv\n"+$"{level}";
+            levelText2.text = "lv\n" + $"{level}";
         }
+
         if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture) ;
+            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture);
 
         if (upgradeCostText != null)
         {
@@ -54,7 +68,6 @@ public class ProductData
                     IncomeManager.BuyMode.x1 => 1,
                     IncomeManager.BuyMode.x10 => 10,
                     IncomeManager.BuyMode.x50 => 50,
-                    // Line 50 is here, and now it's safe because we checked Instance above
                     IncomeManager.BuyMode.Max => Mathf.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
                     _ => 1
                 };
@@ -63,8 +76,6 @@ public class ProductData
                 upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
             }
         }
-
-
     }
 
     public void ResetToBase()
@@ -98,22 +109,15 @@ public class UnlockCondition
     public int requiredPrestigeLevel;
 }
 
+#endregion
+
 public class IncomeManager : MonoBehaviour
 {
     public static IncomeManager Instance;
     public DecorationIncome decorationIncome;
 
-
-    public enum BuyMode
-    {
-        x1,
-        x10,
-        x50,
-        Max
-    }
-
+    public enum BuyMode { x1, x10, x50, Max }
     public BuyMode currentBuyMode = BuyMode.x1;
-
 
     [Header("Ürünler")]
     public List<ProductData> products;
@@ -128,8 +132,7 @@ public class IncomeManager : MonoBehaviour
     [Header("Global Multipliers")]
     public float globalIncomeMultiplier = 1f;   // Barista vb. global etkiler
 
-
-    // 🔥 Event sistemi için multiplier
+    // Event/Boost çarpanı
     public float temporaryMultiplier = 1f;
 
     [Header("UI")]
@@ -155,9 +158,22 @@ public class IncomeManager : MonoBehaviour
 
     double offlineEarning;
 
+    // 🔹 Tür-bazlı dekorasyon çarpan tablosu
+    private float globalDecorationMultiplier = 1f;                // applyToAllTypes ile gelenler
+    private readonly Dictionary<ProductType, float> typeDecorationMultiplier = new();
+
     void Awake()
     {
         Instance = this;
+        InitTypeMultipliers();
+    }
+
+    private void InitTypeMultipliers()
+    {
+        typeDecorationMultiplier.Clear();
+        foreach (ProductType t in Enum.GetValues(typeof(ProductType)))
+            typeDecorationMultiplier[t] = 1f;
+        globalDecorationMultiplier = 1f;
     }
 
     void Start()
@@ -167,6 +183,7 @@ public class IncomeManager : MonoBehaviour
         CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
+        // DecorationIncome.Start() içinde satın alınmış dekorasyonlar yeniden uygulanır.
     }
 
     private void Update()
@@ -219,7 +236,12 @@ public class IncomeManager : MonoBehaviour
         totalMoney = 10f;
         prestigeLevel = 0;
         prestigePoint = 0;
-        decorationIncome.ResetDecorations();
+
+        // Dekorasyon ve tür çarpanlarını sıfırla
+        ResetDecorationMultipliers();
+        if (decorationIncome != null)
+            decorationIncome.ResetDecorations();
+
         UpdateUI();
 
         Debug.Log("🔁 ResetAllData tamamlandı.");
@@ -231,7 +253,7 @@ public class IncomeManager : MonoBehaviour
         foreach (var p in products)
             total += p.GetIncome();
 
-        // Prestige + event + global çarpanları DAHİL
+        // Prestige + event + global çarpanları burada uygulanır
         total *= prestigeMultiplier;
         total *= temporaryMultiplier;
         total *= globalIncomeMultiplier;
@@ -290,6 +312,7 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
+
     public int CalculateMaxBuyableLevels(ProductData p)
     {
         int maxLevels = 0;
@@ -308,6 +331,7 @@ public class IncomeManager : MonoBehaviour
 
         return maxLevels;
     }
+
     public double CalculateTotalCost(ProductData p, int levelsToBuy)
     {
         double totalCost = 0;
@@ -355,6 +379,7 @@ public class IncomeManager : MonoBehaviour
                 failSound.Play();
         }
     }
+
     public void SetBuyMode(int mode)
     {
         mode = Mathf.Clamp(mode, 0, 3);
@@ -421,17 +446,18 @@ public class IncomeManager : MonoBehaviour
             else
                 products[i].level = products[i].config.baseLevel;
 
-            // 🔹 multiplier da yükle
             products[i].incomeMultiplier = PlayerPrefs.GetFloat($"Product_{i}_Multiplier", 1f);
-
         }
 
         totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
         globalIncomeMultiplier = PlayerPrefs.GetFloat("GlobalIncomeMultiplier", 1f);
-    }
 
+        // Tür çarpan tablolarını her açılışta sıfırla.
+        // DecorationIncome.Start() satın alınmış dekorasyonları yeniden uygular.
+        ResetDecorationMultipliers();
+    }
 
     public void InactiveIncome()
     {
@@ -445,22 +471,12 @@ public class IncomeManager : MonoBehaviour
             double incomePerSecond = GetTotalIncome();
             offlineEarning = incomePerSecond * secondsAway;
 
-            // ✅ Doğru kullanım
             if (PassiveIncomeText != null)
                 PassiveIncomeText.text = "Coffees were sold, your vault is full! " + FormatMoneyStatic(offlineEarning);
 
-            // Paneli aç / kapat
-            if (offlineEarning > 0)
-            {
-                PassiveIncomePanel.SetActive(true);
-            }
-            else
-            {
-                PassiveIncomePanel.SetActive(false);
-            }
+            PassiveIncomePanel.SetActive(offlineEarning > 0);
         }
     }
-
 
     public void CollectOffline1x()
     {
@@ -474,7 +490,6 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
-    // 2x toplama
     public void CollectOffline2x()
     {
         totalMoney += offlineEarning * 2;
@@ -487,22 +502,60 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
+    // 🔻 Geriye uyumluluk — eski çağrılar tüm türlere uygular
     public void AddDecorationMultiplier(float multiplier)
     {
-        foreach (var product in products)
+        AddDecorationMultiplier(multiplier, null, true);
+    }
+
+    // 🔸 Yeni API: Tür-bazlı veya global dekorasyon çarpanı ekle
+    public void AddDecorationMultiplier(float multiplier, List<ProductType> types, bool applyToAll)
+    {
+        if (applyToAll || types == null || types.Count == 0)
         {
-            product.incomeMultiplier += multiplier;
-            product.UpdateUI();
+            globalDecorationMultiplier *= multiplier;
+        }
+        else
+        {
+            foreach (var t in types)
+            {
+                if (!typeDecorationMultiplier.ContainsKey(t))
+                    typeDecorationMultiplier[t] = 1f;
+
+                typeDecorationMultiplier[t] *= multiplier;
+            }
         }
 
+        RecomputeAllIncomes();
+    }
+
+    // 🔸 Tür-bazlı çarpanları sıfırla (DecorationIncome yüklerken/Reset’te çağırır)
+    public void ResetDecorationMultipliers()
+    {
+        InitTypeMultipliers();
+        RecomputeAllIncomes();
+    }
+
+    // 🔸 Bir ürün için efektif dekorasyon çarpanı
+    public float GetEffectiveDecorationMultiplier(ProductType type)
+    {
+        float perType = typeDecorationMultiplier.TryGetValue(type, out var m) ? m : 1f;
+        return globalDecorationMultiplier * perType;
+    }
+
+    // Çarpan değişimlerinde UI’ı tazelemek yeterli
+    private void RecomputeAllIncomes()
+    {
         UpdateUI();
     }
+
     public void ApplyGlobalIncomeMultiplier(float mult)
     {
         globalIncomeMultiplier *= mult;   // örn. 1.2f => +%20
         UpdateUI();
         SaveData();
     }
+
     public void ApplyCategoryUpgrade(ProductType type, float multiplier)
     {
         if (type == ProductType.Barista)
@@ -515,7 +568,7 @@ public class IncomeManager : MonoBehaviour
         {
             if (p.config.productType == type)
             {
-                p.incomeMultiplier *= multiplier;
+                p.incomeMultiplier *= multiplier; // ürün yerel çarpanı
                 p.UpdateUI();
             }
         }

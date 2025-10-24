@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 34259daa41f999947a8aab85ed71a7f5
+guid: 929577a4ec7c6b44b94fabac2b0b4434
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2466791347931372572
-    second: "\u015E\xF6mine_pxl_0"
+      213: -743595387415555238
+    second: B.Espresso New 3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u015E\xF6mine_pxl_0"
+      name: B.Espresso New 3_0
       rect:
         serializedVersion: 2
-        x: 87
-        y: 71
-        width: 334
-        height: 370
+        x: 0
+        y: 779
+        width: 2241
+        height: 1002
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c1cd47c49adcb3220800000000000000
-      internalID: 2466791347931372572
+      spriteID: a531a745fe73ea5f0800000000000000
+      internalID: -743595387415555238
       vertices: []
       indices: 
       edges: []
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      "\u015E\xF6mine_pxl_0": 2466791347931372572
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -21,7 +21,13 @@ MonoBehaviour:
   icon: {fileID: 0}
   productType: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductName: Green Tea
+    requiredLevel: 5
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

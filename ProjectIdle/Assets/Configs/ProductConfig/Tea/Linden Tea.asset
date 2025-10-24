@@ -19,5 +19,33 @@ MonoBehaviour:
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 0}
+  productType: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductName: Orange Tea
+    requiredLevel: 5
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 1
+    requiredPrestigeLevel: 0
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

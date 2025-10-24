@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 34259daa41f999947a8aab85ed71a7f5
+guid: a904505c56a02184db198ffbf7305813
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2466791347931372572
-    second: "\u015E\xF6mine_pxl_0"
+      213: -6618555463507301080
+    second: mozaikp_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u015E\xF6mine_pxl_0"
+      name: mozaikp_0
       rect:
         serializedVersion: 2
-        x: 87
-        y: 71
-        width: 334
-        height: 370
+        x: 39
+        y: 419
+        width: 1082
+        height: 542
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c1cd47c49adcb3220800000000000000
-      internalID: 2466791347931372572
+      spriteID: 82d2d6f5fda2624a0800000000000000
+      internalID: -6618555463507301080
       vertices: []
       indices: 
       edges: []
@@ -147,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      "\u015E\xF6mine_pxl_0": 2466791347931372572
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

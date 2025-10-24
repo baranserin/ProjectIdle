@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 34259daa41f999947a8aab85ed71a7f5
+guid: 0ba2862ff2c2ce849b66cda1f3fd9bdf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2466791347931372572
-    second: "\u015E\xF6mine_pxl_0"
+      213: 5885354185863272669
+    second: tiramissu2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u015E\xF6mine_pxl_0"
+      name: tiramissu2_0
       rect:
         serializedVersion: 2
-        x: 87
-        y: 71
-        width: 334
-        height: 370
+        x: 271
+        y: 255
+        width: 498
+        height: 514
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c1cd47c49adcb3220800000000000000
-      internalID: 2466791347931372572
+      spriteID: dd81db9337afca150800000000000000
+      internalID: 5885354185863272669
       vertices: []
       indices: 
       edges: []
@@ -147,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      "\u015E\xF6mine_pxl_0": 2466791347931372572
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

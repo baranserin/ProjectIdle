@@ -175,7 +175,6 @@ public class IncomeManager : MonoBehaviour
             typeDecorationMultiplier[t] = 1f;
         globalDecorationMultiplier = 1f;
     }
-
     void Start()
     {
         LoadData();
@@ -183,7 +182,24 @@ public class IncomeManager : MonoBehaviour
         CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
+
+        // 🔹 Show upgrade arrows at startup (even if popup is inactive)
+        StartCoroutine(InitializeUpgradeArrowsAfterStartup());
+
         // DecorationIncome.Start() içinde satın alınmış dekorasyonlar yeniden uygulanır.
+    }
+
+    private IEnumerator InitializeUpgradeArrowsAfterStartup()
+    {
+        // wait 1 frame to ensure allProductCards & IncomeManager are ready
+        yield return null;
+
+        // find all ProductPurchasePanels, even if inactive
+        var panels = FindObjectsOfType<ProductPurchasePanel>(true);
+        foreach (var panel in panels)
+        {
+            panel.UpdateUpgradeArrow();
+        }
     }
 
     private void Update()

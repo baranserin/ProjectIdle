@@ -36,6 +36,15 @@ public class ProductPurchasePanel : MonoBehaviour
 
     private ProductData P => IncomeManager.Instance.products[productIndex];
 
+    public ProductCard[] allProductCards;
+
+    private void Start()
+    {
+        // The IncomeManager and products should be initialized by now.
+        // Call the UpdateUpgradeArrow() to set the initial state of the cards.
+        UpdateUpgradeArrow();
+    }
+
     private void OnEnable()
     {
         Refresh();
@@ -65,6 +74,7 @@ public class ProductPurchasePanel : MonoBehaviour
     {
         IncomeManager.Instance.UpgradeProduct(productIndex);
         Refresh();
+        UpdateUpgradeArrow();
     }
 
     // Hook these to the buy-mode buttons
@@ -89,6 +99,18 @@ public class ProductPurchasePanel : MonoBehaviour
         if (btnX10 != null && mode == IncomeManager.BuyMode.x10) btnX10.Select();
         if (btnX50 != null && mode == IncomeManager.BuyMode.x50) btnX50.Select();
         if (btnMax != null && mode == IncomeManager.BuyMode.Max) btnMax.Select();
+    }
+    public void UpdateUpgradeArrow()
+    {
+        var im = IncomeManager.Instance;
+        for (int i = 0; i < allProductCards.Length; i++)
+        {
+            var card = allProductCards[i];
+            var product = im.products[card.productIndex];
+            double cost = im.CalculateTotalCost(product, 1);
+            bool canAfford = im.totalMoney >= cost;
+            card.SetUpgradeArrowVisible(canAfford);
+        }
     }
 
     public void Refresh()
@@ -171,5 +193,7 @@ public class ProductPurchasePanel : MonoBehaviour
         _lastMode = im.currentBuyMode;
 
         HighlightBuyModeButtons();
+        UpdateUpgradeArrow();
     }
+    
 }

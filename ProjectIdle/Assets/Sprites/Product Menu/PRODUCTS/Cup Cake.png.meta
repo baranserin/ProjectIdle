@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 12a57bf06fda16f40b6bf4ef777533c1
+guid: 8796711fa8e2fae41a182a01957fc2da
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1011160887777837880
-    second: "anl\u0131k.opak2_0"
+      213: -5781272318846071955
+    second: Untitled 75_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,43 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "anl\u0131k.opak2_0"
+      name: Untitled 75_0
       rect:
         serializedVersion: 2
-        x: 495
-        y: 479
-        width: 466
-        height: 210
+        x: 343
+        y: 311
+        width: 298
+        height: 458
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8ccbb39a782a7f1f0800000000000000
-      internalID: -1011160887777837880
+      spriteID: d6b816dd47bc4cfa0800000000000000
+      internalID: -5781272318846071955
       vertices: []
       indices: 
       edges: []
@@ -161,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "anl\u0131k.opak2_0": -1011160887777837880
+      Untitled 75_0: -5781272318846071955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

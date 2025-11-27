@@ -19,11 +19,33 @@ MonoBehaviour:
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 6019415064621256269, guid: e5aa877322fe0e945a77797a7ee48c74, type: 3}
+  productType: 0
   isLockedInitially: 1
   unlockConditions:
-  - requiredProductName: Tea
+  - requiredProductConfig: {fileID: 11400000, guid: b32afd0e1307abe4bbd627269ed10f80, type: 2}
     requiredLevel: 5
     requireTotalMoney: 0
     requiredMoney: 0
     requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

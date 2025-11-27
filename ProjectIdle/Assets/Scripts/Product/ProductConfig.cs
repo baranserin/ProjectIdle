@@ -23,7 +23,7 @@ public class ProductConfig : ScriptableObject
     public ProductType productType;
 
     [Header("Unlock Condition")]
-    public bool isLockedInitially = false;
+    public bool isLockedInitially = true;
     public List<UnlockCondition> unlockConditions = new List<UnlockCondition>();
 
     [Header("Level Boosts (çarpanlar)")]

@@ -148,9 +148,6 @@ public class IncomeManager : MonoBehaviour
     public AudioSource successSound;
     public AudioSource failSound;
 
-    [Header("Unlockable UI Elements")]
-    public GameObject orangeTeaUpgradeButton;
-
     public double income;
     public double clickValue = 1;
 
@@ -323,6 +320,15 @@ public class IncomeManager : MonoBehaviour
 
         var p = products[index];
 
+        // 🔴 Eğer ürün kilitliyse → upgrade YASAK, level artmasın, görünürlük değişmesin
+        if (!IsProductUnlocked(p))
+        {
+            Debug.Log($"❌ {p.config.productName} is locked, cannot upgrade.");
+            if (failSound != null)
+                failSound.Play();
+            return;
+        }
+
         int levelsToBuy = 1;
         switch (currentBuyMode)
         {
@@ -353,6 +359,7 @@ public class IncomeManager : MonoBehaviour
                 failSound.Play();
         }
     }
+
 
     public void SetBuyMode(int mode)
     {
@@ -621,75 +628,62 @@ public class IncomeManager : MonoBehaviour
             PlayerPrefs.Save();
     }
 
+    // 🔹 Bu ürün şu an unlocked mı? (sadece config ve şartlara göre karar verir)
+    private bool IsProductUnlocked(ProductData product)
+    {
+        var config = product.config;
+
+        // Hiç kilitli değilse (isLockedInitially = false) → her zaman açık
+        if (!config.isLockedInitially)
+            return true;
+
+        // Kilitliyse, UnlockCondition’lara bak
+        bool allConditionsMet = true;
+
+        foreach (var condition in config.unlockConditions)
+        {
+            // A) Belirli bir ürünün belirli seviyeye gelmesi
+            if (condition.requiredProductConfig != null)
+            {
+                var requiredProduct = products.Find(p => p.config == condition.requiredProductConfig);
+                if (requiredProduct == null || requiredProduct.level < condition.requiredLevel)
+                {
+                    allConditionsMet = false;
+                    break;
+                }
+            }
+
+            // B) Toplam para şartı
+            if (condition.requireTotalMoney && totalMoney < condition.requiredMoney)
+            {
+                allConditionsMet = false;
+                break;
+            }
+
+            // C) Prestige seviye şartı
+            if (condition.requirePrestigeLevel && prestigeLevel < condition.requiredPrestigeLevel)
+            {
+                allConditionsMet = false;
+                break;
+            }
+        }
+
+        return allConditionsMet;
+    }
+
+
     public void CheckUnlocks()
     {
         for (int i = 0; i < products.Count; i++)
         {
             var product = products[i];
-            var config = product.config;
-
             if (product.uiObject == null)
                 continue;
 
-            // Zaten aktifse tekrar uğraşma
-            if (product.uiObject.activeSelf)
-                continue;
+            bool unlocked = IsProductUnlocked(product);
 
-            // 1) Zorla açılmışsa (UnlockProductsByConfigs veya başka yerden)
-            int forcedUnlocked = PlayerPrefs.GetInt($"Product_{i}_ForcedUnlocked", 0);
-            if (forcedUnlocked == 1)
-            {
-                product.uiObject.SetActive(true);
-                continue;
-            }
-
-            // 2) isLockedInitially = false ise direkt açık olsun
-            if (!config.isLockedInitially)
-            {
-                product.uiObject.SetActive(true);
-                continue;
-            }
-
-            // 3) Normal şart kontrolü (seviyeye bağlı açılma burası)
-            bool allConditionsMet = true;
-
-            foreach (var condition in config.unlockConditions)
-            {
-                // 🔸 A) Belirli bir ürünün belirli seviyeye gelmesi şartı
-                if (condition.requiredProductConfig != null)
-                {
-                    var requiredProduct = products.Find(p => p.config == condition.requiredProductConfig);
-                    if (requiredProduct == null || requiredProduct.level < condition.requiredLevel)
-                    {
-                        allConditionsMet = false;
-                        break;
-                    }
-                }
-
-                // 🔸 B) Toplam para şartı
-                if (condition.requireTotalMoney && totalMoney < condition.requiredMoney)
-                {
-                    allConditionsMet = false;
-                    break;
-                }
-
-                // 🔸 C) Prestige seviye şartı
-                if (condition.requirePrestigeLevel && prestigeLevel < condition.requiredPrestigeLevel)
-                {
-                    allConditionsMet = false;
-                    break;
-                }
-            }
-
-            if (allConditionsMet)
-            {
-                product.uiObject.SetActive(true);
-                Debug.Log($"UNLOCKED by conditions → {config.productName}");
-            }
         }
     }
-
-
 }
 
 

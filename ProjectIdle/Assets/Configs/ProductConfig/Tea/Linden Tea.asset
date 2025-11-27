@@ -20,13 +20,13 @@ MonoBehaviour:
   baseLevel: 0
   icon: {fileID: 0}
   productType: 0
-  isLockedInitially: 0
+  isLockedInitially: 1
   unlockConditions:
-  - requiredProductName: Orange Tea
+  - requiredProductConfig: {fileID: 11400000, guid: 8fa609420b4531b40a054d96e4b498f5, type: 2}
     requiredLevel: 5
     requireTotalMoney: 0
     requiredMoney: 0
-    requirePrestigeLevel: 1
+    requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0

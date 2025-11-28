@@ -8,19 +8,18 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton güvenli
         if (Instance == null)
         {
             Instance = this;
         }
         else if (Instance != this)
         {
-            Destroy(this); // duplicate varsa sadece bu script yok olur, objeler silinmez
+            Destroy(this);
             return;
         }
     }
 
-    // Menü açma butonlarý bu fonksiyonu çaðýracak
+    // Menü aç/kapat kontrolü
     public void ToggleButton(MenuToggleButton clickedButton)
     {
         // Eðer baþka bir menü açýksa kapat
@@ -29,9 +28,9 @@ public class MenuManager : MonoBehaviour
             currentlyOpenButton.CloseSlider();
         }
 
+        // Ayný butona tekrar basýldýysa kapat
         if (currentlyOpenButton == clickedButton)
         {
-            // Ayný menüye tekrar basýlýrsa kapat
             CloseCurrentlyOpenMenu();
         }
         else

@@ -1,19 +1,30 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuToggleButton : MonoBehaviour
 {
     public Animator animator;
+
+    public Image buttonImage;
+    public Color normalColor = Color.white;
+    public Color selectedColor = new Color(0.8f, 0.8f, 0.8f); // hafif kararma
+
     [HideInInspector] public bool isOpen = false;
 
     private MenuManager menuManager;
 
     private void Awake()
     {
-        // Unity 2023+ i�in g�ncel referans alma
         menuManager = GameObject.FindFirstObjectByType<MenuManager>();
 
         if (menuManager == null)
-            Debug.LogError("Sahnede MenuManager bulunamad�!");
+            Debug.LogError("Sahnede MenuManager bulunamadı!");
+    }
+
+    private void Start()
+    {
+        if (buttonImage != null)
+            buttonImage.color = normalColor;
     }
 
     public void OnToggleMenu()
@@ -27,8 +38,10 @@ public class MenuToggleButton : MonoBehaviour
         if (animator != null && !isOpen)
         {
             animator.SetTrigger("Open");
-            isOpen = true;
             animator.ResetTrigger("Close");
+            isOpen = true;
+
+            SetSelected(true);
         }
     }
 
@@ -37,8 +50,17 @@ public class MenuToggleButton : MonoBehaviour
         if (animator != null && isOpen)
         {
             animator.SetTrigger("Close");
-            isOpen = false;
             animator.ResetTrigger("Open");
+            isOpen = false;
+
+            SetSelected(false);
         }
+    }
+
+    // ✅ BUTON RENGİNİ DEĞİŞTİREN FONKSİYON
+    public void SetSelected(bool selected)
+    {
+        if (buttonImage != null)
+            buttonImage.color = selected ? selectedColor : normalColor;
     }
 }

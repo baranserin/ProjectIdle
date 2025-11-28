@@ -1,52 +1,95 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour
 {
-    public static MenuManager Instance { get; private set; }
+    public static MenuManager Instance;
 
-    [HideInInspector] public MenuToggleButton currentlyOpenButton;
+    // Her menÃ¼nÃ¼n aÃ§Ä±k/kapalÄ± durumunu tutar
+    private Dictionary<int, bool> menuOpenState = new Dictionary<int, bool>();
+
+    // Her menÃ¼nÃ¼n slider animator referansÄ±nÄ± tutar
+    private Dictionary<int, List<MenuToggleButton>> buttonsByMenu
+        = new Dictionary<int, List<MenuToggleButton>>();
 
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Destroy(this);
-            return;
-        }
+        else
+            Destroy(gameObject);
     }
 
-    // Menü aç/kapat kontrolü
+    // Butonlar sahnede register edilir
+    public void RegisterButton(MenuToggleButton button)
+    {
+        int id = button.menuID;
+
+        if (!buttonsByMenu.ContainsKey(id))
+            buttonsByMenu[id] = new List<MenuToggleButton>();
+
+        if (!buttonsByMenu[id].Contains(button))
+            buttonsByMenu[id].Add(button);
+
+        if (!menuOpenState.ContainsKey(id))
+            menuOpenState[id] = false;
+    }
+
     public void ToggleButton(MenuToggleButton clickedButton)
     {
-        // Eðer baþka bir menü açýksa kapat
-        if (currentlyOpenButton != null && currentlyOpenButton != clickedButton)
-        {
-            currentlyOpenButton.CloseSlider();
-        }
+        int id = clickedButton.menuID;
 
-        // Ayný butona tekrar basýldýysa kapat
-        if (currentlyOpenButton == clickedButton)
+        bool isOpen = menuOpenState[id];
+
+        if (isOpen)
         {
-            CloseCurrentlyOpenMenu();
+            // âœ… AynÄ± menÃ¼ â†’ KAPAT
+            CloseMenu(id);
         }
         else
         {
-            clickedButton.OpenSlider();
-            currentlyOpenButton = clickedButton;
+            // âœ… Ã–NCE TÃœM DÄ°ÄžER MENÃœLERÄ° KAPAT
+            CloseAllExcept(id);
+
+            // âœ… SONRA SEÃ‡Ä°LEN MENÃœYÃœ AÃ‡
+            OpenMenu(id);
         }
     }
 
-    // Açýk menüyü kapat
-    public void CloseCurrentlyOpenMenu()
+    private void OpenMenu(int id)
     {
-        if (currentlyOpenButton != null)
+        if (buttonsByMenu.ContainsKey(id))
         {
-            currentlyOpenButton.CloseSlider();
-            currentlyOpenButton = null;
+            foreach (var button in buttonsByMenu[id])
+                button.OpenSlider();
+        }
+
+        menuOpenState[id] = true;
+    }
+
+    private void CloseMenu(int id)
+    {
+        if (buttonsByMenu.ContainsKey(id))
+        {
+            foreach (var button in buttonsByMenu[id])
+                button.CloseSlider();
+        }
+
+        menuOpenState[id] = false;
+    }
+
+    private void CloseAllExcept(int exceptID)
+    {
+        foreach (var kvp in buttonsByMenu)
+        {
+            int id = kvp.Key;
+
+            if (id == exceptID) continue;
+
+            if (menuOpenState.ContainsKey(id) && menuOpenState[id])
+            {
+                CloseMenu(id);
+            }
         }
     }
 }

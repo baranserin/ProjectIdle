@@ -682,8 +682,16 @@ public class IncomeManager : MonoBehaviour
 
             bool unlocked = IsProductUnlocked(product);
 
+            // Ürün unlocked ise UI’ı aç, değilse kapalı kalsın
+            product.uiObject.SetActive(unlocked);
+
+            if (unlocked)
+            {
+                Debug.Log($"UNLOCKED by conditions → {product.config.productName}");
+            }
         }
     }
+
 }
 
 

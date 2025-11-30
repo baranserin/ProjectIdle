@@ -13,12 +13,33 @@ MonoBehaviour:
   m_Name: Caramel Latte
   m_EditorClassIdentifier: 
   productName: Caramel Latte
-  baseUpgradeCost: 10
-  costGrowth: 1.5
-  baseIncome: 1
-  incomeGrowth: 1
+  baseUpgradeCost: 2500000
+  costGrowth: 1.12
+  baseIncome: 2500
+  incomeGrowth: 1.11
   baseLevel: 0
   icon: {fileID: 0}
   productType: 1
   isLockedInitially: 0
   unlockConditions: []
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

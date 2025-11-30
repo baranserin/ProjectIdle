@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Tea
   baseUpgradeCost: 10
-  costGrowth: 1.25
+  costGrowth: 1.08
   baseIncome: 2
-  incomeGrowth: 1.1
+  incomeGrowth: 1.07
   baseLevel: 0
   icon: {fileID: -5081744711958562449, guid: 5d9a6a4529c1e7e4fbfa3aed2c1c9974, type: 3}
   productType: 0

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Sage
   m_EditorClassIdentifier: 
   productName: Sage
-  baseUpgradeCost: 10
-  costGrowth: 1.5
-  baseIncome: 1
-  incomeGrowth: 1
+  baseUpgradeCost: 70000
+  costGrowth: 1.09
+  baseIncome: 225
+  incomeGrowth: 1.08
   baseLevel: 0
   icon: {fileID: 0}
   productType: 0
   isLockedInitially: 0
   unlockConditions:
-  - requiredProductName: Roseship
+  - requiredProductConfig: {fileID: 0}
     requiredLevel: 5
     requireTotalMoney: 0
     requiredMoney: 0

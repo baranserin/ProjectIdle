@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Americano
   m_EditorClassIdentifier: 
   productName: Americano
-  baseUpgradeCost: 100000
-  costGrowth: 1.25
-  baseIncome: 100
+  baseUpgradeCost: 12500
+  costGrowth: 1.11
+  baseIncome: 25
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 0}
   productType: 1
   isLockedInitially: 0
   unlockConditions:
-  - requiredProductName: 
+  - requiredProductConfig: {fileID: 0}
     requiredLevel: 0
     requireTotalMoney: 0
     requiredMoney: 0

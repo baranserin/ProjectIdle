@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Espresso
   m_EditorClassIdentifier: 
   productName: Espresso
-  baseUpgradeCost: 1000
-  costGrowth: 1.25
+  baseUpgradeCost: 5000
+  costGrowth: 1.11
   baseIncome: 10
   incomeGrowth: 1.1
   baseLevel: 0
@@ -22,3 +22,24 @@ MonoBehaviour:
   productType: 1
   isLockedInitially: 0
   unlockConditions: []
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

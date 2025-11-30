@@ -14,11 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Turkish Coffee
   baseUpgradeCost: 10000
-  costGrowth: 1.25
-  baseIncome: 25
+  costGrowth: 1.11
+  baseIncome: 20
   incomeGrowth: 1.1
   baseLevel: 0
   icon: {fileID: 0}
   productType: 1
   isLockedInitially: 0
   unlockConditions: []
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

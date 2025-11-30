@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Tiramisu
   m_EditorClassIdentifier: 
   productName: Tiramisu
-  baseUpgradeCost: 10
-  costGrowth: 1.25
-  baseIncome: 1
-  incomeGrowth: 1.1
+  baseUpgradeCost: 1000000
+  costGrowth: 1.13
+  baseIncome: 1150
+  incomeGrowth: 1.12
   baseLevel: 0
   icon: {fileID: 0}
   productType: 2

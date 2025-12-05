@@ -149,7 +149,6 @@ public class IncomeManager : MonoBehaviour
     public AudioSource failSound;
 
     public double income;
-    public double clickValue = 1;
 
     public GameObject PassiveIncomePanel;
     public GameObject collect1xButton;

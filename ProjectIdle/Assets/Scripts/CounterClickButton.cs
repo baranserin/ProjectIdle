@@ -14,7 +14,7 @@ public class CounterClickButton : MonoBehaviour
     {
         if (IncomeManager.Instance != null)
         {
-            IncomeManager.Instance.AddMoney(IncomeManager.clickValue);
+            (IncomeManager.Instance.AddMoney(IncomeManager.income))/5;
 
         }
     }

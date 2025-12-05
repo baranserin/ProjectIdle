@@ -22,6 +22,10 @@ public class ProductConfig : ScriptableObject
     [Header("Category")]
     public ProductType productType;
 
+
+    [Header("Machine Requirement")]
+    public bool requiresMachine = false;  // Bu ürün makineye bağlı mı?
+
     [Header("Unlock Condition")]
     public bool isLockedInitially = true;
     public List<UnlockCondition> unlockConditions = new List<UnlockCondition>();
@@ -29,6 +33,8 @@ public class ProductConfig : ScriptableObject
     [Header("Level Boosts (çarpanlar)")]
     public LevelBoost[] levelBoosts = new LevelBoost[10]; // 👈 Inspector’dan doldurulacak
 }
+
+
 
 public enum ProductType
 {

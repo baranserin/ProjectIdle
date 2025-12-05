@@ -18,8 +18,12 @@ public class UpgradeCardData
     public Vector2 imageOffset = Vector2.zero;
     public float imageScale = 0.33f;
 
+    [Header("Machine Upgrade")]
+    public bool unlocksMachineForThisType = false; // 👈 Bu kart ilgili türün makinesini açıyor mu?
+
     [HideInInspector] public bool isBought = false;
 }
+
 
 public class UpgradeCardManager : MonoBehaviour
 {
@@ -104,21 +108,18 @@ public class UpgradeCardManager : MonoBehaviour
     {
         var upgrade = upgrades[currentIndex];
 
-        // 1) Sıralı açılma kontrolü
         if (!IsUnlocked(currentIndex))
         {
             Debug.Log("❌ Bu upgrade henüz kilitli. Önce önceki upgrade'i satın almalısın.");
             return;
         }
 
-        // 2) Zaten alınmış mı?
         if (upgrade.isBought)
         {
             Debug.Log("Upgrade zaten alınmış!");
             return;
         }
 
-        // 3) Para kontrolü
         if (IncomeManager.Instance.totalMoney >= upgrade.price)
         {
             IncomeManager.Instance.totalMoney -= upgrade.price;
@@ -127,12 +128,17 @@ public class UpgradeCardManager : MonoBehaviour
             upgrade.isBought = true;
             SaveSingleUpgrade(currentIndex);
 
+            // 🔹 Eğer bu bir makine kartıysa, ilgili türün makinesini aç
+            if (upgrade.unlocksMachineForThisType && IncomeManager.Instance != null)
+            {
+                IncomeManager.Instance.UnlockMachine(upgrade.targetType);
+            }
+
             Debug.Log($"✅ Bought upgrade: {upgrade.objectName}, applied x{upgrade.multiplier} to {upgrade.targetType}");
             IncomeManager.Instance.UpdateUI();
 
             UpdateCardVisual(currentIndex);
 
-            // İstersen otomatik olarak bir sonraki uygun upgrade'e geç
             int nextIndex = FindFirstAvailableIndex();
             ShowCard(nextIndex);
         }
@@ -141,6 +147,7 @@ public class UpgradeCardManager : MonoBehaviour
             Debug.Log("❌ Yeterli paran yok!");
         }
     }
+
 
     #endregion
 

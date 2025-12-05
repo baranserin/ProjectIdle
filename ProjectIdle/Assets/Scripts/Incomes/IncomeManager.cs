@@ -161,6 +161,10 @@ public class IncomeManager : MonoBehaviour
     private float globalDecorationMultiplier = 1f;                // applyToAllTypes ile gelenler
     private readonly Dictionary<ProductType, float> typeDecorationMultiplier = new();
 
+    private readonly HashSet<ProductType> unlockedMachines = new();
+
+
+
     void Awake()
     {
         Instance = this;
@@ -438,6 +442,8 @@ public class IncomeManager : MonoBehaviour
         // Tür çarpan tablolarını her açılışta sıfırla.
         // DecorationIncome.Start() satın alınmış dekorasyonları yeniden uygular.
         ResetDecorationMultipliers();
+        LoadMachineUnlocks();
+
     }
 
     public void InactiveIncome()
@@ -633,11 +639,20 @@ public class IncomeManager : MonoBehaviour
     {
         var config = product.config;
 
+        // 1️⃣ Eğer bu ürün makineye bağlıysa, önce makineye bak
+        if (config.requiresMachine)
+        {
+            // O ürünün türüne ait makine açılmamışsa → direkt false
+            if (!IsMachineUnlocked(config.productType))
+                return false;
+        }
+
+        // 2️⃣ Makine engeli yoksa (ya da makine zaten açıksa) normal unlock mantığına geç
+
         // Hiç kilitli değilse (isLockedInitially = false) → her zaman açık
         if (!config.isLockedInitially)
             return true;
 
-        // Kilitliyse, UnlockCondition’lara bak
         bool allConditionsMet = true;
 
         foreach (var condition in config.unlockConditions)
@@ -672,6 +687,7 @@ public class IncomeManager : MonoBehaviour
     }
 
 
+
     public void CheckUnlocks()
     {
         for (int i = 0; i < products.Count; i++)
@@ -691,6 +707,43 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
+
+    private void LoadMachineUnlocks()
+    {
+        unlockedMachines.Clear();
+
+        foreach (ProductType t in Enum.GetValues(typeof(ProductType)))
+        {
+            int flag = PlayerPrefs.GetInt($"Machine_{t}_Unlocked", 0);
+            if (flag == 1)
+                unlockedMachines.Add(t);
+        }
+    }
+
+    private void SaveMachineUnlock(ProductType type)
+    {
+        PlayerPrefs.SetInt($"Machine_{type}_Unlocked", 1);
+        PlayerPrefs.Save();
+    }
+
+    // Makineyi kalıcı olarak açan fonksiyon
+    public void UnlockMachine(ProductType type)
+    {
+        if (!unlockedMachines.Contains(type))
+        {
+            unlockedMachines.Add(type);
+            SaveMachineUnlock(type);
+            CheckUnlocks(); // ürünlerin UI’ını tekrar değerlendir
+            Debug.Log($"[IncomeManager] Machine unlocked for type: {type}");
+        }
+    }
+
+    // Bu tür için makine açık mı?
+    public bool IsMachineUnlocked(ProductType type)
+    {
+        return unlockedMachines.Contains(type);
+    }
+
 
 }
 

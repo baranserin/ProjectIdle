@@ -11528,7 +11528,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 185916256}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 196869086}
+        m_TargetAssemblyTypeName: UpgradeCardManager, Assembly-CSharp
+        m_MethodName: BuyUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &185916256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12567,13 +12579,13 @@ MonoBehaviour:
   upgrades:
   - objectImage: {fileID: -1764275478048324899, guid: 46fce6fe7a5310b46b133961160eab55, type: 3}
     objectName: TEA MACHINE I
-    price: 100000
+    price: 1000
     targetType: 0
     multiplier: 2
     descriptionText: {fileID: 0}
     imageOffset: {x: 0, y: 0}
     imageScale: 0.33
-    unlocksMachineForThisType: 0
+    unlocksMachineForThisType: 1
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -25862,7 +25874,7 @@ MonoBehaviour:
     descriptionText: {fileID: 1040606590}
     imageOffset: {x: 10, y: 300}
     imageScale: 0.33
-    unlocksMachineForThisType: 0
+    unlocksMachineForThisType: 1
     isBought: 0
   - objectImage: {fileID: -3446601908824515954, guid: 5057137496db37c469c28c8a3643ce5b, type: 3}
     objectName: COFFEE MACHINE II
@@ -70458,7 +70470,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -94.16333}
+  m_AnchoredPosition: {x: 0, y: -107.49707}
   m_SizeDelta: {x: 3787.7, y: 2781}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104811558

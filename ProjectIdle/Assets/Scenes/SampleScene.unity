@@ -1856,7 +1856,7 @@ MonoBehaviour:
   productIndex: 0
   purchasePanel: {fileID: 917572877}
   arrowSprite: {fileID: 1272626253}
-  upgradeHintIcon: {fileID: 0}
+  upgradeHintIcon: {fileID: 1272626253}
 --- !u!1 &26787584
 GameObject:
   m_ObjectHideFlags: 0

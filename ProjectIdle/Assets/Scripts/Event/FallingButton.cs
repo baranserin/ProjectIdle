@@ -145,24 +145,32 @@ public class FallingButton : MonoBehaviour, IPointerClickHandler
         if (consumed) return;
         consumed = true;
 
-        // Etki
         switch (config.eventType)
         {
             case EventType.InstantReward:
-                IncomeManager.Instance.AddMoney(config.rewardAmount);
-                break;
+                {
+                   
+                    double reward = IncomeManager.Instance.income * 3;
+
+                    IncomeManager.Instance.AddMoney(reward);
+
+                    break;
+                }
+
             case EventType.TimedMultiplier:
-                IncomeManager.Instance.StartCoroutine(ApplyTimedMultiplier(config.multiplier, config.duration));
+                IncomeManager.Instance.StartCoroutine(
+                    ApplyTimedMultiplier(config.multiplier, config.duration)
+                );
                 break;
         }
 
-        // Etkileşimi kapat + kısa “pop” hissi
+        // Disable UI interaction
         if (button) button.interactable = false;
         if (buttonImage) buttonImage.raycastTarget = false;
 
-        // tıklayınca ufak pop ve hızlı fade
         StartCoroutine(ClickPopAndDestroy());
     }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {

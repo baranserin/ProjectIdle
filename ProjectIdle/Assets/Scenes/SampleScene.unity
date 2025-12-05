@@ -1856,6 +1856,7 @@ MonoBehaviour:
   productIndex: 0
   purchasePanel: {fileID: 917572877}
   arrowSprite: {fileID: 1272626253}
+  upgradeHintIcon: {fileID: 0}
 --- !u!1 &26787584
 GameObject:
   m_ObjectHideFlags: 0
@@ -12585,7 +12586,7 @@ MonoBehaviour:
     descriptionText: {fileID: 0}
     imageOffset: {x: 0, y: 0}
     imageScale: 0.33
-    unlocksMachineForThisType: 1
+    unlocksMachineForThisType: 0
     isBought: 0
   - objectImage: {fileID: -3283775279570671454, guid: 3c01d474063413e459d40c70d0a894f8, type: 3}
     objectName: TEA MACHINE II
@@ -25874,7 +25875,7 @@ MonoBehaviour:
     descriptionText: {fileID: 1040606590}
     imageOffset: {x: 10, y: 300}
     imageScale: 0.33
-    unlocksMachineForThisType: 1
+    unlocksMachineForThisType: 0
     isBought: 0
   - objectImage: {fileID: -3446601908824515954, guid: 5057137496db37c469c28c8a3643ce5b, type: 3}
     objectName: COFFEE MACHINE II
@@ -55748,7 +55749,6 @@ MonoBehaviour:
   successSound: {fileID: 1976358944}
   failSound: {fileID: 1084479307}
   income: 0
-  clickValue: 1
   PassiveIncomePanel: {fileID: 153236691}
   collect1xButton: {fileID: 519409202}
   collect2xButton: {fileID: 1907021295}

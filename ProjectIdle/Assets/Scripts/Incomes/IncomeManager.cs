@@ -144,6 +144,15 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI prestigePointText;
     public TextMeshProUGUI PassiveIncomeText;
 
+    [Header("Locks")]
+    public GameObject TeaLock;
+    public GameObject teaMachineButton;
+    
+    public GameObject CoffeLock;
+    public GameObject coffeMachineButton;
+    public GameObject DessertLock;
+    public GameObject dessertMachineButton;
+
     [Header("Sesler")]
     public AudioSource successSound;
     public AudioSource failSound;
@@ -162,6 +171,7 @@ public class IncomeManager : MonoBehaviour
 
     private readonly HashSet<ProductType> unlockedMachines = new();
 
+    
 
 
     void Awake()

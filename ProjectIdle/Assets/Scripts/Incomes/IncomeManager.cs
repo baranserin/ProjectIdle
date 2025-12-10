@@ -203,9 +203,9 @@ public class IncomeManager : MonoBehaviour
     {
         LoadData();
         InactiveIncome();
-        LoadMachineStates();
         CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
+        LoadMachineStates();
         UpdateUI();
 
         // 🔹 Show upgrade arrows at startup (even if popup is inactive)

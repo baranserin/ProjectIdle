@@ -125,7 +125,7 @@ public class IncomeManager : MonoBehaviour
     public List<ProductData> products;
 
     [Header("Genel")]
-    public double totalMoney = 10f;
+    public double totalMoney = 110f;
     public double prestigeMultiplier = 1.1;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
@@ -147,11 +147,20 @@ public class IncomeManager : MonoBehaviour
     [Header("Locks")]
     public GameObject TeaLock;
     public GameObject teaMachineButton;
-    
+    public int teaMachinePrice;
     public GameObject CoffeLock;
     public GameObject coffeMachineButton;
+    public int coffeMachinePrice;
     public GameObject DessertLock;
     public GameObject dessertMachineButton;
+    public int dessertMachinePrice;
+
+    private bool teaBought;
+    private bool coffeeBought;
+    private bool dessertBought;
+    private const string TEA_KEY = "TeaBought";
+    private const string COFFEE_KEY = "CoffeeBought";
+    private const string DESSERT_KEY = "DessertBought";
 
     [Header("Sesler")]
     public AudioSource successSound;
@@ -190,6 +199,7 @@ public class IncomeManager : MonoBehaviour
     void Start()
     {
         LoadData();
+        LoadMachineStates();
         InactiveIncome();
         CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
@@ -261,7 +271,7 @@ public class IncomeManager : MonoBehaviour
             p.incomeMultiplier = 1f;
         }
 
-        totalMoney = 10f;
+        totalMoney = 110f;
         prestigeLevel = 0;
         prestigePoint = 0;
 
@@ -443,7 +453,7 @@ public class IncomeManager : MonoBehaviour
             products[i].incomeMultiplier = PlayerPrefs.GetFloat($"Product_{i}_Multiplier", 1f);
         }
 
-        totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "10"));
+        totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "110"));
         prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
         globalIncomeMultiplier = PlayerPrefs.GetFloat("GlobalIncomeMultiplier", 1f);
@@ -753,7 +763,66 @@ public class IncomeManager : MonoBehaviour
         return unlockedMachines.Contains(type);
     }
 
+    public void BuyMachine(GameObject lockObj, GameObject machineButton, int price)
+    {
+        if (totalMoney >= price)
+        {
+            totalMoney -= price;
 
+            lockObj.SetActive(false);
+            machineButton.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Yetersiz para!");
+        }
+    }
+
+    public void BuyTea()
+    {
+        BuyMachine(TeaLock, teaMachineButton, teaMachinePrice);
+        PlayerPrefs.SetInt("TeaBought", 1);
+        PlayerPrefs.Save();
+    }
+
+    public void BuyCoffee()
+    {
+        BuyMachine(CoffeLock, coffeMachineButton, coffeMachinePrice);
+        PlayerPrefs.SetInt("CoffeBought", 1);
+        PlayerPrefs.Save();
+    }
+
+    public void BuyDessert()
+    {
+        BuyMachine(DessertLock, dessertMachineButton, dessertMachinePrice);
+        PlayerPrefs.SetInt("DessertBought", 1);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadMachineStates()
+    {
+        teaBought = PlayerPrefs.GetInt(TEA_KEY, 0) == 1;
+        coffeeBought = PlayerPrefs.GetInt(COFFEE_KEY, 0) == 1;
+        dessertBought = PlayerPrefs.GetInt(DESSERT_KEY, 0) == 1;
+
+        if (teaBought)
+        {
+            TeaLock.SetActive(false);
+            teaMachineButton.SetActive(false);
+        }
+
+        if (coffeeBought)
+        {
+            CoffeLock.SetActive(false);
+            coffeMachineButton.SetActive(false);
+        }
+
+        if (dessertBought)
+        {
+            DessertLock.SetActive(false);
+            dessertMachineButton.SetActive(false);
+        }
+    }
 }
 
 

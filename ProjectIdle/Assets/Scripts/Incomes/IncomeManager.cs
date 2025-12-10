@@ -148,12 +148,15 @@ public class IncomeManager : MonoBehaviour
     public GameObject TeaLock;
     public GameObject teaMachineButton;
     public int teaMachinePrice;
+    public TextMeshProUGUI teaMachineText;
     public GameObject CoffeLock;
     public GameObject coffeMachineButton;
     public int coffeMachinePrice;
+    public TextMeshProUGUI coffeMachineText;
     public GameObject DessertLock;
     public GameObject dessertMachineButton;
     public int dessertMachinePrice;
+    public TextMeshProUGUI dessertMachineText;
 
     private bool teaBought;
     private bool coffeeBought;
@@ -199,8 +202,8 @@ public class IncomeManager : MonoBehaviour
     void Start()
     {
         LoadData();
-        LoadMachineStates();
         InactiveIncome();
+        LoadMachineStates();
         CheckUnlocks();
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
@@ -279,6 +282,9 @@ public class IncomeManager : MonoBehaviour
         ResetDecorationMultipliers();
         if (decorationIncome != null)
             decorationIncome.ResetDecorations();
+
+        ActivateLocks();
+
 
         UpdateUI();
 
@@ -801,6 +807,9 @@ public class IncomeManager : MonoBehaviour
 
     private void LoadMachineStates()
     {
+        teaMachineText.text = FormatMoneyStatic(teaMachinePrice);
+        coffeMachineText.text = FormatMoneyStatic(coffeMachinePrice);
+        dessertMachineText.text = FormatMoneyStatic(dessertMachinePrice);
         teaBought = PlayerPrefs.GetInt(TEA_KEY, 0) == 1;
         coffeeBought = PlayerPrefs.GetInt(COFFEE_KEY, 0) == 1;
         dessertBought = PlayerPrefs.GetInt(DESSERT_KEY, 0) == 1;
@@ -808,20 +817,28 @@ public class IncomeManager : MonoBehaviour
         if (teaBought)
         {
             TeaLock.SetActive(false);
-            teaMachineButton.SetActive(false);
         }
 
         if (coffeeBought)
         {
             CoffeLock.SetActive(false);
-            coffeMachineButton.SetActive(false);
         }
 
         if (dessertBought)
         {
             DessertLock.SetActive(false);
-            dessertMachineButton.SetActive(false);
         }
+    }
+     
+    private void ActivateLocks()
+    {
+        TeaLock.SetActive(true);
+        teaMachineButton.SetActive(true);
+        CoffeLock.SetActive(true);
+        coffeMachineButton.SetActive(true);
+        DessertLock.SetActive(true);
+        dessertMachineButton.SetActive(true);
+
     }
 }
 

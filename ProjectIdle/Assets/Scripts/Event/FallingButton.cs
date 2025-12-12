@@ -11,6 +11,9 @@ public class FallingButton : MonoBehaviour, IPointerClickHandler
     private Image buttonImage;
     private RectTransform canvasRect;
 
+    public AudioClip clickSound;   // Inspector’dan ses dosyası eklenir
+    private AudioSource audioSource;
+
     // --- Frame animasyon ---
     private Sprite[] frames;
     private int frameIndex = 0;
@@ -77,6 +80,8 @@ public class FallingButton : MonoBehaviour, IPointerClickHandler
 
         // Görsel kalite: yumuşak kenar
         if (buttonImage) buttonImage.preserveAspect = true;
+
+     
     }
 
     void Update()
@@ -142,6 +147,9 @@ public class FallingButton : MonoBehaviour, IPointerClickHandler
 
     private void OnClick()
     {
+        if (clickSound)
+            AudioSource.PlayClipAtPoint(clickSound, Camera.main.transform.position, 1f);
+
         if (consumed) return;
         consumed = true;
 

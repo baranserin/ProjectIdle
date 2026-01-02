@@ -117,6 +117,7 @@ public class IncomeManager : MonoBehaviour
 {
     public static IncomeManager Instance;
     public DecorationIncome decorationIncome;
+    public UpgradeCardManager upgradeCardManager;
 
     public enum BuyMode { x1, x10, x50, Max }
     public BuyMode currentBuyMode = BuyMode.x1;
@@ -275,8 +276,6 @@ public class IncomeManager : MonoBehaviour
         }
 
         totalMoney = 110f;
-        prestigeLevel = 0;
-        prestigePoint = 0;
 
         // Dekorasyon ve tür çarpanlarını sıfırla
         ResetDecorationMultipliers();
@@ -284,7 +283,7 @@ public class IncomeManager : MonoBehaviour
             decorationIncome.ResetDecorations();
 
         ActivateLocks();
-
+        upgradeCardManager.ResetUpgrades();
 
         UpdateUI();
 

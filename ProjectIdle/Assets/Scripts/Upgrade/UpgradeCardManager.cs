@@ -236,7 +236,7 @@ public class UpgradeCardManager : MonoBehaviour
     /// <summary>
     /// Tüm upgradelerin durumunu PlayerPrefs'ten yükler.
     /// </summary>
-    private void LoadUpgradesFromSave()
+    public void LoadUpgradesFromSave()
     {
         for (int i = 0; i < upgrades.Length; i++)
         {
@@ -244,6 +244,22 @@ public class UpgradeCardManager : MonoBehaviour
             int value = PlayerPrefs.GetInt(key, 0); // 0: alınmamış, 1: alınmış
             upgrades[i].isBought = (value == 1);
         }
+    }
+
+    public void ResetUpgrades()
+    {
+        PlayerPrefs.DeleteAll();
+        for (int i = 0; i < upgrades.Length; i++)
+        {
+            upgrades[i].isBought = false;
+            string key = GetUpgradeKey(i);
+            PlayerPrefs.DeleteKey(key);
+        }
+        PlayerPrefs.Save();
+        LoadUpgradesFromSave();
+        currentIndex = 0;
+        // ShowCard zaten UpdateCardVisual'ı kendi içinde çağırıyor
+        ShowCard(0);
     }
 
     /// <summary>

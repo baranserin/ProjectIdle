@@ -290,7 +290,7 @@ public class IncomeManager : MonoBehaviour
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
 
-    double GetTotalIncome()
+    public double GetTotalIncome()
     {
         double total = 0;
         foreach (var p in products)

@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour
     [Header("Bağlantılar")]
     public Canvas targetCanvas;   // Inspector’dan ata (önerilir)
 
+    double income;
     private void Awake() => Instance = this;
 
     private void Start()
@@ -50,7 +51,8 @@ public class EventManager : MonoBehaviour
 
     private void TryTriggerEvent()
     {
-        if (isEventActive || possibleEvents.Length == 0) return;
+        income = IncomeManager.GetTotalIncome();
+        if (isEventActive || possibleEvents.Length == 0 || income == 0) return;
 
         EventConfig config = possibleEvents[Random.Range(0, possibleEvents.Length)];
         TriggerEvent(config);

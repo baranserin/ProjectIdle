@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
+  m_Name: 10.Balm Tea
+  m_EditorClassIdentifier: 
+  productName: Balm Tea
+  baseUpgradeCost: 100000
+  costGrowth: 1.12
+  baseIncome: 250
+  incomeGrowth: 1.11
+  baseLevel: 0
+  icon: {fileID: 0}
+  productType: 0
+  isLockedInitially: 0
+  unlockConditions:
+  - requiredProductConfig: {fileID: 0}
+    requiredLevel: 5
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

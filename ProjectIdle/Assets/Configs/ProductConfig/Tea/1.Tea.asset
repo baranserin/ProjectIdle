@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
+  m_Name: 1.Tea
+  m_EditorClassIdentifier: 
+  productName: Tea
+  baseUpgradeCost: 10
+  costGrowth: 1.08
+  baseIncome: 2
+  incomeGrowth: 1.07
+  baseLevel: 0
+  icon: {fileID: -5081744711958562449, guid: 5d9a6a4529c1e7e4fbfa3aed2c1c9974, type: 3}
+  productType: 0
+  requiresMachine: 0
+  isLockedInitially: 0
+  unlockConditions: []
+  levelBoosts:
+  - requiredLevel: 10
+    incomeMultiplier: 1.1
+  - requiredLevel: 25
+    incomeMultiplier: 1.05
+  - requiredLevel: 50
+    incomeMultiplier: 1.04
+  - requiredLevel: 100
+    incomeMultiplier: 1.03

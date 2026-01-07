@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f564c9bae2346c14aaff50a2de872471, type: 3}
+  m_Name: 2.Cookie
+  m_EditorClassIdentifier: 
+  productName: Cookie
+  baseUpgradeCost: 12000
+  costGrowth: 1.13
+  baseIncome: 20
+  incomeGrowth: 1.12
+  baseLevel: 0
+  icon: {fileID: 5541253663642590004, guid: 0ce4ca6491f710b458ca8a5db0eff339, type: 3}
+  productType: 2
+  isLockedInitially: 0
+  unlockConditions: []
+  levelBoosts:
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0
+  - requiredLevel: 0
+    incomeMultiplier: 0

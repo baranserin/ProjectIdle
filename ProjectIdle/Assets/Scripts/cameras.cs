@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.EventSystems; // EKLENDİ: UI kontrolü için gerekli
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using System.Collections.Generic;
 
 public class UIContentZoom : MonoBehaviour
 {
@@ -13,14 +15,14 @@ public class UIContentZoom : MonoBehaviour
     public TMP_Text buttonText;
 
     [Header("Zoom Levels & Labels")]
-    public float[] zoomLevels = { 0.3f, 0.6f, 1f };      // Buton zoom değerleri
-    public string[] zoomLabels = { "2x", "4x", "1x" };   // Buton üzerindeki yazılar
+    public float[] zoomLevels = { 0.3f, 0.6f, 1f };
+    public string[] zoomLabels = { "2x", "4x", "1x" };
 
     [Header("Manual Zoom Settings")]
-    public float minZoom = 0.3f;     // Artık daha uzaklaşabilirsin
-    public float maxZoom = 2f;       // Yakınlaşma sınırı
+    public float minZoom = 0.3f;
+    public float maxZoom = 2f;
     [Range(0.001f, 0.02f)]
-    public float zoomSpeed = 0.001f; // Pinch hassasiyeti (düşük = daha yavaş)
+    public float zoomSpeed = 0.001f;
 
     private int currentIndex = 0;
     private float currentZoom;
@@ -38,7 +40,6 @@ public class UIContentZoom : MonoBehaviour
 
     void Start()
     {
-        // Eğer label sayısı zoomLevels ile eşit değilse otomatik oluştur
         if (zoomLabels.Length != zoomLevels.Length)
         {
             zoomLabels = new string[zoomLevels.Length];
@@ -46,7 +47,6 @@ public class UIContentZoom : MonoBehaviour
                 zoomLabels[i] = zoomLevels[i].ToString("0.0") + "x";
         }
 
-        // Başlangıçta currentZoom = buton değerinde
         currentZoom = zoomLevels[currentIndex];
         ApplyZoom(currentZoom);
 
@@ -62,9 +62,12 @@ public class UIContentZoom : MonoBehaviour
         if (target == null) return;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        // PC test için mouse scroll
+        // PC: Eğer mouse bir UI elemanının üzerindeyse zoom yapma
         if (Mouse.current != null)
         {
+            // Mouse UI üzerinde mi kontrolü
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             float scroll = Mouse.current.scroll.ReadValue().y;
             if (Mathf.Abs(scroll) > 0.03f)
             {
@@ -78,9 +81,15 @@ public class UIContentZoom : MonoBehaviour
 #endif
 
 #if UNITY_ANDROID || UNITY_IOS
-        // Mobil pinch zoom (sadece iki parmak)
         if (Touch.activeTouches.Count == 2)
         {
+            // Mobil: Parmaklardan HERHANGİ BİRİ UI üzerindeyse zoom yapma
+            if (IsPointerOverUI(Touch.activeTouches[0]) || IsPointerOverUI(Touch.activeTouches[1]))
+            {
+                lastPinchDist = -1f; // Pinch'i resetle ki menüden elini çekince zıplamasın
+                return;
+            }
+
             Vector2 t0 = Touch.activeTouches[0].screenPosition;
             Vector2 t1 = Touch.activeTouches[1].screenPosition;
 
@@ -88,12 +97,10 @@ public class UIContentZoom : MonoBehaviour
 
             if (lastPinchDist < 0f)
             {
-                // İlk frame, sadece mesafeyi kaydet
                 lastPinchDist = dist;
             }
             else
             {
-                // Pinch delta hesapla
                 float delta = dist - lastPinchDist;
 
                 currentZoom += delta * zoomSpeed;
@@ -133,5 +140,15 @@ public class UIContentZoom : MonoBehaviour
     {
         if (target != null)
             target.localScale = new Vector3(zoom, zoom, 1);
+    }
+
+    // --- YENİ EKLENEN FONKSİYON: New Input System için UI Kontrolü ---
+    private bool IsPointerOverUI(Touch touch)
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = touch.screenPosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }

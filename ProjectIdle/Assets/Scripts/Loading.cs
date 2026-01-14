@@ -6,17 +6,26 @@ using System.Collections;
 public class FadeEnterLoading : MonoBehaviour
 {
     [Header("UI Elements")]
-    public TextMeshProUGUI infoText; // Fade olacak "ENTER" yazýsý
+    public TextMeshProUGUI infoText;
+    public Animator transitionAnimator; // YENÝ: Animasyon kontrolcüsü
 
     [Header("Settings")]
-    public string sceneToLoad = "SampleScene"; // Yüklenecek sahne adý
-    public string finalMessage = "ENTER"; // Gözükecek mesaj
-    [Tooltip("Yazýnýn ne kadar hýzlý belirip kaybolacaðýný belirler. Yüksek deðer = hýzlý fade.")]
-    public float fadeSpeed = 3.0f; // Fade hýzý
+    public string sceneToLoad = "SampleScene";
+    public string finalMessage = "ENTER";
+
+    [Header("Animation Settings")]
+    [Tooltip("Animator içindeki Trigger parametresinin adý.")]
+    public string animTriggerName = "End"; // YENÝ: Animasyonu baþlatan trigger adý
+    [Tooltip("Animasyonun ne kadar süreceði (Sahne geçiþi bu süre kadar bekler).")]
+    public float transitionDuration = 1.0f; // YENÝ: Bekleme süresi
+
+    [Header("Text Effects")]
+    public float flashSpeed = 3.0f;
+
+    private bool isExiting = false;
 
     void Start()
     {
-        // Baþlangýçta metni ayarla ama tamamen þeffaf yap (görünmez)
         if (infoText != null)
         {
             infoText.text = finalMessage;
@@ -28,35 +37,32 @@ public class FadeEnterLoading : MonoBehaviour
 
     IEnumerator LoadGameScene()
     {
-        // Sahneyi arka planda yükle
+        // Sahneyi arka planda yüklemeye baþla
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
         operation.allowSceneActivation = false;
 
         while (!operation.isDone)
         {
-            // Yükleme bittiðinde (Unity'de %90'da durur)
+            // Yükleme hazýr olduðunda (%90)
             if (operation.progress >= 0.9f)
             {
-                // --- YÜKLEME BÝTTÝ: FADE EFEKTÝ ---
-
-                // Mathf.Sin -1 ile 1 arasýnda deðer üretir.
-                // Bunu 0 ile 1 arasýna (Alpha deðerine) dönüþtürmek için formül:
-                float fadeValue = (Mathf.Sin(Time.time * fadeSpeed) + 1f) / 2f;
-
-                SetTextAlpha(fadeValue);
-
-                // Týklanýnca sahneye geç
-                if (Input.GetMouseButtonDown(0))
+                // --- SENARYO 1: HENÜZ TIKLANMADI (BEKLEME MODU) ---
+                if (!isExiting)
                 {
-                    // Geçiþ öncesi son kez tam görünür yapalým ki kesilmesin
-                    SetTextAlpha(1f);
-                    operation.allowSceneActivation = true;
+                    // Yanýp sönme efekti
+                    float flashValue = (Mathf.Sin(Time.time * flashSpeed) + 1f) / 2f;
+                    SetTextAlpha(flashValue);
+
+                    // TIKLAMA ALGILANDIÐINDA
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        StartCoroutine(PlayAnimAndSwitch(operation));
+                    }
                 }
             }
             else
             {
-                // --- HALA YÜKLENÝYOR ---
-                // Yükleme sürerken tamamen görünmez olduðundan emin ol
+                // Yüklenirken yazý görünmez olsun
                 SetTextAlpha(0f);
             }
 
@@ -64,13 +70,33 @@ public class FadeEnterLoading : MonoBehaviour
         }
     }
 
-    // TextMeshPro'nun alphasýný deðiþtirmek için yardýmcý fonksiyon
+    // YENÝ: Animasyonu oynatýp sahneyi deðiþtiren Coroutine
+    IEnumerator PlayAnimAndSwitch(AsyncOperation operation)
+    {
+        isExiting = true;
+
+        // 1. Týklanýr týklanmaz yazýyý yok et (Ýsteðe baðlý, temiz görüntü için)
+        SetTextAlpha(0f);
+
+        // 2. Animasyonu tetikle
+        if (transitionAnimator != null)
+        {
+            transitionAnimator.SetTrigger(animTriggerName);
+        }
+
+        // 3. Animasyonun bitmesi için belirlediðin süre kadar bekle
+        yield return new WaitForSeconds(transitionDuration);
+
+        // 4. Sahne geçiþine izin ver
+        operation.allowSceneActivation = true;
+    }
+
     void SetTextAlpha(float alpha)
     {
         if (infoText != null)
         {
             Color currentColor = infoText.color;
-            currentColor.a = alpha;
+            currentColor.a = Mathf.Clamp01(alpha);
             infoText.color = currentColor;
         }
     }

@@ -511,7 +511,7 @@ RectTransform:
   m_GameObject: {fileID: 1016299999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1602749995}
@@ -519,8 +519,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 581}
+  m_SizeDelta: {x: 0.00000333786, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1016300001
 MonoBehaviour:
@@ -1186,9 +1186,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoText: {fileID: 1602749996}
+  transitionAnimator: {fileID: 1016300003}
   sceneToLoad: SampleScene
   finalMessage: ENTER
-  fadeSpeed: 3
+  animTriggerName: End
+  transitionDuration: 1
+  flashSpeed: 3
 --- !u!4 &1792385941
 Transform:
   m_ObjectHideFlags: 0

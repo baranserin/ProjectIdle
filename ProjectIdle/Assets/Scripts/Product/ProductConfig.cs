@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [System.Serializable] // ✅ sadece bu yeterli
@@ -16,6 +19,11 @@ public class ProductConfig : ScriptableObject
     public float costGrowth = 1.5f;
     public float baseIncome = 1f;
     public float incomeGrowth = 1f;
+    public float incomeSineAmplitude = 2.0f;
+    public float incomeSineFrequency = 0.5f;
+    public float costSineAmplitude = 2.0f;
+    public float costSineFrequency = 0.5f;
+    public double costSinePhase = Math.PI / 2;
     public int baseLevel = 1;
     public Sprite icon;
 

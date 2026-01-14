@@ -26,21 +26,29 @@ public class ProductData
 
     public double GetUpgradeCost()
     {
-        return config.baseUpgradeCost * Math.Pow(config.costGrowth, level);
+        if (level == 0) return config.baseUpgradeCost;
+
+        double waveOffset = config.costSineAmplitude * Math.Sin((level * config.costSineFrequency) + config.costSinePhase);
+
+        double effectiveLevel = level + waveOffset;
+
+        return config.baseUpgradeCost * Math.Pow(config.costGrowth, effectiveLevel);
     }
 
     public double GetIncome()
     {
-        if (level == 0)
-            return 0;
+        if (level == 0) return 0;
 
-        // Temel gelir (seviye büyümesi)
-        double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, level);
+        if (level == 1) return config.baseIncome;
 
-        // Ürüne özel yerel çarpan (level boost vb.)
+        double waveOffset = config.incomeSineAmplitude * Math.Sin(level * config.incomeSineFrequency);
+
+        double effectiveLevel = level + waveOffset;
+
+        double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, effectiveLevel);
+
         double localMul = incomeMultiplier;
 
-        // Tür-bazlı dekorasyon çarpanı
         float decoMul = 1f;
         if (IncomeManager.Instance != null)
             decoMul = IncomeManager.Instance.GetEffectiveDecorationMultiplier(config.productType);

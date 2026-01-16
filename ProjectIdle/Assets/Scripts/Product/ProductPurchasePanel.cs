@@ -103,13 +103,40 @@ public class ProductPurchasePanel : MonoBehaviour
     public void UpdateUpgradeArrow()
     {
         var im = IncomeManager.Instance;
-        for (int i = 0; i < allProductCards.Length; i++)
+        if (im == null) return;
+
+        // EÐER LÝSTE BOÞSA: Sahnedeki tüm kartlarý otomatik bul (Sürükle býrakla uðraþma)
+        if (allProductCards == null || allProductCards.Length == 0)
         {
-            var card = allProductCards[i];
-            var product = im.products[card.productIndex];
-            double cost = im.CalculateTotalCost(product, 1);
-            bool canAfford = im.totalMoney >= cost;
-            card.SetUpgradeArrowVisible(canAfford);
+            allProductCards = FindObjectsOfType<ProductCard>(true);
+        }
+
+        // SAHNEDEKÝ TÜM KARTLARI DÖNGÜYE SOK
+        foreach (var card in allProductCards)
+        {
+            if (card == null) continue;
+
+            // Kartýn indexine göre doðru ürünü IncomeManager'dan çek
+            if (card.productIndex >= 0 && card.productIndex < im.products.Count)
+            {
+                var product = im.products[card.productIndex];
+
+                // Mevcut BuyMode'a (x1, x10 vb.) göre maliyeti hesapla
+                int levelsToBuy = im.currentBuyMode switch
+                {
+                    IncomeManager.BuyMode.x1 => 1,
+                    IncomeManager.BuyMode.x10 => 10,
+                    IncomeManager.BuyMode.x50 => 50,
+                    IncomeManager.BuyMode.Max => Mathf.Max(1, im.CalculateMaxBuyableLevels(product)),
+                    _ => 1
+                };
+
+                double cost = im.CalculateTotalCost(product, levelsToBuy);
+                bool canAfford = im.totalMoney >= cost;
+
+                // Kartýn içindeki SetUpgradeArrowVisible fonksiyonunu çaðýr
+                card.SetUpgradeArrowVisible(canAfford);
+            }
         }
     }
 
@@ -195,5 +222,7 @@ public class ProductPurchasePanel : MonoBehaviour
         HighlightBuyModeButtons();
         UpdateUpgradeArrow();
     }
+
     
+
 }

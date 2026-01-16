@@ -119,11 +119,22 @@ public class UnlockCondition
     public int requiredPrestigeLevel;
 
 }
-
+[Serializable]
+public class MachineLockData
+{
+    public string machineName; // Sadece Inspector'da takip etmek için
+    public ProductType type;
+    public double price;
+    public GameObject lockObject;
+    public GameObject buyButton;
+    public TextMeshProUGUI priceText;
+    public GameObject firstProductUI;
+}
 #endregion
 
 public class IncomeManager : MonoBehaviour
 {
+    private ProductCard[] allProductCards;
     public static IncomeManager Instance;
     public DecorationIncome decorationIncome;
     public UpgradeCardManager upgradeCardManager;
@@ -154,24 +165,10 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI prestigePointText;
     public TextMeshProUGUI PassiveIncomeText;
 
-    [Header("Locks")]
-    public GameObject TeaLock;
-    public GameObject teaMachineButton;
-    public int teaMachinePrice;
-    public TextMeshProUGUI teaMachineText;
-    public GameObject CoffeLock;
-    public GameObject coffeMachineButton;
-    public int coffeMachinePrice;
-    public TextMeshProUGUI coffeMachineText;
-    public GameObject DessertLock;
-    public GameObject dessertMachineButton;
-    public int dessertMachinePrice;
-    public TextMeshProUGUI dessertMachineText;
 
-    [Header("Machine → Product UI Bindings")]
-    public GameObject teaFirstProductUI;
-    public GameObject coffeeFirstProductUI;
-    public GameObject dessertFirstProductUI;
+
+    [Header("Machine Locks")]
+    public List<MachineLockData> machineLocks;
 
 
     private bool TeaBought;
@@ -217,35 +214,21 @@ public class IncomeManager : MonoBehaviour
     }
     void Start()
     {
+        
         LoadData();
         InactiveIncome();
         CheckUnlocks();
         LoadMachineStates();
         SyncMachineProductUIs();
+        allProductCards = FindObjectsOfType<ProductCard>(true);
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
-
-        // 🔹 Show upgrade arrows at startup (even if popup is inactive)
-        StartCoroutine(InitializeUpgradeArrowsAfterStartup());
-        // DecorationIncome.Start() içinde satın alınmış dekorasyonlar yeniden uygulanır.
-    }
-
-    private IEnumerator InitializeUpgradeArrowsAfterStartup()
-    {
-        // wait 1 frame to ensure allProductCards & IncomeManager are ready
-        yield return null;
-
-        // find all ProductPurchasePanels, even if inactive
-        var panels = FindObjectsOfType<ProductPurchasePanel>(true);
-        foreach (var panel in panels)
-        {
-            panel.UpdateUpgradeArrow();
-        }
     }
 
     private void Update()
     {
         UpdateUI();
+        RefreshUpgradeArrows();
     }
 
     private void OnApplicationQuit()
@@ -276,6 +259,7 @@ public class IncomeManager : MonoBehaviour
         if (incomeText != null)
             incomeText.text = FormatMoneyStatic(income) + "/s";
 
+        RefreshUpgradeArrows();
         UpdateUI();
     }
 
@@ -405,6 +389,7 @@ public class IncomeManager : MonoBehaviour
             p.UpdateUI();
             UpdateUI();
             p.CheckLevelBoosts();
+            RefreshUpgradeArrows();
 
             if (successSound != null)
                 successSound.Play();
@@ -825,85 +810,84 @@ public class IncomeManager : MonoBehaviour
         return unlockedMachines.Contains(type);
     }
 
-    public void BuyMachine(ProductType type, GameObject lockObj, GameObject machineButton, int price)
+    // Bu metodun isminin ve parametresinin (int index) tam olarak böyle olduğundan emin ol
+    public void BuyMachine(int index)
     {
-        if (totalMoney >= price)
+        // Liste sınırlarını kontrol et
+        if (index < 0 || index >= machineLocks.Count) return;
+
+        var m = machineLocks[index];
+
+        if (totalMoney >= m.price)
         {
-            totalMoney -= price;
+            totalMoney -= m.price;
+            UnlockMachine(m.type);
 
-            if (lockObj != null) lockObj.SetActive(false);
-            if (machineButton != null) machineButton.SetActive(false);
+            // Görsel güncellemeler
+            if (m.lockObject != null) m.lockObject.SetActive(false);
+            if (m.buyButton != null) m.buyButton.SetActive(false);
+            if (m.firstProductUI != null) m.firstProductUI.SetActive(true);
 
-            UnlockMachine(type);
-            SyncMachineProductUIs();
-
+            if (successSound != null) successSound.Play();
             UpdateUI();
-            Debug.Log($"{type} makinesi başarıyla satın alındı!");
         }
         else
         {
-            Debug.Log("Yetersiz para!");
             if (failSound != null) failSound.Play();
         }
     }
 
 
-
-    public void BuyTea() => BuyMachine(ProductType.Tea, TeaLock, teaMachineButton, teaMachinePrice);
-    public void BuyCoffee() => BuyMachine(ProductType.Coffee, CoffeLock, coffeMachineButton, coffeMachinePrice);
-    public void BuyDessert() => BuyMachine(ProductType.Dessert, DessertLock, dessertMachineButton, dessertMachinePrice);
-
+    // Bunlar artık BuyMachine metoduna listenin kaçıncı elemanı olduğunu gönderiyor
+    public void BuyTea() => BuyMachine(0);      // Liste başında Tea varsa
+    public void BuyCoffee() => BuyMachine(1);   // İkinci sırada Coffee varsa
+    public void BuyDessert() => BuyMachine(2);  // Üçüncü sırada Dessert varsa
 
     private void LoadMachineStates()
     {
-        // Fiyat yazılarını güncelle
-        if (teaMachineText != null) teaMachineText.text = FormatMoneyStatic(teaMachinePrice);
-        if (coffeMachineText != null) coffeMachineText.text = FormatMoneyStatic(coffeMachinePrice);
-        if (dessertMachineText != null) dessertMachineText.text = FormatMoneyStatic(dessertMachinePrice);
+        foreach (var m in machineLocks)
+        {
+            if (m.priceText != null)
+                m.priceText.text = FormatMoneyStatic(m.price);
 
-        // Çay Kilidi
-        bool teaUnlocked = IsMachineUnlocked(ProductType.Tea);
-        TeaLock.SetActive(!teaUnlocked);
-        teaMachineButton.SetActive(!teaUnlocked);
+            bool isUnlocked = IsMachineUnlocked(m.type);
 
-        // Kahve Kilidi
-        bool coffeeUnlocked = IsMachineUnlocked(ProductType.Coffee);
-        CoffeLock.SetActive(!coffeeUnlocked);
-        coffeMachineButton.SetActive(!coffeeUnlocked);
-
-        // Tatlı Kilidi
-        bool dessertUnlocked = IsMachineUnlocked(ProductType.Dessert);
-        DessertLock.SetActive(!dessertUnlocked);
-        dessertMachineButton.SetActive(!dessertUnlocked);
-    }
-
-    private void ActivateLocks()
-    {
-        TeaLock.SetActive(true);
-        teaMachineButton.SetActive(true);
-        CoffeLock.SetActive(true);
-        coffeMachineButton.SetActive(true);
-        DessertLock.SetActive(true);
-        dessertMachineButton.SetActive(true);
-
+            if (m.lockObject != null) m.lockObject.SetActive(!isUnlocked);
+            if (m.buyButton != null) m.buyButton.SetActive(!isUnlocked);
+        }
     }
 
     private void SyncMachineProductUIs()
     {
-        // 1) Default: hepsini kapat
-        if (teaFirstProductUI != null) teaFirstProductUI.SetActive(false);
-        if (coffeeFirstProductUI != null) coffeeFirstProductUI.SetActive(false);
-        if (dessertFirstProductUI != null) dessertFirstProductUI.SetActive(false);
+        foreach (var m in machineLocks)
+        {
+            if (m.firstProductUI != null)
+            {
+                m.firstProductUI.SetActive(IsMachineUnlocked(m.type));
+            }
+        }
+    }
 
-        // 2) Kayıt / mevcut duruma göre açık olan makinelerin ürününü aç
-        if (IsMachineUnlocked(ProductType.Tea) && teaFirstProductUI != null)
-            teaFirstProductUI.SetActive(true);
+    // Reset kısmında kullanılacak
+    private void ActivateLocks()
+    {
+        foreach (var m in machineLocks)
+        {
+            if (m.lockObject != null) m.lockObject.SetActive(true);
+            if (m.buyButton != null) m.buyButton.SetActive(true);
+        }
+    }
 
-        if (IsMachineUnlocked(ProductType.Coffee) && coffeeFirstProductUI != null)
-            coffeeFirstProductUI.SetActive(true);
-
-        if (IsMachineUnlocked(ProductType.Dessert) && dessertFirstProductUI != null)
-            dessertFirstProductUI.SetActive(true);
+    // IncomeManager.cs içinde
+    public void RefreshUpgradeArrows()
+    {
+        // Panel objesini bul ve onun içindeki UpdateUpgradeArrow fonksiyonunu tetikle
+        // (Panel kapalı olsa bile çalışması için)
+        var panel = FindObjectOfType<ProductPurchasePanel>(true);
+        if (panel != null)
+        {
+            panel.UpdateUpgradeArrow();
+        }
     }
 
 

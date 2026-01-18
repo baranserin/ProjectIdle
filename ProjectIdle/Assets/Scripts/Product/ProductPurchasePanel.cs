@@ -146,7 +146,11 @@ public class ProductPurchasePanel : MonoBehaviour
         if (im == null || productIndex < 0 || productIndex >= im.products.Count) return;
 
         if (titleText != null) titleText.text = P.config.productName;
-        if (currentIncomeText != null) currentIncomeText.text = P.GetIncome().ToString("F1") + "/s";
+
+        // --- BURASI DÜZELTÝLDÝ ---
+        // Artýk sadece FormatMoneyStatic kullanýyoruz ve sonuna "/s" ekliyoruz.
+        if (currentIncomeText != null)
+            currentIncomeText.text = IncomeManager.FormatMoneyStatic(P.GetIncome()) + "/s";
 
         int levelsToBuy = im.currentBuyMode switch
         {
@@ -180,7 +184,7 @@ public class ProductPurchasePanel : MonoBehaviour
             buyButtonLabel.color = canAfford ? affordableTextColor : unaffordableTextColor;
         }
 
-        // Calculate income difference
+        // Gelir farký hesaplama
         int originalLevel = P.level;
         P.level = originalLevel + levelsToBuy;
         double newIncome = P.GetIncome();
@@ -188,21 +192,22 @@ public class ProductPurchasePanel : MonoBehaviour
 
         double incomeDiff = newIncome - P.GetIncome();
 
-        // Show current income
-        if (currentIncomeText != null)
-            currentIncomeText.text = $"{P.GetIncome():F1}/s";
+        // --- BURADAKÝ HATALI SATIRLAR SÝLÝNDÝ VEYA DÜZELTÝLDÝ ---
+        // Daha önce burada currentIncomeText.text = $"{P.GetIncome():F1}/s"; yazýyordu,
+        // bu satýr yukarýda yaptýðýn FormatMoneyStatic iþlemini bozuyordu. O satýrý sildik.
 
-        // Show next income difference (like +5/s)
         if (incomeIncreaseText != null)
         {
             if (incomeDiff > 0)
             {
-                incomeIncreaseText.text = $"+{incomeDiff:F1}/s";
-            Color customGreen;
-            if (ColorUtility.TryParseHtmlString("#1CC717", out customGreen))
-            {
-                incomeIncreaseText.color = customGreen;
-            }
+                // Artýþ miktarýný da formatlýyoruz
+                incomeIncreaseText.text = "+" + IncomeManager.FormatMoneyStatic(incomeDiff) + "/s";
+
+                Color customGreen;
+                if (ColorUtility.TryParseHtmlString("#1CC717", out customGreen))
+                {
+                    incomeIncreaseText.color = customGreen;
+                }
             }
             else
             {
@@ -210,11 +215,10 @@ public class ProductPurchasePanel : MonoBehaviour
             }
         }
 
-        // Optionally, show next total income if you like:
         if (nextIncomeText != null)
-            nextIncomeText.text = $"{newIncome:F1}/s";
+            nextIncomeText.text = IncomeManager.FormatMoneyStatic(newIncome) + "/s";
 
-
+        // Cache güncelleme
         _lastMoney = im.totalMoney;
         _lastLevel = P.level;
         _lastMode = im.currentBuyMode;
@@ -223,6 +227,6 @@ public class ProductPurchasePanel : MonoBehaviour
         UpdateUpgradeArrow();
     }
 
-    
+
 
 }

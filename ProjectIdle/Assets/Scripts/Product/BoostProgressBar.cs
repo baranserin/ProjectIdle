@@ -31,7 +31,7 @@ public class BoostProgressBar : MonoBehaviour
     {
         if (fillBar == null) return;
 
-        int prevBoost = 1;
+        int prevBoost = 0;
         int nextBoost = -1;
 
         foreach (var boost in config.levelBoosts)

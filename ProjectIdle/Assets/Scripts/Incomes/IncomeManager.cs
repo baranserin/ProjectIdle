@@ -421,12 +421,18 @@ public class IncomeManager : MonoBehaviour
         foreach (var p in products)
             p.UpdateUI();
     }
+
     public static string FormatMoneyStatic(double value)
     {
+        // Değer 1000'den küçükse virgülden sonra 1 basamak göster (Örn: 862.5)
         if (value < 1000)
-            return Math.Floor(value).ToString();
+        {
+            // Not: Eğer telefonun dili Türkçeyse virgül (,), İngilizceyse nokta (.) görünür.
+            // Her zaman nokta görünmesini istersen: value.ToString("F1", CultureInfo.InvariantCulture)
+            return value.ToString("F1", CultureInfo.InvariantCulture);
+        }
 
-        // K, M, B, T
+        // K, M, B, T (1000 ve üstü için mevcut mantık)
         string[] basicSuffixes = { "K", "M", "B", "T" };
         double[] basicValues = { 1e3, 1e6, 1e9, 1e12 };
 
@@ -436,28 +442,24 @@ public class IncomeManager : MonoBehaviour
             {
                 double v = value / basicValues[i];
                 if (v < 1000)
-                    return v.ToString("F1") + basicSuffixes[i];
+                    return v.ToString("F1", CultureInfo.InvariantCulture) + basicSuffixes[i];
             }
         }
 
-        // T sonrası: a, b, c ... z  (KÜÇÜK HARF)
-        double alphabetBase = 1e15; // 1a = 1e15
+        // T sonrası: a, b, c ... z
+        double alphabetBase = 1e15;
         value /= alphabetBase;
 
         int suffixIndex = 0;
-
         while (value >= 1000 && suffixIndex < 25)
         {
             value /= 1000;
             suffixIndex++;
         }
 
-        char suffixChar = (char)('a' + suffixIndex); // <-- küçük harf garanti
-
-        return value.ToString("F1") + suffixChar;
+        char suffixChar = (char)('a' + suffixIndex);
+        return value.ToString("F1", CultureInfo.InvariantCulture) + suffixChar;
     }
-
-
 
     public void Prestige()
     {

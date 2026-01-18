@@ -13,15 +13,15 @@ using UnityEngine;
 [Serializable]
 public class ProductData
 {
+    public GameObject uiObject;
     public ProductConfig config;
     [NonSerialized] public int level;
     [NonSerialized] public float incomeMultiplier = 1f; // LevelBoost vb. ürün-özel çarpan
 
     [Header("UI")]
-    public GameObject uiObject;
+    public GameObject upgradeArrow;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI levelText2;
-    public TextMeshProUGUI incomeText;
     public TextMeshProUGUI upgradeCostText;
 
     public double GetUpgradeCost()
@@ -63,9 +63,6 @@ public class ProductData
             levelText.text = $"{level}";
             levelText2.text = "lv\n" + $"{level}";
         }
-
-        if (incomeText != null)
-            incomeText.text = GetIncome().ToString("F1", CultureInfo.InvariantCulture);
 
         if (upgradeCostText != null)
         {
@@ -134,7 +131,6 @@ public class MachineLockData
 
 public class IncomeManager : MonoBehaviour
 {
-    private ProductCard[] allProductCards;
     public static IncomeManager Instance;
     public DecorationIncome decorationIncome;
     public UpgradeCardManager upgradeCardManager;
@@ -220,7 +216,6 @@ public class IncomeManager : MonoBehaviour
         CheckUnlocks();
         LoadMachineStates();
         SyncMachineProductUIs();
-        allProductCards = FindObjectsOfType<ProductCard>(true);
         InvokeRepeating(nameof(GeneratePassiveIncome), 1f, 1f);
         UpdateUI();
     }

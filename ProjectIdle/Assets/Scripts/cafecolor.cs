@@ -1,106 +1,84 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-public class SkinSelector : MonoBehaviour
+public class WallSkinItem : MonoBehaviour
 {
-    [Header("UI")]
-    public Image targetImage;
-    public Button buyButton;
+    [Header("Ayarlar")]
+    public Sprite skinSprite;      // Satılacak duvar resmi
+    public TMPro.TMP_Text buttonText;       // Butonun içindeki Text (Yazı) bileşeni
 
-    [Header("Preview Settings")]
-    public float previewDuration = 2f;
+    // Tüm butonların birbiriyle konuşmasını sağlayan statik olay
+    // (Biri seçilince diğerleri bunu duyar)
+    public static System.Action<string> OnSkinChanged;
 
-    private Sprite currentSprite;   // Satın alınmış (kalıcı)
-    private Sprite previewSprite;   // Geçici seçim
-    private Coroutine previewCoroutine;
-
+    private Image targetWallImage;
+    private Button myButton;
     private const string SAVE_KEY = "SelectedSkin";
 
     void Start()
     {
-        LoadSkin();
-        buyButton.interactable = false;
-    }
+        myButton = GetComponent<Button>();
 
-    // RENK BUTONLARINA BAĞLANACAK
-    public void PreviewSkin(Sprite selectedSprite)
-    {
-        if (previewCoroutine != null)
-            StopCoroutine(previewCoroutine);
-
-        previewSprite = selectedSprite;
-        targetImage.sprite = previewSprite;
-
-        buyButton.interactable = true;
-
-        previewCoroutine = StartCoroutine(PreviewTimer());
-    }
-
-    IEnumerator PreviewTimer()
-    {
-        yield return new WaitForSeconds(previewDuration);
-
-        // SADECE sprite geri döner, BUY kalır
-        ResetSpriteOnly();
-    }
-
-    void ResetSpriteOnly()
-    {
-        targetImage.sprite = currentSprite;
-    }
-
-    // BUY BUTONU
-    public void BuySkin()
-    {
-        if (previewCoroutine != null)
-            StopCoroutine(previewCoroutine);
-
-        currentSprite = previewSprite;
-        targetImage.sprite = currentSprite;
-
-        SaveSkin(currentSprite.name);
-
-        buyButton.interactable = false;
-    }
-
-    // PANEL KAPANIRSA / İPTAL
-    public void CancelAll()
-    {
-        if (previewCoroutine != null)
-            StopCoroutine(previewCoroutine);
-
-        targetImage.sprite = currentSprite;
-        buyButton.interactable = false;
-    }
-
-    // =====================
-    // SAVE / LOAD
-    // =====================
-
-    void SaveSkin(string skinName)
-    {
-        PlayerPrefs.SetString(SAVE_KEY, skinName);
-        PlayerPrefs.Save();
-    }
-
-    void LoadSkin()
-    {
-        string savedSkin = PlayerPrefs.GetString(SAVE_KEY, "");
-
-        if (!string.IsNullOrEmpty(savedSkin))
+        // 1. Duvarı Bul
+        GameObject wallObj = GameObject.FindGameObjectWithTag("Wall");
+        if (wallObj != null)
         {
-            Sprite loadedSprite = Resources.Load<Sprite>("Skins/" + savedSkin);
-
-            if (loadedSprite != null)
-            {
-                currentSprite = loadedSprite;
-                targetImage.sprite = currentSprite;
-                return;
-            }
+            targetWallImage = wallObj.GetComponent<Image>();
         }
 
-        // Eğer kayıt yoksa veya bulunamazsa
-        currentSprite = targetImage.sprite;
+        // 2. Tıklama olayını ekle
+        myButton.onClick.AddListener(BuyAndEquip);
+
+        // 3. Haberleşme sistemine abone ol
+        // "Birisi deri değiştirdiğinde bana haber ver" diyoruz.
+        OnSkinChanged += UpdateUI;
+
+        // 4. Oyun açıldığında durumunu kontrol et
+        string savedName = PlayerPrefs.GetString(SAVE_KEY, "");
+        UpdateUI(savedName);
+
+        // Eğer açılışta kayıtlı olan bendeysem, duvarı boyayayım
+        if (savedName == skinSprite.name && targetWallImage != null)
+        {
+            targetWallImage.sprite = skinSprite;
+        }
+    }
+
+    // Obje yok olunca abonelikten çık (Hata almamak için şart)
+    void OnDestroy()
+    {
+        OnSkinChanged -= UpdateUI;
+    }
+
+    void BuyAndEquip()
+    {
+        if (targetWallImage == null) return;
+
+        // Duvarı değiştir
+        targetWallImage.sprite = skinSprite;
+
+        // Kaydet
+        PlayerPrefs.SetString(SAVE_KEY, skinSprite.name);
+        PlayerPrefs.Save();
+
+        // HERKESE HABER VER: "Şu isimli deri seçildi!"
+        OnSkinChanged?.Invoke(skinSprite.name);
+    }
+
+    // Bu fonksiyon her tetiklendiğinde buton kendi durumuna bakar
+    void UpdateUI(string activeSkinName)
+    {
+        if (skinSprite.name == activeSkinName)
+        {
+            // Eğer seçilen ben isem:
+            buttonText.text = "Selected";
+            myButton.interactable = false; // Seçili olana tekrar basılmasın
+        }
+        else
+        {
+            // Eğer seçilen ben değilsem:
+            buttonText.text = "Select";
+            myButton.interactable = true;
+        }
     }
 }

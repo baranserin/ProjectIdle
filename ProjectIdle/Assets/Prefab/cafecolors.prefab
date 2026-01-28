@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 501404832526464092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7459586, y: 0.6680027, z: 0.6680027}
+  m_LocalScale: {x: 0.6465, y: 0.6680027, z: 0.6680027}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5335535444403507572}
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4109611522753056046, guid: fa445a14eaccd52419c56435b24e8389, type: 3}
+  m_Sprite: {fileID: -6928340414441513809, guid: dcd7ff4fe26e8aa4abb9785e6030bc7a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -499,7 +499,6 @@ GameObject:
   - component: {fileID: 3636874028814027868}
   - component: {fileID: 4976435138124626131}
   - component: {fileID: 4256298579369688339}
-  - component: {fileID: 7651092699456476399}
   m_Layer: 5
   m_Name: Clock Button
   m_TagString: Untagged
@@ -621,20 +620,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7651092699456476399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7803925464881740982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdb83b8c30c46184ca84cf69be58bfb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skinSprite: {fileID: 0}
-  buttonText: {fileID: 0}
 --- !u!1 &8053303802677798292
 GameObject:
   m_ObjectHideFlags: 0

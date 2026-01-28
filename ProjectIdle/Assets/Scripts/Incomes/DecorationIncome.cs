@@ -14,38 +14,46 @@ public class DecorationIncome : MonoBehaviour
         public int itemCost;
         public float itemMultiplier = 1f;
 
-        [Header("Bağlantılar")]
-        public GameObject targetObject;         // Sahnedeki obje (seçilince aktif)
-        public Button buyButton;                // Satın alma / Seç butonu
-        public TextMeshProUGUI costText;        // Fiyat yazısı
+        [Header("Tür Ayarı")]
+        // 🔹 YENİ: Bu eşya bir duvar boyası mı yoksa normal eşya mı?
+        public bool isWallSkin = false;
+
+        [Header("Bağlantılar (Normal Eşya İçin)")]
+        public GameObject targetObject;         // Masa, koltuk vs. (SetActive kullanılır)
+
+        [Header("Bağlantılar (Duvar Boyası İçin)")]
+        // 🔹 YENİ: Eğer isWallSkin işaretliyse burası çalışır
+        public Image targetWallImage;           // Duvardaki Image bileşeni
+        public Sprite skinSprite;               // Atanacak yeni renk/resim
+
+        [Header("UI Kontrolleri")]
+        public Button buyButton;
+        public TextMeshProUGUI costText;
+        public RectTransform itemNameRect;
+        [HideInInspector] public Vector2 originalItemNamePos;
 
         [Header("Grup ve Önkoşul")]
         public int groupId;                     // Aynı gruptakilerden sadece biri seçili
-        public DecorationEntry prerequisite;    // Önkoşul öğe (satın alınmış olmalı)
+        public DecorationEntry prerequisite;
 
-        [Header("Satın Alındı Prefab")]
-        public GameObject purchasedPrefab;      // Inspector’dan atanacak
-        [HideInInspector] public GameObject spawnedPurchased; // Oluşturulan prefab referansı
+        [Header("Satın Alındı Prefab (Opsiyonel)")]
+        public GameObject purchasedPrefab;
+        [HideInInspector] public GameObject spawnedPurchased;
 
         [Header("Ek Butonlar")]
-        public Button deselectButton;           // Inspector’dan bağlanacak
+        public Button deselectButton;
 
-        // 🔹 YENİ: Tür hedefleme
         [Header("Hedef Türler (ProductType)")]
-        public bool applyToAllTypes = false;           // Hepsine etki etsin
-        public List<ProductType> affectedTypes = new(); // Sadece bu tür(ler)e etki etsin
+        public bool applyToAllTypes = false;
+        public List<ProductType> affectedTypes = new();
 
-        // 🔹 YENİ: İsim etiketinin pozisyonunu yönetmek için
-        [Header("Ek UI Elemanları")]
-        public RectTransform itemNameRect;      // itemName yazısının RectTransform’u (Inspector’dan bağla)
-        [HideInInspector] public Vector2 originalItemNamePos; // Orijinal pozisyonu sakla
-
-        [HideInInspector] public bool isPurchased = false; // Satın alındı mı?
-        [HideInInspector] public bool isSelected = false;  // Seçili mi?
+        [HideInInspector] public bool isPurchased = false;
+        [HideInInspector] public bool isSelected = false;
 
         public void Initialize(System.Action<DecorationEntry> onBuy, System.Action<DecorationEntry> onDeselect)
         {
-            if (targetObject != null)
+            // Başlangıçta objeyi kapat (Eğer normal eşyaysa)
+            if (!isWallSkin && targetObject != null)
                 targetObject.SetActive(false);
 
             if (costText != null)
@@ -54,19 +62,13 @@ public class DecorationIncome : MonoBehaviour
             if (buyButton != null)
             {
                 buyButton.onClick.RemoveAllListeners();
-                buyButton.onClick.AddListener(() =>
-                {
-                    onBuy?.Invoke(this);
-                });
+                buyButton.onClick.AddListener(() => { onBuy?.Invoke(this); });
             }
 
             if (deselectButton != null)
             {
                 deselectButton.onClick.RemoveAllListeners();
-                deselectButton.onClick.AddListener(() =>
-                {
-                    onDeselect?.Invoke(this);
-                });
+                deselectButton.onClick.AddListener(() => { onDeselect?.Invoke(this); });
             }
 
             if (itemNameRect != null)
@@ -81,12 +83,12 @@ public class DecorationIncome : MonoBehaviour
     public IncomeManager incomeManager;
 
     [Header("UI - Popup")]
-    public TextMeshProUGUI popupText;          // Inspector'dan bağla
-    public float displayDuration = 2.0f;       // Kaç saniye gözükecek
+    public TextMeshProUGUI popupText;
+    public float displayDuration = 2.0f;
 
     [Header("Otomatik UI Yenileme")]
-    public bool autoRefresh = true;            // Dilersen kapat
-    public float refreshInterval = 0.25f;      // 4 kez/sn
+    public bool autoRefresh = true;
+    public float refreshInterval = 0.25f;
 
     private Coroutine popupRoutine;
     private float _nextRefresh;
@@ -96,7 +98,6 @@ public class DecorationIncome : MonoBehaviour
         foreach (var deco in decorations)
             deco.Initialize(ApplyDecoration, DeselectDecoration);
 
-        // Tür-bazlı çarpan tablosunu temizle ve yükle
         if (incomeManager != null)
             incomeManager.ResetDecorationMultipliers();
 
@@ -128,7 +129,6 @@ public class DecorationIncome : MonoBehaviour
     private IEnumerator ShowPopup(string msg)
     {
         if (popupText == null) yield break;
-
         popupText.text = msg;
         popupText.gameObject.SetActive(true);
         yield return new WaitForSeconds(displayDuration);
@@ -137,58 +137,74 @@ public class DecorationIncome : MonoBehaviour
 
     private void ApplyDecoration(DecorationEntry entry)
     {
-        if (incomeManager == null)
-        {
-            Debug.LogWarning("[DecorationIncome] IncomeManager bağlı değil.");
-            return;
-        }
+        if (incomeManager == null) return;
 
-        // Satın alma akışı
+        // --- SATIN ALMA İŞLEMİ ---
         if (!entry.isPurchased)
         {
             if (!PrereqOk(entry))
             {
                 if (popupRoutine != null) StopCoroutine(popupRoutine);
-                popupRoutine = StartCoroutine(ShowPopup("Önce gerekli dekorasyonu satın al."));
+                popupRoutine = StartCoroutine(ShowPopup("Önce gerekli öğeyi satın al!"));
                 return;
             }
 
             if (!CanAfford(entry))
             {
                 if (popupRoutine != null) StopCoroutine(popupRoutine);
-                popupRoutine = StartCoroutine(ShowPopup("Yetersiz para!"));
+                popupRoutine = StartCoroutine(ShowPopup("Yetersiz Para!"));
                 return;
             }
 
+            // Para düş
             incomeManager.totalMoney -= entry.itemCost;
             entry.isPurchased = true;
 
-            // 🔸 Tür-bazlı çarpanı uygula
+            // Çarpan Ekle
             incomeManager.AddDecorationMultiplier(entry.itemMultiplier, entry.affectedTypes, entry.applyToAllTypes);
 
+            // Kaydet
             PlayerPrefs.SetInt("Decoration_" + entry.itemName, 1);
             PlayerPrefs.Save();
 
             TrySpawnPurchasedPrefab(entry);
         }
 
-        // Seçim akışı: aynı grupta sadece biri seçili
+        // --- SEÇİM VE AKTİFLEŞTİRME İŞLEMİ ---
+
+        // 1. Aynı gruptaki diğerlerini kapat
         foreach (var deco in decorations)
         {
             if (deco != entry && deco.groupId == entry.groupId)
             {
                 deco.isSelected = false;
-                if (deco.targetObject != null)
+
+                // Normal eşyaysa kapat
+                if (!deco.isWallSkin && deco.targetObject != null)
                     deco.targetObject.SetActive(false);
             }
         }
 
-        // Bu dekorasyonu seç
+        // 2. Bu öğeyi seçili yap
         entry.isSelected = true;
-        if (entry.targetObject != null)
-            entry.targetObject.SetActive(true);
 
-        // Seçimi kaydet
+        // 🔹 YENİ MANTIK: Duvar mı, Eşya mı?
+        if (entry.isWallSkin)
+        {
+            // Duvar Boyası Mantığı: Image sprite'ını değiştir
+            if (entry.targetWallImage != null && entry.skinSprite != null)
+            {
+                entry.targetWallImage.sprite = entry.skinSprite;
+            }
+        }
+        else
+        {
+            // Normal Eşya Mantığı: Game Object'i aç
+            if (entry.targetObject != null)
+                entry.targetObject.SetActive(true);
+        }
+
+        // Seçimi Kaydet
         PlayerPrefs.SetString("SelectedDecoration_Group_" + entry.groupId, entry.itemName);
         PlayerPrefs.Save();
 
@@ -215,6 +231,7 @@ public class DecorationIncome : MonoBehaviour
 
             if (!deco.isPurchased)
             {
+                // SATIN ALINMAMIŞ DURUM
                 if (deco.buyButton != null)
                 {
                     deco.buyButton.gameObject.SetActive(true);
@@ -228,21 +245,21 @@ public class DecorationIncome : MonoBehaviour
                         deco.costText.color = CanAfford(deco) ? Color.white : Color.red;
                 }
 
-                // Cost görünüyorsa itemName eski konumda
                 if (deco.itemNameRect != null)
                     deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
             }
             else
             {
+                // SATIN ALINMIŞ DURUM
                 if (deco.buyButton != null)
                 {
                     deco.buyButton.gameObject.SetActive(true);
                     var label = deco.buyButton.GetComponentInChildren<TextMeshProUGUI>();
 
                     if (deco.costText != null)
-                        deco.costText.gameObject.SetActive(false);
+                        deco.costText.gameObject.SetActive(false); // Fiyatı gizle
 
-                    // Cost kapandığında itemName aşağı insin
+                    // İsim yazısını kaydır
                     if (deco.itemNameRect != null)
                     {
                         Vector2 newPos = deco.originalItemNamePos;
@@ -253,20 +270,16 @@ public class DecorationIncome : MonoBehaviour
                     if (deco.isSelected)
                     {
                         if (label != null) label.text = "SELECTED";
-                        deco.buyButton.interactable = false;
+                        deco.buyButton.interactable = false; // Zaten seçili, tıklanmasın
                     }
                     else
                     {
                         if (label != null) label.text = "SELECT";
                         deco.buyButton.interactable = true;
                     }
-
-                    if (deco.costText != null)
-                        deco.costText.color = Color.white;
                 }
             }
 
-            // Deselect buton görünürlüğü
             if (deco.deselectButton != null)
                 deco.deselectButton.gameObject.SetActive(deco.isSelected);
         }
@@ -274,11 +287,10 @@ public class DecorationIncome : MonoBehaviour
 
     public void LoadDecorations()
     {
-        // Tür-bazlı çarpanları resetle, sonra satın alınanları tekrar uygula
         if (incomeManager != null)
             incomeManager.ResetDecorationMultipliers();
 
-        // Satın alma durumlarını yükle
+        // 1. Satın almaları yükle
         foreach (var deco in decorations)
         {
             int saved = PlayerPrefs.GetInt("Decoration_" + deco.itemName, 0);
@@ -287,33 +299,41 @@ public class DecorationIncome : MonoBehaviour
 
             if (deco.isPurchased)
             {
-                // Satın alınmışsa prefab’ı çıkar
                 TrySpawnPurchasedPrefab(deco);
-
-                // 🔸 Tür-bazlı çarpanı tekrar uygula
                 if (incomeManager != null)
                     incomeManager.AddDecorationMultiplier(deco.itemMultiplier, deco.affectedTypes, deco.applyToAllTypes);
             }
 
-            if (deco.targetObject != null)
+            // Başlangıçta hepsini kapat (Duvar veya Obje)
+            if (!deco.isWallSkin && deco.targetObject != null)
                 deco.targetObject.SetActive(false);
         }
 
-        // Daha önce seçilmiş dekorasyonu geri yükle
+        // 2. Seçili olanları yükle ve uygula
         foreach (var deco in decorations)
         {
             if (deco.isPurchased)
             {
                 string selectedName = PlayerPrefs.GetString("SelectedDecoration_Group_" + deco.groupId, "");
+
                 if (selectedName == deco.itemName)
                 {
                     deco.isSelected = true;
-                    if (deco.targetObject != null)
-                        deco.targetObject.SetActive(true);
+
+                    // 🔹 YENİ: Yüklerken de türüne göre davran
+                    if (deco.isWallSkin)
+                    {
+                        if (deco.targetWallImage != null && deco.skinSprite != null)
+                            deco.targetWallImage.sprite = deco.skinSprite;
+                    }
+                    else
+                    {
+                        if (deco.targetObject != null)
+                            deco.targetObject.SetActive(true);
+                    }
                 }
             }
         }
-
         UpdateDecorationButtons();
     }
 
@@ -322,18 +342,22 @@ public class DecorationIncome : MonoBehaviour
         if (!entry.isSelected) return;
 
         entry.isSelected = false;
-        if (entry.targetObject != null)
+
+        // Eşyaysa kapat
+        if (!entry.isWallSkin && entry.targetObject != null)
             entry.targetObject.SetActive(false);
+
+        // Duvar ise deselect genelde "Varsayılan duvara dön" anlamına gelir
+        // İstersen buraya bir varsayılan duvar ataması ekleyebilirsin.
 
         PlayerPrefs.DeleteKey("SelectedDecoration_Group_" + entry.groupId);
         PlayerPrefs.Save();
-
         UpdateDecorationButtons();
     }
 
+    // Reset fonksiyonunu da aynı mantıkla koruyoruz...
     public void ResetDecorations()
     {
-        // PlayerPrefs ve görselleri sıfırla
         foreach (var deco in decorations)
         {
             PlayerPrefs.DeleteKey("Decoration_" + deco.itemName);
@@ -342,35 +366,23 @@ public class DecorationIncome : MonoBehaviour
             deco.isPurchased = false;
             deco.isSelected = false;
 
+            // UI Reset
             if (deco.costText != null)
             {
                 deco.costText.gameObject.SetActive(true);
                 deco.costText.text = deco.itemCost.ToString() + " $";
-                deco.costText.color = Color.white;
             }
+            if (deco.buyButton != null) deco.buyButton.gameObject.SetActive(true);
 
-            if (deco.targetObject != null)
+            // Prefab Reset
+            if (deco.spawnedPurchased != null) { Destroy(deco.spawnedPurchased); deco.spawnedPurchased = null; }
+
+            // Obje Reset
+            if (!deco.isWallSkin && deco.targetObject != null)
                 deco.targetObject.SetActive(false);
-
-            if (deco.buyButton != null)
-                deco.buyButton.gameObject.SetActive(true);
-
-            if (deco.spawnedPurchased != null)
-            {
-                Destroy(deco.spawnedPurchased);
-                deco.spawnedPurchased = null;
-            }
-
-            if (deco.itemNameRect != null)
-                deco.itemNameRect.anchoredPosition = deco.originalItemNamePos;
         }
-
         PlayerPrefs.Save();
-
-        // 🔸 Tür-bazlı çarpanları da sıfırla
-        if (incomeManager != null)
-            incomeManager.ResetDecorationMultipliers();
-
+        if (incomeManager != null) incomeManager.ResetDecorationMultipliers();
         UpdateDecorationButtons();
     }
 }

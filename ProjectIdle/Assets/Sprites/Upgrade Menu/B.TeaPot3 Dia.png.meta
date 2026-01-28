@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      B.TeaPot3 Dia_0: 5515351890654336976
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

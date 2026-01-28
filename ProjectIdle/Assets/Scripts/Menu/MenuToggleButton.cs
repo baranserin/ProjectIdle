@@ -2,18 +2,19 @@
 
 public class MenuToggleButton : MonoBehaviour
 {
-    public int menuID;   // 0, 1, 2
+    public int menuID;   // 0, 1, 2, 3...
     public Animator animator;
 
-    private void Awake()
+    // Awake yerine Start kullanıyoruz ki Manager kesinlikle yüklenmiş olsun.
+    private void Start()
     {
         if (MenuManager.Instance == null)
         {
-            Debug.LogError("SAHNEDE MenuManager YOK!");
+            Debug.LogError("HATA: MenuManager sahnede bulunamadı veya henüz yüklenmedi!");
             return;
         }
 
-        // ✅ BUTON MANAGERA KAYDEDİLİYOR
+        // ✅ BUTON MANAGERA GÜVENLE KAYDEDİLİYOR
         MenuManager.Instance.RegisterButton(this);
     }
 

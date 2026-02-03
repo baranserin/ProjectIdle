@@ -22,7 +22,7 @@ public class ProductConfig : ScriptableObject
     public float incomeSineAmplitude = 2.0f;
     public float incomeSineFrequency = 0.5f;
     public float costSineAmplitude = 2.0f;
-    public float costSineFrequency = 0.5f;
+    public float costSineFrequency = 0.3f;
     public double costSinePhase = Math.PI / 2;
     public int baseLevel = 1;
     public Sprite icon;

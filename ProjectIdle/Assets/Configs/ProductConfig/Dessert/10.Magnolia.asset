@@ -17,9 +17,15 @@ MonoBehaviour:
   costGrowth: 1.13
   baseIncome: 2000
   incomeGrowth: 1.12
+  incomeSineAmplitude: 2
+  incomeSineFrequency: 0.5
+  costSineAmplitude: 2
+  costSineFrequency: 0.3
+  costSinePhase: 1.5707963267948966
   baseLevel: 0
   icon: {fileID: 0}
   productType: 2
+  requiresMachine: 0
   isLockedInitially: 0
   unlockConditions: []
   levelBoosts:

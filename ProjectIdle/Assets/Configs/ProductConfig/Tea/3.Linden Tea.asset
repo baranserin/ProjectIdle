@@ -13,34 +13,40 @@ MonoBehaviour:
   m_Name: 3.Linden Tea
   m_EditorClassIdentifier: 
   productName: Linden Tea
-  baseUpgradeCost: 2500
-  costGrowth: 1.08
-  baseIncome: 8
+  baseUpgradeCost: 50
+  costGrowth: 1.12
+  baseIncome: 7
   incomeGrowth: 1.07
+  incomeSineAmplitude: 2
+  incomeSineFrequency: 0.5
+  costSineAmplitude: 2
+  costSineFrequency: 0.3
+  costSinePhase: 1.5707963267948966
   baseLevel: 0
   icon: {fileID: 0}
   productType: 0
+  requiresMachine: 0
   isLockedInitially: 1
   unlockConditions:
   - requiredProductConfig: {fileID: 11400000, guid: 8fa609420b4531b40a054d96e4b498f5, type: 2}
-    requiredLevel: 5
+    requiredLevel: 15
     requireTotalMoney: 0
     requiredMoney: 0
     requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
   levelBoosts:
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
+  - requiredLevel: 10
+    incomeMultiplier: 2
+  - requiredLevel: 25
+    incomeMultiplier: 2
+  - requiredLevel: 50
+    incomeMultiplier: 4
+  - requiredLevel: 100
+    incomeMultiplier: 5
+  - requiredLevel: 200
+    incomeMultiplier: 10
+  - requiredLevel: 300
+    incomeMultiplier: 10
   - requiredLevel: 0
     incomeMultiplier: 0
   - requiredLevel: 0

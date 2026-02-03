@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Tea
   baseUpgradeCost: 10
-  costGrowth: 1.08
+  costGrowth: 1.12
   baseIncome: 2
   incomeGrowth: 1.07
+  incomeSineAmplitude: 2
+  incomeSineFrequency: 0.5
+  costSineAmplitude: 2
+  costSineFrequency: 0.3
+  costSinePhase: 1.5707963267948966
   baseLevel: 0
   icon: {fileID: -5081744711958562449, guid: 5d9a6a4529c1e7e4fbfa3aed2c1c9974, type: 3}
   productType: 0
@@ -25,10 +30,22 @@ MonoBehaviour:
   unlockConditions: []
   levelBoosts:
   - requiredLevel: 10
-    incomeMultiplier: 1.1
+    incomeMultiplier: 2
   - requiredLevel: 25
-    incomeMultiplier: 1.05
+    incomeMultiplier: 2
   - requiredLevel: 50
-    incomeMultiplier: 1.04
+    incomeMultiplier: 4
   - requiredLevel: 100
-    incomeMultiplier: 1.03
+    incomeMultiplier: 5
+  - requiredLevel: 200
+    incomeMultiplier: 10
+  - requiredLevel: 300
+    incomeMultiplier: 10
+  - requiredLevel: 400
+    incomeMultiplier: 10
+  - requiredLevel: 500
+    incomeMultiplier: 20
+  - requiredLevel: 750
+    incomeMultiplier: 50
+  - requiredLevel: 900
+    incomeMultiplier: 100

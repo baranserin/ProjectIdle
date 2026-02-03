@@ -13,24 +13,30 @@ MonoBehaviour:
   m_Name: 3.Cup Cake
   m_EditorClassIdentifier: 
   productName: Cup Cake
-  baseUpgradeCost: 150000
-  costGrowth: 1.13
-  baseIncome: 250
-  incomeGrowth: 1.12
+  baseUpgradeCost: 2000
+  costGrowth: 1.14
+  baseIncome: 180
+  incomeGrowth: 1.09
+  incomeSineAmplitude: 2
+  incomeSineFrequency: 0.5
+  costSineAmplitude: 2
+  costSineFrequency: 0.3
+  costSinePhase: 1.5707963267948966
   baseLevel: 0
   icon: {fileID: 0}
   productType: 2
+  requiresMachine: 0
   isLockedInitially: 0
   unlockConditions: []
   levelBoosts:
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
+  - requiredLevel: 10
+    incomeMultiplier: 2
+  - requiredLevel: 25
+    incomeMultiplier: 2
+  - requiredLevel: 50
+    incomeMultiplier: 4
+  - requiredLevel: 100
+    incomeMultiplier: 5
   - requiredLevel: 0
     incomeMultiplier: 0
   - requiredLevel: 0

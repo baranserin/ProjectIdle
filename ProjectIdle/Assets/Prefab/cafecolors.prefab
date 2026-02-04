@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6928340414441513809, guid: dcd7ff4fe26e8aa4abb9785e6030bc7a, type: 3}
+  m_Sprite: {fileID: 56405453324043922, guid: 118648633df121c4598289a6fa418c12, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -146,8 +146,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1000$
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
-  m_sharedMaterial: {fileID: -1740799228980189678, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 09bc4b867e3ed124cb979473eaeb3068, type: 2}
+  m_sharedMaterial: {fileID: 7152225370607687928, guid: 09bc4b867e3ed124cb979473eaeb3068, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -282,8 +282,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Decoration Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
-  m_sharedMaterial: {fileID: -1740799228980189678, guid: c13f33c369711a14e8c5649e1bc0cde6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 09bc4b867e3ed124cb979473eaeb3068, type: 2}
+  m_sharedMaterial: {fileID: 7152225370607687928, guid: 09bc4b867e3ed124cb979473eaeb3068, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -425,8 +425,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -443,8 +443,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -515,7 +515,7 @@ RectTransform:
   m_GameObject: {fileID: 7803925464881740982}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3002188, y: 1.3002188, z: 1.3002188}
+  m_LocalScale: {x: 0.7102705, y: 0.7102705, z: 0.7102705}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1224466042826286729}
@@ -524,7 +524,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 1002, y: -125}
-  m_SizeDelta: {x: 207.9375, y: 118.29}
+  m_SizeDelta: {x: 422, y: 167}
   m_Pivot: {x: 0.5, y: 0.4999997}
 --- !u!222 &3636874028814027868
 CanvasRenderer:
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 4233971712940682837, guid: 0c8b973944eed9b4384f2ad89e6e713a, type: 3}
+  m_Sprite: {fileID: -6023699498310559281, guid: 7073b4e4ae4fbd2488f28d91316d369f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

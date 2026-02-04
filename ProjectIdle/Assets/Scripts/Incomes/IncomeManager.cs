@@ -9,6 +9,23 @@ using UnityEngine;
 
 // ProductType enum'un ProductConfig'te tanımlı olduğundan emin olun:
 // public enum ProductType { Tea, Coffee, Dessert, Barista }
+public static class GlobalLevelBoosts
+{
+    public static readonly Dictionary<int, float> BoostTable = new Dictionary<int, float>
+    {
+        { 10, 2.0f },   // 10. seviyede x2
+        { 25, 2.0f },   // 25. seviyede x2 (Toplam x4)
+        { 50, 4.0f },   // ...
+        { 100, 5.0f },
+        { 200, 10.0f },
+        { 300, 10.0f },
+        { 400, 10.0f },
+        { 500, 20.0f },
+        { 600, 50.0f },
+        { 800, 100.0f },
+        { 999, 100.0f }
+    };
+}
 
 [Serializable]
 public class ProductData
@@ -16,7 +33,8 @@ public class ProductData
     public GameObject uiObject;
     public ProductConfig config;
     [NonSerialized] public int level;
-    [NonSerialized] public float incomeMultiplier = 1f; // LevelBoost vb. ürün-özel çarpan
+    [NonSerialized] public float incomeMultiplier = 1f; // HATAYI ÇÖZMEK İÇİN GERİ EKLEDİK
+    // incomeMultiplier değişkenini kaldırdık çünkü artık CurrentLevelBoostMultiplier dinamik hesaplıyor.
 
     [Header("UI")]
     public GameObject upgradeArrow;
@@ -24,14 +42,28 @@ public class ProductData
     public TextMeshProUGUI levelText2;
     public TextMeshProUGUI upgradeCostText;
 
+    // 2. ADIM: Dinamik Çarpan Hesaplayıcı
+    public float CurrentLevelBoostMultiplier
+    {
+        get
+        {
+            float totalMultiplier = 1f;
+            foreach (var boost in GlobalLevelBoosts.BoostTable)
+            {
+                if (level >= boost.Key)
+                {
+                    totalMultiplier *= boost.Value;
+                }
+            }
+            return totalMultiplier;
+        }
+    }
+
     public double GetUpgradeCost()
     {
         if (level == 0) return config.baseUpgradeCost;
-
         double waveOffset = config.costSineAmplitude * Math.Sin((level * config.costSineFrequency) + config.costSinePhase);
-
         double effectiveLevel = level + waveOffset;
-
         return config.baseUpgradeCost * Math.Pow(config.costGrowth, effectiveLevel);
     }
 
@@ -39,15 +71,12 @@ public class ProductData
     {
         if (level == 0) return 0;
 
-        if (level == 1) return config.baseIncome;
-
         double waveOffset = config.incomeSineAmplitude * Math.Sin(level * config.incomeSineFrequency);
-
         double effectiveLevel = level + waveOffset;
-
         double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, effectiveLevel);
 
-        double localMul = incomeMultiplier;
+        // Merkezi sistemden gelen çarpanı uygula
+        double localMul = CurrentLevelBoostMultiplier;
 
         float decoMul = 1f;
         if (IncomeManager.Instance != null)
@@ -64,42 +93,29 @@ public class ProductData
             levelText2.text = "lv\n" + $"{level}";
         }
 
-        if (upgradeCostText != null)
+        if (upgradeCostText != null && IncomeManager.Instance != null)
         {
-            if (IncomeManager.Instance != null)
+            int levelsToBuy = IncomeManager.Instance.currentBuyMode switch
             {
-                int levelsToBuy = IncomeManager.Instance.currentBuyMode switch
-                {
-                    IncomeManager.BuyMode.x1 => 1,
-                    IncomeManager.BuyMode.x10 => 10,
-                    IncomeManager.BuyMode.x50 => 50,
-                    IncomeManager.BuyMode.Max => Mathf.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
-                    _ => 1
-                };
+                IncomeManager.BuyMode.x1 => 1,
+                IncomeManager.BuyMode.x10 => 10,
+                IncomeManager.BuyMode.x50 => 50,
+                IncomeManager.BuyMode.Max => Math.Max(1, IncomeManager.Instance.CalculateMaxBuyableLevels(this)),
+                _ => 1
+            };
 
-                double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
-                upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
-            }
+            double totalCost = IncomeManager.Instance.CalculateTotalCost(this, levelsToBuy);
+            upgradeCostText.text = IncomeManager.FormatMoneyStatic(totalCost);
         }
     }
-
     public void ResetToBase()
     {
         level = config.baseLevel;
     }
 
-    public void CheckLevelBoosts()
-    {
-        foreach (var boost in config.levelBoosts)
-        {
-            if (boost != null && !Mathf.Approximately(boost.incomeMultiplier, 0f) && level == boost.requiredLevel)
-            {
-                incomeMultiplier *= boost.incomeMultiplier;
-                Debug.Log($"{config.productName} {boost.requiredLevel} seviyeye ulaştı! Gelir {boost.incomeMultiplier}x oldu.");
-            }
-        }
-    }
+   
 }
+
 [System.Serializable]
 public class UnlockCondition
 {
@@ -192,7 +208,6 @@ public class IncomeManager : MonoBehaviour
 
     private readonly HashSet<ProductType> unlockedMachines = new();
 
-    
 
 
     void Awake()
@@ -355,23 +370,21 @@ public class IncomeManager : MonoBehaviour
 
         var p = products[index];
 
-        // 🔴 Eğer ürün kilitliyse → upgrade YASAK, level artmasın, görünürlük değişmesin
         if (!IsProductUnlocked(p))
         {
-            Debug.Log($"❌ {p.config.productName} is locked, cannot upgrade.");
-            if (failSound != null)
-                failSound.Play();
+            if (failSound != null) failSound.Play();
             return;
         }
 
-        int levelsToBuy = 1;
-        switch (currentBuyMode)
+        // Satın alınacak seviye miktarını belirle
+        int levelsToBuy = currentBuyMode switch
         {
-            case BuyMode.x1: levelsToBuy = 1; break;
-            case BuyMode.x10: levelsToBuy = 10; break;
-            case BuyMode.x50: levelsToBuy = 50; break;
-            case BuyMode.Max: levelsToBuy = CalculateMaxBuyableLevels(p); break;
-        }
+            BuyMode.x1 => 1,
+            BuyMode.x10 => 10,
+            BuyMode.x50 => 50,
+            BuyMode.Max => CalculateMaxBuyableLevels(p),
+            _ => 1
+        };
 
         double totalCost = CalculateTotalCost(p, levelsToBuy);
 
@@ -380,19 +393,26 @@ public class IncomeManager : MonoBehaviour
             totalMoney -= totalCost;
             p.level += levelsToBuy;
 
+            // Merkezi tabloya göre Milestone kontrolü (Log basar)
+            foreach (var milestone in GlobalLevelBoosts.BoostTable.Keys)
+            {
+                // Eğer yeni seviye bir milestone'u geçtiyse veya tam üstündeyse
+                if (p.level >= milestone && (p.level - levelsToBuy) < milestone)
+                {
+                    Debug.Log($"<color=cyan>{p.config.productName}</color> Seviye {milestone} Boostu Aktif! Yeni Çarpan: x{p.CurrentLevelBoostMultiplier}");
+                }
+            }
+
             CheckUnlocks();
             p.UpdateUI();
             UpdateUI();
-            p.CheckLevelBoosts();
             RefreshUpgradeArrows();
 
-            if (successSound != null)
-                successSound.Play();
+            if (successSound != null) successSound.Play();
         }
         else
         {
-            if (failSound != null)
-                failSound.Play();
+            if (failSound != null) failSound.Play();
         }
     }
 
@@ -472,7 +492,7 @@ public class IncomeManager : MonoBehaviour
         for (int i = 0; i < products.Count; i++)
         {
             PlayerPrefs.SetInt($"Product_{i}_Level", products[i].level);
-            PlayerPrefs.SetFloat($"Product_{i}_Multiplier", products[i].incomeMultiplier);
+            PlayerPrefs.SetFloat($"Product_{i}_Multiplier", products[i].incomeMultiplier); // Bu satır artık hata vermeyecek
         }
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
@@ -485,29 +505,52 @@ public class IncomeManager : MonoBehaviour
 
     public void LoadData()
     {
+        // 1. Ürün Verilerini Yükle
         for (int i = 0; i < products.Count; i++)
         {
-            string key = $"Product_{i}_Level";
-
-            if (PlayerPrefs.HasKey(key))
-                products[i].level = PlayerPrefs.GetInt(key);
+            // Seviye Yükleme
+            string levelKey = $"Product_{i}_Level";
+            if (PlayerPrefs.HasKey(levelKey))
+            {
+                products[i].level = PlayerPrefs.GetInt(levelKey);
+            }
             else
+            {
                 products[i].level = products[i].config.baseLevel;
+            }
 
-            products[i].incomeMultiplier = PlayerPrefs.GetFloat($"Product_{i}_Multiplier", 1f);
+            // Çarpan Yükleme (Kartlar veya özel geliştirmeler için)
+            string multiplierKey = $"Product_{i}_Multiplier";
+            products[i].incomeMultiplier = PlayerPrefs.GetFloat(multiplierKey, 1f);
         }
 
-        totalMoney = Convert.ToDouble(PlayerPrefs.GetString("TotalMoney", "110"));
-        prestigeMultiplier = Convert.ToDouble(PlayerPrefs.GetString("PrestigeMultiplier", "1"));
+        // 2. Genel Ekonomik Verileri Yükle
+        // InvariantCulture kullanarak farklı cihaz dillerinde oluşabilecek nokta/virgül hatasını önlüyoruz
+        string totalMoneyStr = PlayerPrefs.GetString("TotalMoney", "110");
+        totalMoney = double.Parse(totalMoneyStr, System.Globalization.CultureInfo.InvariantCulture);
+
+        string prestigeMulStr = PlayerPrefs.GetString("PrestigeMultiplier", "1");
+        prestigeMultiplier = double.Parse(prestigeMulStr, System.Globalization.CultureInfo.InvariantCulture);
+
         prestigeLevel = PlayerPrefs.GetInt("PrestigeLevel", 0);
         globalIncomeMultiplier = PlayerPrefs.GetFloat("GlobalIncomeMultiplier", 1f);
 
-        // Tür çarpan tablolarını her açılışta sıfırla.
-        // DecorationIncome.Start() satın alınmış dekorasyonları yeniden uygular.
+        // 3. Makine ve Dekorasyon Sistemini Başlat
+        // Önce çarpanları sıfırla, sonra kayıtlı makineleri çek
         ResetDecorationMultipliers();
         LoadMachineUnlocks();
 
-    }
+        // 4. UI Güncellemesi
+        // Yüklenen seviyelere göre tüm ürün kartlarını tazele
+        foreach (var p in products)
+        {
+            p.UpdateUI();
+        }
+        UpdateUI();
+
+        Debug.Log("<color=green>✅ Veriler başarıyla yüklendi.</color>");
+    } 
+
 
     public void InactiveIncome()
     {

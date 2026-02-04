@@ -38,8 +38,24 @@ public class ProductConfig : ScriptableObject
     public bool isLockedInitially = true;
     public List<UnlockCondition> unlockConditions = new List<UnlockCondition>();
 
-    [Header("Level Boosts (çarpanlar)")]
-    public LevelBoost[] levelBoosts = new LevelBoost[10]; // 👈 Inspector’dan doldurulacak
+    public static class GlobalLevelBoosts
+    {
+        // 11 adet değişken (seviye ve çarpan çifti)
+        public static readonly Dictionary<int, float> BoostTable = new Dictionary<int, float>
+    {
+        { 10,  2.0f },
+        { 25,  2.0f },
+        { 50,  2.0f },
+        { 100, 5.0f },
+        { 200, 2.0f },
+        { 300, 2.0f },
+        { 400, 2.0f },
+        { 500, 10.0f },
+        { 600, 2.0f },
+        { 800, 2.0f },
+        { 1000, 20.0f }
+    };
+    }
 }
 
 

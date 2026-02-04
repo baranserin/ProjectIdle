@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 7.Cold Brew
   m_EditorClassIdentifier: 
   productName: Cold Brew
-  baseUpgradeCost: 250000
-  costGrowth: 1.12
-  baseIncome: 500
+  baseUpgradeCost: 100000
+  costGrowth: 1.16
+  baseIncome: 2750
   incomeGrowth: 1.11
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 1
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 4194b5288ea648541af4d5a81c735391, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

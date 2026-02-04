@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 9.Vanilya Coffee Latte
   m_EditorClassIdentifier: 
   productName: Vanilya Coffee Latte
-  baseUpgradeCost: 750000
-  costGrowth: 1.12
-  baseIncome: 1000
+  baseUpgradeCost: 10000000
+  costGrowth: 1.16
+  baseIncome: 15000
   incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 1
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 34deefe508f02f94d930b85881c17fc5, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

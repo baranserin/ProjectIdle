@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 8.Cheesecake
   m_EditorClassIdentifier: 
   productName: Cheesecake
-  baseUpgradeCost: 1250000
-  costGrowth: 1.13
-  baseIncome: 1250
+  baseUpgradeCost: 15000000
+  costGrowth: 1.17
+  baseIncome: 20000
   incomeGrowth: 1.12
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 2
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 58af416d1cedfe24fac0b9bad7ce1e6a, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

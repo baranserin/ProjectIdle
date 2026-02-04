@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 2
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 5e607ad0da0ca7147919b91603741179, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 10
     incomeMultiplier: 2

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 9.Fennel
   m_EditorClassIdentifier: 
   productName: Fennel
-  baseUpgradeCost: 80000
-  costGrowth: 1.09
-  baseIncome: 250
-  incomeGrowth: 1.08
+  baseUpgradeCost: 1000000
+  costGrowth: 1.15
+  baseIncome: 7500
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2
@@ -28,8 +28,8 @@ MonoBehaviour:
   requiresMachine: 0
   isLockedInitially: 0
   unlockConditions:
-  - requiredProductConfig: {fileID: 0}
-    requiredLevel: 5
+  - requiredProductConfig: {fileID: 11400000, guid: 5149e1c26806a5c43ad0ee4228cf9f3f, type: 2}
+    requiredLevel: 15
     requireTotalMoney: 0
     requiredMoney: 0
     requirePrestigeLevel: 0

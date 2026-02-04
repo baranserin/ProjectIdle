@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 8.Sage
   m_EditorClassIdentifier: 
   productName: Sage
-  baseUpgradeCost: 70000
-  costGrowth: 1.09
-  baseIncome: 225
-  incomeGrowth: 1.08
+  baseUpgradeCost: 50000
+  costGrowth: 1.15
+  baseIncome: 1000
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2
@@ -28,8 +28,8 @@ MonoBehaviour:
   requiresMachine: 0
   isLockedInitially: 0
   unlockConditions:
-  - requiredProductConfig: {fileID: 0}
-    requiredLevel: 5
+  - requiredProductConfig: {fileID: 11400000, guid: 0fdd525f3d143b644b245da15137ce3c, type: 2}
+    requiredLevel: 15
     requireTotalMoney: 0
     requiredMoney: 0
     requirePrestigeLevel: 0

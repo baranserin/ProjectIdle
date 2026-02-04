@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 10.Mocha
   m_EditorClassIdentifier: 
   productName: Mocha
-  baseUpgradeCost: 1250000
-  costGrowth: 1.12
-  baseIncome: 1200
+  baseUpgradeCost: 50000000
+  costGrowth: 1.16
+  baseIncome: 25000
   incomeGrowth: 1.11
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 1
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 977350d772cd3fa4197542d3b036e163, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

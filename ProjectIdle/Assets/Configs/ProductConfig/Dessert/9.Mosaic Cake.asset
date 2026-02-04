@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 9.Mosaic Cake
   m_EditorClassIdentifier: 
   productName: Mosaic Cake
-  baseUpgradeCost: 1500000
-  costGrowth: 1.13
-  baseIncome: 1700
+  baseUpgradeCost: 400000000
+  costGrowth: 1.17
+  baseIncome: 60000
   incomeGrowth: 1.12
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
@@ -27,7 +27,13 @@ MonoBehaviour:
   productType: 2
   requiresMachine: 0
   isLockedInitially: 0
-  unlockConditions: []
+  unlockConditions:
+  - requiredProductConfig: {fileID: 11400000, guid: 37a21c38f5da2ea4ba9abb9b31c9274a, type: 2}
+    requiredLevel: 15
+    requireTotalMoney: 0
+    requiredMoney: 0
+    requirePrestigeLevel: 0
+    requiredPrestigeLevel: 0
   levelBoosts:
   - requiredLevel: 0
     incomeMultiplier: 0

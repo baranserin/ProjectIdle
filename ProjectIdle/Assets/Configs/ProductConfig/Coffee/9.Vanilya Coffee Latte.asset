@@ -16,7 +16,7 @@ MonoBehaviour:
   baseUpgradeCost: 10000000
   costGrowth: 1.16
   baseIncome: 15000
-  incomeGrowth: 1.1
+  incomeGrowth: 1.11
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2
@@ -34,24 +34,3 @@ MonoBehaviour:
     requiredMoney: 0
     requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
-  levelBoosts:
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0

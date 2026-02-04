@@ -7,22 +7,21 @@ using UnityEngine;
 
 #region ProductData & UnlockCondition (AYNI DOSYADA)
 
-// ProductType enum'un ProductConfig'te tanımlı olduğundan emin olun:
-// public enum ProductType { Tea, Coffee, Dessert, Barista }
 public static class GlobalLevelBoosts
 {
     public static readonly Dictionary<int, float> BoostTable = new Dictionary<int, float>
     {
-        { 10, 2.0f },   // 10. seviyede x2
-        { 25, 2.0f },   // 25. seviyede x2 (Toplam x4)
-        { 50, 4.0f },   // ...
+
+        { 10, 2.0f },  
+        { 25, 2.0f },   
+        { 50, 4.0f },   
         { 100, 5.0f },
         { 200, 10.0f },
         { 300, 10.0f },
         { 400, 10.0f },
         { 500, 20.0f },
-        { 600, 50.0f },
-        { 800, 100.0f },
+        { 750, 50.0f },
+        { 900, 100.0f },
         { 999, 100.0f }
     };
 }
@@ -33,8 +32,7 @@ public class ProductData
     public GameObject uiObject;
     public ProductConfig config;
     [NonSerialized] public int level;
-    [NonSerialized] public float incomeMultiplier = 1f; // HATAYI ÇÖZMEK İÇİN GERİ EKLEDİK
-    // incomeMultiplier değişkenini kaldırdık çünkü artık CurrentLevelBoostMultiplier dinamik hesaplıyor.
+    [NonSerialized] public float incomeMultiplier = 1f;
 
     [Header("UI")]
     public GameObject upgradeArrow;
@@ -42,7 +40,6 @@ public class ProductData
     public TextMeshProUGUI levelText2;
     public TextMeshProUGUI upgradeCostText;
 
-    // 2. ADIM: Dinamik Çarpan Hesaplayıcı
     public float CurrentLevelBoostMultiplier
     {
         get
@@ -70,12 +67,12 @@ public class ProductData
     public double GetIncome()
     {
         if (level == 0) return 0;
+        if (level == 1) return config.baseIncome;
 
         double waveOffset = config.incomeSineAmplitude * Math.Sin(level * config.incomeSineFrequency);
         double effectiveLevel = level + waveOffset;
         double baseValue = config.baseIncome * Math.Pow(config.incomeGrowth, effectiveLevel);
 
-        // Merkezi sistemden gelen çarpanı uygula
         double localMul = CurrentLevelBoostMultiplier;
 
         float decoMul = 1f;
@@ -120,7 +117,7 @@ public class ProductData
 public class UnlockCondition
 {
     [Header("Gerekli Ürün ve Seviyesi")]
-    public ProductConfig requiredProductConfig; // << buradan config seçilecek
+    public ProductConfig requiredProductConfig;
     public int requiredLevel;
 
     [Header("Toplam Para Şartı")]
@@ -135,7 +132,7 @@ public class UnlockCondition
 [Serializable]
 public class MachineLockData
 {
-    public string machineName; // Sadece Inspector'da takip etmek için
+    public string machineName;
     public ProductType type;
     public double price;
     public GameObject lockObject;
@@ -159,13 +156,13 @@ public class IncomeManager : MonoBehaviour
 
     [Header("Genel")]
     public double totalMoney = 110f;
-    public double prestigeMultiplier = 1.1;
+    public double prestigeMultiplier = 1.0f;
     public int prestigeLevel = 0;
     public int prestigePoint = 0;
     public float upgradeMultiplier = 0f;
 
     [Header("Global Multipliers")]
-    public float globalIncomeMultiplier = 1f;   // Barista vb. global etkiler
+    public float globalIncomeMultiplier = 1f;
 
     // Event/Boost çarpanı
     public float temporaryMultiplier = 1f;
@@ -202,8 +199,7 @@ public class IncomeManager : MonoBehaviour
 
     double offlineEarning;
 
-    // 🔹 Tür-bazlı dekorasyon çarpan tablosu
-    private float globalDecorationMultiplier = 1f;                // applyToAllTypes ile gelenler
+    private float globalDecorationMultiplier = 1f;
     private readonly Dictionary<ProductType, float> typeDecorationMultiplier = new();
 
     private readonly HashSet<ProductType> unlockedMachines = new();
@@ -277,7 +273,6 @@ public class IncomeManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
 
-        // ✅ RAM'deki machine unlock durumunu da sıfırla
         unlockedMachines.Clear();
 
         PlayerPrefs.Save();
@@ -294,13 +289,10 @@ public class IncomeManager : MonoBehaviour
         if (decorationIncome != null)
             decorationIncome.ResetDecorations();
 
-        // ✅ Kilit UI'larını geri getir
         ActivateLocks();
 
-        // ✅ Makine kilitlerini/tuşlarını Prefs+RAM durumuna göre yeniden ayarla
         LoadMachineStates();
 
-        // ✅ İlk ürün kartlarını makine durumuna göre kapat/aç
         SyncMachineProductUIs();
 
         if (upgradeCardManager != null)
@@ -929,10 +921,4 @@ public class IncomeManager : MonoBehaviour
             panel.UpdateUpgradeArrow();
         }
     }
-
-
 }
-
-
-
-

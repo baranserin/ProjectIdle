@@ -185,7 +185,11 @@ public class ProductPurchasePanel : MonoBehaviour
         {
             if (incomeDiff > 0)
             {
-                incomeIncreaseText.text = "+" + IncomeManager.FormatMoneyStatic(incomeDiff) + "/s";
+                // Fark 0'dan büyükse, en az 0.1 olacak þekilde sýnýrla
+                double visibleDiff = System.Math.Max(incomeDiff, 0.1);
+
+                incomeIncreaseText.text = "+" + IncomeManager.FormatMoneyStatic(visibleDiff) + "/s";
+
                 if (ColorUtility.TryParseHtmlString("#1CC717", out Color customGreen))
                     incomeIncreaseText.color = customGreen;
             }

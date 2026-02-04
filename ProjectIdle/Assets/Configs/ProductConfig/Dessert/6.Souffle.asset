@@ -25,8 +25,8 @@ MonoBehaviour:
   baseLevel: 0
   icon: {fileID: 0}
   productType: 2
-  requiresMachine: 0
-  isLockedInitially: 0
+  requiresMachine: 1
+  isLockedInitially: 1
   unlockConditions:
   - requiredProductConfig: {fileID: 11400000, guid: e36415fb4243c5d4bb1efb04d1c66660, type: 2}
     requiredLevel: 15
@@ -34,24 +34,3 @@ MonoBehaviour:
     requiredMoney: 0
     requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
-  levelBoosts:
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0
-  - requiredLevel: 0
-    incomeMultiplier: 0

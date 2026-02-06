@@ -3,152 +3,177 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.EventSystems; // EKLENDİ: UI kontrolü için gerekli
+using UnityEngine.EventSystems;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using System.Collections.Generic;
 
-public class UIContentZoom : MonoBehaviour
+public class UIZoomCustomStartPos : MonoBehaviour
 {
-    [Header("Target & Button")]
-    public RectTransform target;
+    [Header("Gerekli Objeler")]
+    public RectTransform target;     // Hareket edecek Büyük Resim
+    public RectTransform viewArea;   // Sınırları belirleyen Panel
+    public Canvas parentCanvas;      // Hassas sürükleme için Canvas
+
+    [Header("Buton ve Zoom Ayarları")]
     public Button zoomButton;
     public TMP_Text buttonText;
 
-    [Header("Zoom Levels & Labels")]
-    public float[] zoomLevels = { 0.3f, 0.6f, 1f };
-    public string[] zoomLabels = { "2x", "4x", "1x" };
+    // Zoom seviyeleri
+    public float[] zoomSteps = { 1f, 1.5f, 2f, 3f };
 
-    [Header("Manual Zoom Settings")]
-    public float minZoom = 0.3f;
-    public float maxZoom = 2f;
-    [Range(0.001f, 0.02f)]
-    public float zoomSpeed = 0.001f;
+    [Header("Hassasiyet")]
+    public float dragSpeed = 1f;
 
-    private int currentIndex = 0;
-    private float currentZoom;
-    private float lastPinchDist = -1f;
+    private int currentStepIndex = 0;
+    private float currentZoom = 1f;
 
-    void OnEnable()
-    {
-        EnhancedTouchSupport.Enable();
-    }
+    // Senin ayarladığın başlangıç pozisyonunu hafızada tutmak için:
+    private Vector2 startPos;
 
-    void OnDisable()
-    {
-        EnhancedTouchSupport.Disable();
-    }
+    void OnEnable() { EnhancedTouchSupport.Enable(); }
+    void OnDisable() { EnhancedTouchSupport.Disable(); }
 
     void Start()
     {
-        if (zoomLabels.Length != zoomLevels.Length)
+        // 1. Pivot Ayarları (Zoom'un düzgün çalışması için pivot 0.5 olmalı)
+        // Ama Anchor pozisyonunu bozmuyoruz.
+        if (target != null)
         {
-            zoomLabels = new string[zoomLevels.Length];
-            for (int i = 0; i < zoomLevels.Length; i++)
-                zoomLabels[i] = zoomLevels[i].ToString("0.0") + "x";
+            target.pivot = new Vector2(0.5f, 0.5f);
+
+            // ÖNEMLİ: Senin ayarladığın pozisyonu hafızaya alıyoruz.
+            startPos = target.anchoredPosition;
         }
 
-        currentZoom = zoomLevels[currentIndex];
-        ApplyZoom(currentZoom);
+        if (viewArea == null && target != null)
+            viewArea = target.parent as RectTransform;
 
-        if (buttonText != null)
-            buttonText.text = zoomLabels[currentIndex];
+        if (parentCanvas == null)
+            parentCanvas = GetComponentInParent<Canvas>();
 
         if (zoomButton != null)
-            zoomButton.onClick.AddListener(NextZoom);
+        {
+            zoomButton.onClick.RemoveAllListeners();
+            zoomButton.onClick.AddListener(OnZoomClicked);
+        }
+
+        // Başlangıç Ayarları
+        currentStepIndex = 0;
+        SetZoom(zoomSteps[0]);
     }
 
     void Update()
     {
-        if (target == null) return;
+        if (target == null || viewArea == null) return;
 
-#if UNITY_EDITOR || UNITY_STANDALONE
-        // PC: Eğer mouse bir UI elemanının üzerindeyse zoom yapma
-        if (Mouse.current != null)
+        // --- 1. SERT KİLİT (HARD LOCK) ---
+        // Eğer 1. seviyedeysek (1x), resim senin ayarladığın başlangıç noktasında (startPos) kalmalı.
+        if (currentStepIndex == 0)
         {
-            // Mouse UI üzerinde mi kontrolü
-            if (EventSystem.current.IsPointerOverGameObject()) return;
-
-            float scroll = Mouse.current.scroll.ReadValue().y;
-            if (Mathf.Abs(scroll) > 0.03f)
+            // Eğer milim kaymışsa senin ayarladığın konuma geri getir
+            if (target.anchoredPosition != startPos)
             {
-                currentZoom += scroll * zoomSpeed * 20f;
-                currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
-                ApplyZoom(currentZoom);
-                if (buttonText != null)
-                    buttonText.text = currentZoom.ToString("0.0") + "x";
+                target.anchoredPosition = startPos;
+            }
+            // Input okuma, burada bitir.
+            return;
+        }
+
+        // --- 2. SÜRÜKLEME KODLARI (Zoom > 1x ise çalışır) ---
+        float scaleFactor = parentCanvas != null ? parentCanvas.scaleFactor : 1f;
+
+        // Mouse (Editör)
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Mouse.current.leftButton.isPressed && !EventSystem.current.IsPointerOverGameObject())
+        {
+            Vector2 delta = Mouse.current.delta.ReadValue();
+            target.anchoredPosition += (delta / scaleFactor) * dragSpeed;
+        }
+#endif
+
+        // Mobil (Touch)
+#if UNITY_ANDROID || UNITY_IOS
+        if (Touch.activeTouches.Count == 1)
+        {
+            Touch t = Touch.activeTouches[0];
+            if (!IsPointerOverUI(t))
+            {
+                Vector2 delta = t.delta;
+                target.anchoredPosition += (delta / scaleFactor) * dragSpeed;
             }
         }
 #endif
 
-#if UNITY_ANDROID || UNITY_IOS
-        if (Touch.activeTouches.Count == 2)
+        // Sınırları Koru
+        ClampTargetPosition();
+    }
+
+    public void OnZoomClicked()
+    {
+        currentStepIndex = (currentStepIndex + 1) % zoomSteps.Length;
+        SetZoom(zoomSteps[currentStepIndex]);
+    }
+
+    private void SetZoom(float zoomValue)
+    {
+        currentZoom = zoomValue;
+        target.localScale = new Vector3(currentZoom, currentZoom, 1f);
+
+        if (buttonText != null)
+            buttonText.text = $"{currentZoom:0.0}x";
+
+        // Zoom 1x'e döndüyse, senin orijinal pozisyonuna geri dön
+        if (currentStepIndex == 0)
         {
-            // Mobil: Parmaklardan HERHANGİ BİRİ UI üzerindeyse zoom yapma
-            if (IsPointerOverUI(Touch.activeTouches[0]) || IsPointerOverUI(Touch.activeTouches[1]))
-            {
-                lastPinchDist = -1f; // Pinch'i resetle ki menüden elini çekince zıplamasın
-                return;
-            }
-
-            Vector2 t0 = Touch.activeTouches[0].screenPosition;
-            Vector2 t1 = Touch.activeTouches[1].screenPosition;
-
-            float dist = Vector2.Distance(t0, t1);
-
-            if (lastPinchDist < 0f)
-            {
-                lastPinchDist = dist;
-            }
-            else
-            {
-                float delta = dist - lastPinchDist;
-
-                currentZoom += delta * zoomSpeed;
-                currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
-                ApplyZoom(currentZoom);
-
-                if (buttonText != null)
-                    buttonText.text = currentZoom.ToString("0.0") + "x";
-
-                lastPinchDist = dist;
-            }
+            target.anchoredPosition = startPos;
         }
         else
         {
-            lastPinchDist = -1f;
+            ClampTargetPosition();
         }
-#endif
     }
 
-    public void NextZoom()
+    private void ClampTargetPosition()
     {
-        currentIndex = (currentIndex + 1) % zoomLevels.Length;
-        currentZoom = zoomLevels[currentIndex];
-        SetZoom(currentIndex);
+        // 1x ise hesaplama yapma (startPos'ta kalacak)
+        if (currentStepIndex == 0) return;
+
+        float contentWidth = target.rect.width * target.localScale.x;
+        float contentHeight = target.rect.height * target.localScale.y;
+
+        float viewWidth = viewArea.rect.width;
+        float viewHeight = viewArea.rect.height;
+
+        Vector2 pos = target.anchoredPosition;
+
+        // X Sınırı
+        if (contentWidth > viewWidth)
+        {
+            float limitX = (contentWidth - viewWidth) / 2f;
+            // Orijinal pozisyonun ofsetini de hesaba katmak gerekebilir ama 
+            // genellikle Clamp yaparken merkeze göre yapmak en sağlıklısıdır.
+            // Eğer çok kenarda başlıyorsa burası hafif zıplama yapabilir, 
+            // ama zoom yapınca genelde kullanıcı bunu fark etmez.
+            pos.x = Mathf.Clamp(pos.x, -limitX, limitX);
+        }
+        // else: Eğer resim ekrandan küçükse serbest bırak veya startPos.x'e çek (Şimdilik serbest)
+
+        // Y Sınırı
+        if (contentHeight > viewHeight)
+        {
+            float limitY = (contentHeight - viewHeight) / 2f;
+            pos.y = Mathf.Clamp(pos.y, -limitY, limitY);
+        }
+
+        target.anchoredPosition = pos;
     }
 
-    private void SetZoom(int index)
-    {
-        currentZoom = zoomLevels[index];
-        ApplyZoom(currentZoom);
-
-        if (buttonText != null)
-            buttonText.text = zoomLabels[index];
-    }
-
-    private void ApplyZoom(float zoom)
-    {
-        if (target != null)
-            target.localScale = new Vector3(zoom, zoom, 1);
-    }
-
-    // --- YENİ EKLENEN FONKSİYON: New Input System için UI Kontrolü ---
     private bool IsPointerOverUI(Touch touch)
     {
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        eventDataCurrentPosition.position = touch.screenPosition;
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = touch.screenPosition;
         List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        EventSystem.current.RaycastAll(eventData, results);
         return results.Count > 0;
     }
 }

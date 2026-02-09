@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Green Tea
   baseUpgradeCost: 400
-  costGrowth: 1.12
+  costGrowth: 1.14
   baseIncome: 40
   incomeGrowth: 1.07
-  incomeSineAmplitude: 2
+  incomeSineAmplitude: 1
   incomeSineFrequency: 0.5
   costSineAmplitude: 2
   costSineFrequency: 0.3

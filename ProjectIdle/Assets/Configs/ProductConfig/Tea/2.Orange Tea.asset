@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Orange Tea
   baseUpgradeCost: 25
-  costGrowth: 1.12
+  costGrowth: 1.14
   baseIncome: 4
   incomeGrowth: 1.07
-  incomeSineAmplitude: 2
+  incomeSineAmplitude: 1
   incomeSineFrequency: 0.5
   costSineAmplitude: 2
   costSineFrequency: 0.3
@@ -34,24 +34,3 @@ MonoBehaviour:
     requiredMoney: 0
     requirePrestigeLevel: 0
     requiredPrestigeLevel: 0
-  levelBoosts:
-  - requiredLevel: 10
-    incomeMultiplier: 2
-  - requiredLevel: 25
-    incomeMultiplier: 2
-  - requiredLevel: 50
-    incomeMultiplier: 4
-  - requiredLevel: 100
-    incomeMultiplier: 5
-  - requiredLevel: 200
-    incomeMultiplier: 10
-  - requiredLevel: 300
-    incomeMultiplier: 10
-  - requiredLevel: 400
-    incomeMultiplier: 10
-  - requiredLevel: 500
-    incomeMultiplier: 20
-  - requiredLevel: 750
-    incomeMultiplier: 50
-  - requiredLevel: 900
-    incomeMultiplier: 100

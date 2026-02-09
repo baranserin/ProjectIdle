@@ -17,8 +17,8 @@ MonoBehaviour:
   costGrowth: 1.14
   baseIncome: 25
   incomeGrowth: 1.09
-  incomeSineAmplitude: 2
-  incomeSineFrequency: 0.5
+  incomeSineAmplitude: 1
+  incomeSineFrequency: 0.3
   costSineAmplitude: 2
   costSineFrequency: 0.3
   costSinePhase: 1.5707963267948966

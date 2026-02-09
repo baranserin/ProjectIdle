@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Cold Brew
   baseUpgradeCost: 100000
-  costGrowth: 1.16
+  costGrowth: 1.17
   baseIncome: 2750
-  incomeGrowth: 1.11
+  incomeGrowth: 1.09
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

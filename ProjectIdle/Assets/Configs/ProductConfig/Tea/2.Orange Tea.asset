@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Orange Tea
   baseUpgradeCost: 25
-  costGrowth: 1.14
+  costGrowth: 1.12
   baseIncome: 4
   incomeGrowth: 1.07
   incomeSineAmplitude: 1

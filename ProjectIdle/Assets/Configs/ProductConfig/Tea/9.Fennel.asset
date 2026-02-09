@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Fennel
   baseUpgradeCost: 1000000
-  costGrowth: 1.15
+  costGrowth: 1.18
   baseIncome: 7500
-  incomeGrowth: 1.1
+  incomeGrowth: 1.09
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

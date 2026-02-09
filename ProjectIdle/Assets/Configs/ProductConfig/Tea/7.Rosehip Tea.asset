@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Rosehip Tea
   baseUpgradeCost: 7500
-  costGrowth: 1.15
+  costGrowth: 1.16
   baseIncome: 375
-  incomeGrowth: 1.1
+  incomeGrowth: 1.08
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

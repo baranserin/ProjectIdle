@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Cappuccino
   baseUpgradeCost: 3000
-  costGrowth: 1.15
+  costGrowth: 1.16
   baseIncome: 230
-  incomeGrowth: 1.08
+  incomeGrowth: 1.09
   incomeSineAmplitude: 1
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

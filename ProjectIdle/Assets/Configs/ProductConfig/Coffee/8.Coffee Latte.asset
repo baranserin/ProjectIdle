@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Coffee Latte
   baseUpgradeCost: 3000000
-  costGrowth: 1.16
+  costGrowth: 1.19
   baseIncome: 11000
-  incomeGrowth: 1.11
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

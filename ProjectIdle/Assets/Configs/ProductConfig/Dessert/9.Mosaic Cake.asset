@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Mosaic Cake
   baseUpgradeCost: 400000000
-  costGrowth: 1.17
+  costGrowth: 1.21
   baseIncome: 60000
-  incomeGrowth: 1.12
+  incomeGrowth: 1.11
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

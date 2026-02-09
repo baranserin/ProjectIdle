@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Croissant
   baseUpgradeCost: 25000
-  costGrowth: 1.14
+  costGrowth: 1.18
   baseIncome: 700
-  incomeGrowth: 1.09
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

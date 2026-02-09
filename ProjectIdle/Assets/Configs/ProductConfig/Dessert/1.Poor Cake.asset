@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Poor Cake
   baseUpgradeCost: 200
-  costGrowth: 1.14
+  costGrowth: 1.15
   baseIncome: 25
   incomeGrowth: 1.09
   incomeSineAmplitude: 1

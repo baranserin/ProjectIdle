@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Mocha
   baseUpgradeCost: 50000000
-  costGrowth: 1.16
+  costGrowth: 1.2
   baseIncome: 25000
-  incomeGrowth: 1.11
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

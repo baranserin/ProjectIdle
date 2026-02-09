@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Turkish Coffee
   baseUpgradeCost: 600
-  costGrowth: 1.15
+  costGrowth: 1.14
   baseIncome: 65
   incomeGrowth: 1.08
   incomeSineAmplitude: 1

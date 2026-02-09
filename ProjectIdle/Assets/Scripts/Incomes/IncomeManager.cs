@@ -12,17 +12,17 @@ public static class GlobalLevelBoosts
     public static readonly Dictionary<int, float> BoostTable = new Dictionary<int, float>
     {
 
-        { 10, 2.0f },  
-        { 25, 2.0f },   
-        { 50, 4.0f },   
-        { 100, 5.0f },
-        { 200, 10.0f },
-        { 300, 10.0f },
-        { 400, 10.0f },
-        { 500, 20.0f },
-        { 750, 50.0f },
-        { 900, 100.0f },
-        { 999, 100.0f }
+        { 10, 1.5f },  
+        { 25, 1.5f },   
+        { 50, 1.5f },   
+        { 100, 1.5f },
+        { 200, 1.5f },
+        { 300, 1.5f },
+        { 400, 1.5f },
+        { 500, 1.5f },
+        { 750, 1.5f },
+        { 900, 1.5f },
+        { 999, 1.5f }
     };
 }
 
@@ -879,8 +879,9 @@ public class IncomeManager : MonoBehaviour
     {
         foreach (var m in machineLocks)
         {
+
             if (m.priceText != null)
-                m.priceText.text = FormatMoneyStatic(m.price);
+                m.priceText.text = m.price.ToString("0");
 
             bool isUnlocked = IsMachineUnlocked(m.type);
 

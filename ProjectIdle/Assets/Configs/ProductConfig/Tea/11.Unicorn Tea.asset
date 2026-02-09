@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Unicorn Tea
   baseUpgradeCost: 1e+10
-  costGrowth: 1.17
+  costGrowth: 1.24
   baseIncome: 250
-  incomeGrowth: 1.12
+  incomeGrowth: 1.13
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

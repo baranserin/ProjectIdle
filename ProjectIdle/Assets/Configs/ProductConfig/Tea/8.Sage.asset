@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Sage
   baseUpgradeCost: 50000
-  costGrowth: 1.15
+  costGrowth: 1.16
   baseIncome: 1000
-  incomeGrowth: 1.1
+  incomeGrowth: 1.08
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

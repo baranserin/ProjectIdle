@@ -16,7 +16,7 @@ MonoBehaviour:
   baseUpgradeCost: 2500
   costGrowth: 1.15
   baseIncome: 200
-  incomeGrowth: 1.1
+  incomeGrowth: 1.08
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Donut
   baseUpgradeCost: 5000
-  costGrowth: 1.14
+  costGrowth: 1.17
   baseIncome: 300
-  incomeGrowth: 1.09
+  incomeGrowth: 1.1
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

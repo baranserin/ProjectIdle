@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Cheesecake
   baseUpgradeCost: 15000000
-  costGrowth: 1.17
+  costGrowth: 1.21
   baseIncome: 20000
-  incomeGrowth: 1.12
+  incomeGrowth: 1.11
   incomeSineAmplitude: 2
   incomeSineFrequency: 0.5
   costSineAmplitude: 2

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Chamomile Tea
   baseUpgradeCost: 1250
-  costGrowth: 1.14
+  costGrowth: 1.13
   baseIncome: 110
   incomeGrowth: 1.07
   incomeSineAmplitude: 1

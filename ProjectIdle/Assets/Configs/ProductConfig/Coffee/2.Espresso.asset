@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Espresso
   baseUpgradeCost: 150
-  costGrowth: 1.15
+  costGrowth: 1.13
   baseIncome: 20
   incomeGrowth: 1.08
   incomeSineAmplitude: 1

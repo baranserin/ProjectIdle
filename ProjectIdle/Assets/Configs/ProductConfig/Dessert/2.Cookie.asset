@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Cookie
   baseUpgradeCost: 1000
-  costGrowth: 1.14
+  costGrowth: 1.15
   baseIncome: 100
   incomeGrowth: 1.09
   incomeSineAmplitude: 2

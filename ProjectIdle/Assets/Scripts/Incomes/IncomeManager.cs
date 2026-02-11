@@ -40,6 +40,9 @@ public class ProductData
     public TextMeshProUGUI levelText2;
     public TextMeshProUGUI upgradeCostText;
 
+    [NonSerialized] public bool isNewlyUnlocked = false; // Yeni açıldı mı?
+    [NonSerialized] public bool hasBeenSeen = false;      // Oyuncu menüye girip gördü mü?
+
     public float CurrentLevelBoostMultiplier
     {
         get
@@ -174,8 +177,6 @@ public class IncomeManager : MonoBehaviour
     public TextMeshProUGUI prestigePointText;
     public TextMeshProUGUI PassiveIncomeText;
 
-
-
     [Header("Machine Locks")]
     public List<MachineLockData> machineLocks;
 
@@ -194,10 +195,37 @@ public class IncomeManager : MonoBehaviour
     public double income;
 
     public GameObject PassiveIncomePanel;
+
+    public void CheckUnlocks()
+    {
+        for (int i = 0; i < products.Count; i++)
+        {
+            var product = products[i];
+            if (product.uiObject == null) continue;
+
+            bool currentlyUnlocked = IsProductUnlocked(product);
+
+            // EĞER: Ürün şu an aktifleştiyse VE daha önce UI objesi kapalıysa (ilk defa açılıyor)
+            if (currentlyUnlocked && !product.uiObject.activeSelf)
+            {
+                product.isNewlyUnlocked = true;
+                product.hasBeenSeen = false;
+                TriggerNotification(product.config.productType); // Bildirimi yak
+            }
+
+            product.uiObject.SetActive(currentlyUnlocked);
+        }
+    }
+
     public GameObject collect1xButton;
     public GameObject collect2xButton;
 
     double offlineEarning;
+
+    [Header("Notification UI")]
+    public GameObject teaNotificationIcon;    // Çay tabındaki ünlem/nokta
+    public GameObject coffeeNotificationIcon; // Kahve tabındaki ünlem/nokta
+    public GameObject dessertNotificationIcon;// Tatlı tabındaki ünlem/nokta
 
     private float globalDecorationMultiplier = 1f;
     private readonly Dictionary<ProductType, float> typeDecorationMultiplier = new();
@@ -784,28 +812,6 @@ public class IncomeManager : MonoBehaviour
         return allConditionsMet;
     }
 
-
-
-    public void CheckUnlocks()
-    {
-        for (int i = 0; i < products.Count; i++)
-        {
-            var product = products[i];
-            if (product.uiObject == null)
-                continue;
-
-            bool unlocked = IsProductUnlocked(product);
-
-            // Ürün unlocked ise UI’ı aç, değilse kapalı kalsın
-            product.uiObject.SetActive(unlocked);
-
-            if (unlocked)
-            {
-                Debug.Log($"UNLOCKED by conditions → {product.config.productName}");
-            }
-        }
-    }
-
     private void LoadMachineUnlocks()
     {
         unlockedMachines.Clear();
@@ -921,5 +927,31 @@ public class IncomeManager : MonoBehaviour
         {
             panel.UpdateUpgradeArrow();
         }
+    }
+
+    private void TriggerNotification(ProductType type)
+    {
+        if (type == ProductType.Tea && teaNotificationIcon != null) teaNotificationIcon.SetActive(true);
+        if (type == ProductType.Coffee && coffeeNotificationIcon != null) coffeeNotificationIcon.SetActive(true);
+        // Diğer tipler için de ekleyebilirsin...
+    }
+
+    public void ClearNotification(int productTypeInt)
+    {
+        ProductType type = (ProductType)productTypeInt;
+
+        // O kategoriye ait tüm ürünleri "görüldü" olarak işaretle
+        foreach (var p in products)
+        {
+            if (p.config.productType == type)
+            {
+                p.isNewlyUnlocked = false;
+                p.hasBeenSeen = true;
+            }
+        }
+
+        // İkonu kapat
+        if (type == ProductType.Tea && teaNotificationIcon != null) teaNotificationIcon.SetActive(false);
+        if (type == ProductType.Coffee && coffeeNotificationIcon != null) coffeeNotificationIcon.SetActive(false);
     }
 }

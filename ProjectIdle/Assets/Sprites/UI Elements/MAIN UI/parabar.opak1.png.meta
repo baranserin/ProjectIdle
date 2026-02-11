@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      parabar.opak1_0: -8861683025462329338
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

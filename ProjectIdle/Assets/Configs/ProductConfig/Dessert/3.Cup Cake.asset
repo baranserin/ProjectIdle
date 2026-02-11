@@ -25,7 +25,7 @@ MonoBehaviour:
   baseLevel: 0
   icon: {fileID: 0}
   productType: 2
-  requiresMachine: 1
+  requiresMachine: 0
   isLockedInitially: 1
   unlockConditions:
   - requiredProductConfig: {fileID: 11400000, guid: f800c158b3ca3d94d89df0340efd57c8, type: 2}

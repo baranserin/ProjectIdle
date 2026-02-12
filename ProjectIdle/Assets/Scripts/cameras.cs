@@ -138,12 +138,18 @@ public class UIZoomCustomStartPos : MonoBehaviour
         float viewWidth = viewArea.rect.width;
         float viewHeight = viewArea.rect.height;
 
+        // DEBUG - Değerleri görelim
+        Debug.Log($"Content Size: {target.rect.width}x{target.rect.height}, Zoom: {currentZoom}");
+        Debug.Log($"Zoomed Size: {contentWidth}x{contentHeight}");
+        Debug.Log($"Viewport Size: {viewWidth}x{viewHeight}");
+
         Vector2 pos = target.anchoredPosition;
 
         // X ekseni sınırlaması
         if (contentWidth > viewWidth)
         {
             float maxOffset = (contentWidth - viewWidth) / 2f;
+            Debug.Log($"X MaxOffset: {maxOffset}");
             pos.x = Mathf.Clamp(pos.x, -maxOffset, maxOffset);
         }
         else
@@ -155,6 +161,7 @@ public class UIZoomCustomStartPos : MonoBehaviour
         if (contentHeight > viewHeight)
         {
             float maxOffset = (contentHeight - viewHeight) / 2f;
+            Debug.Log($"Y MaxOffset: {maxOffset}");
             pos.y = Mathf.Clamp(pos.y, -maxOffset, maxOffset);
         }
         else

@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class UIZoomCustomStartPos : MonoBehaviour
 {
     [Header("Gerekli Objeler")]
-    public RectTransform target;     // Hareket edecek Büyük Resim
-    public RectTransform viewArea;   // Sınırları belirleyen Panel
-    public Canvas parentCanvas;      // Hassas sürükleme için Canvas
+    public RectTransform target;     // Content objesi (artık üzerinde resim var)
+    public RectTransform viewArea;   // Viewport (görünen alan)
+    public Canvas parentCanvas;      // Canvas
 
     [Header("Buton ve Zoom Ayarları")]
     public Button zoomButton;
@@ -27,7 +27,7 @@ public class UIZoomCustomStartPos : MonoBehaviour
     private int currentStepIndex = 0;
     private float currentZoom = 1f;
 
-    // Senin ayarladığın başlangıç pozisyonunu hafızada tutmak için:
+    // Başlangıç pozisyonu
     private Vector2 startPos;
 
     void OnEnable() { EnhancedTouchSupport.Enable(); }
@@ -35,18 +35,16 @@ public class UIZoomCustomStartPos : MonoBehaviour
 
     void Start()
     {
-        // 1. Pivot Ayarları (Zoom'un düzgün çalışması için pivot 0.5 olmalı)
-        // Ama Anchor pozisyonunu bozmuyoruz.
         if (target != null)
         {
             target.pivot = new Vector2(0.5f, 0.5f);
-
-            // ÖNEMLİ: Senin ayarladığın pozisyonu hafızaya alıyoruz.
             startPos = target.anchoredPosition;
         }
 
-        if (viewArea == null && target != null)
-            viewArea = target.parent as RectTransform;
+        if (viewArea == null)
+        {
+            Debug.LogError("View Area (Viewport) atanmamış! Inspector'dan ata.");
+        }
 
         if (parentCanvas == null)
             parentCanvas = GetComponentInParent<Canvas>();
@@ -57,7 +55,6 @@ public class UIZoomCustomStartPos : MonoBehaviour
             zoomButton.onClick.AddListener(OnZoomClicked);
         }
 
-        // Başlangıç Ayarları
         currentStepIndex = 0;
         SetZoom(zoomSteps[0]);
     }
@@ -66,20 +63,17 @@ public class UIZoomCustomStartPos : MonoBehaviour
     {
         if (target == null || viewArea == null) return;
 
-        // --- 1. SERT KİLİT (HARD LOCK) ---
-        // Eğer 1. seviyedeysek (1x), resim senin ayarladığın başlangıç noktasında (startPos) kalmalı.
+        // 1x zoom seviyesinde kilitle
         if (currentStepIndex == 0)
         {
-            // Eğer milim kaymışsa senin ayarladığın konuma geri getir
             if (target.anchoredPosition != startPos)
             {
                 target.anchoredPosition = startPos;
             }
-            // Input okuma, burada bitir.
             return;
         }
 
-        // --- 2. SÜRÜKLEME KODLARI (Zoom > 1x ise çalışır) ---
+        // Sürükleme
         float scaleFactor = parentCanvas != null ? parentCanvas.scaleFactor : 1f;
 
         // Mouse (Editör)
@@ -88,6 +82,7 @@ public class UIZoomCustomStartPos : MonoBehaviour
         {
             Vector2 delta = Mouse.current.delta.ReadValue();
             target.anchoredPosition += (delta / scaleFactor) * dragSpeed;
+            ClampTargetPosition();
         }
 #endif
 
@@ -100,12 +95,10 @@ public class UIZoomCustomStartPos : MonoBehaviour
             {
                 Vector2 delta = t.delta;
                 target.anchoredPosition += (delta / scaleFactor) * dragSpeed;
+                ClampTargetPosition();
             }
         }
 #endif
-
-        // Sınırları Koru
-        ClampTargetPosition();
     }
 
     public void OnZoomClicked()
@@ -122,7 +115,7 @@ public class UIZoomCustomStartPos : MonoBehaviour
         if (buttonText != null)
             buttonText.text = $"{currentZoom:0.0}x";
 
-        // Zoom 1x'e döndüyse, senin orijinal pozisyonuna geri dön
+        // 1x'e dönüşte başlangıç pozisyonuna git
         if (currentStepIndex == 0)
         {
             target.anchoredPosition = startPos;
@@ -135,34 +128,38 @@ public class UIZoomCustomStartPos : MonoBehaviour
 
     private void ClampTargetPosition()
     {
-        // 1x ise hesaplama yapma (startPos'ta kalacak)
         if (currentStepIndex == 0) return;
 
-        float contentWidth = target.rect.width * target.localScale.x;
-        float contentHeight = target.rect.height * target.localScale.y;
+        // Content'in zoom yapılmış boyutu
+        float contentWidth = target.rect.width * currentZoom;
+        float contentHeight = target.rect.height * currentZoom;
 
+        // Viewport'un boyutu
         float viewWidth = viewArea.rect.width;
         float viewHeight = viewArea.rect.height;
 
         Vector2 pos = target.anchoredPosition;
 
-        // X Sınırı
+        // X ekseni sınırlaması
         if (contentWidth > viewWidth)
         {
-            float limitX = (contentWidth - viewWidth) / 2f;
-            // Orijinal pozisyonun ofsetini de hesaba katmak gerekebilir ama 
-            // genellikle Clamp yaparken merkeze göre yapmak en sağlıklısıdır.
-            // Eğer çok kenarda başlıyorsa burası hafif zıplama yapabilir, 
-            // ama zoom yapınca genelde kullanıcı bunu fark etmez.
-            pos.x = Mathf.Clamp(pos.x, -limitX, limitX);
+            float maxOffset = (contentWidth - viewWidth) / 2f;
+            pos.x = Mathf.Clamp(pos.x, -maxOffset, maxOffset);
         }
-        // else: Eğer resim ekrandan küçükse serbest bırak veya startPos.x'e çek (Şimdilik serbest)
+        else
+        {
+            pos.x = 0f;
+        }
 
-        // Y Sınırı
+        // Y ekseni sınırlaması
         if (contentHeight > viewHeight)
         {
-            float limitY = (contentHeight - viewHeight) / 2f;
-            pos.y = Mathf.Clamp(pos.y, -limitY, limitY);
+            float maxOffset = (contentHeight - viewHeight) / 2f;
+            pos.y = Mathf.Clamp(pos.y, -maxOffset, maxOffset);
+        }
+        else
+        {
+            pos.y = 0f;
         }
 
         target.anchoredPosition = pos;

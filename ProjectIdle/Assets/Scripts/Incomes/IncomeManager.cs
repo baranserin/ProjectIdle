@@ -192,8 +192,8 @@ public class IncomeManager : MonoBehaviour
     public AudioSource successSound;
     public AudioSource failSound;
 
+    [Header("Income")]
     public double income;
-
     public GameObject PassiveIncomePanel;
 
     public void CheckUnlocks()
@@ -205,28 +205,36 @@ public class IncomeManager : MonoBehaviour
 
             bool currentlyUnlocked = IsProductUnlocked(product);
 
-            // EĞER: Ürün şu an aktifleştiyse VE daha önce UI objesi kapalıysa (ilk defa açılıyor)
-            if (currentlyUnlocked && !product.uiObject.activeSelf)
+            // KRİTİK DÜZELTME: 
+            // 1. Ürün şu an kilitli değilse (Unlocked)
+            // 2. VE UI objesi henüz kapalıysa (İlk defa açılıyorsa)
+            // 3. VE Oyuncu bu bildirimi henüz görmediyse (hasBeenSeen == false)
+            if (currentlyUnlocked && !product.uiObject.activeSelf && !product.hasBeenSeen)
             {
                 product.isNewlyUnlocked = true;
-                product.hasBeenSeen = false;
-                TriggerNotification(product.config.productType); // Bildirimi yak
+
+                if (NotificationManager.Instance != null)
+                {
+                    NotificationManager.Instance.SetNotificationUI(product.config.productType, true);
+                }
             }
 
             product.uiObject.SetActive(currentlyUnlocked);
         }
     }
+    // UI Butonlarından (Tab/Menü geçişleri) çağıracağın yeni metod
+    public void OnMenuTabOpened(int productTypeInt)
+    {
+        if (NotificationManager.Instance != null)
+        {
+            // NotificationManager artık hem listeyi güncelliyor hem de 2 iconu kapatıyor
+            NotificationManager.Instance.ClearNotification(productTypeInt, products);
+        }
+    }
 
     public GameObject collect1xButton;
     public GameObject collect2xButton;
-
     double offlineEarning;
-
-    [Header("Notification UI")]
-    public GameObject teaNotificationIcon;    // Çay tabındaki ünlem/nokta
-    public GameObject coffeeNotificationIcon; // Kahve tabındaki ünlem/nokta
-    public GameObject dessertNotificationIcon;// Tatlı tabındaki ünlem/nokta
-
     private float globalDecorationMultiplier = 1f;
     private readonly Dictionary<ProductType, float> typeDecorationMultiplier = new();
 
@@ -581,11 +589,12 @@ public class IncomeManager : MonoBehaviour
             TimeSpan fark = DateTime.Now - lastTime;
 
             double secondsAway = fark.TotalSeconds;
-            double incomePerSecond = GetTotalIncome();
+            double incomePerSecond = GetTotalIncome() / 10;
             offlineEarning = incomePerSecond * secondsAway;
 
             if (PassiveIncomeText != null)
-                PassiveIncomeText.text = "Coffees were sold, your vault is full! " + FormatMoneyStatic(offlineEarning);
+                
+            PassiveIncomeText.text = "Coffees were sold, your vault is full! " + FormatMoneyStatic(offlineEarning);
 
             PassiveIncomePanel.SetActive(offlineEarning > 0);
         }
@@ -929,29 +938,4 @@ public class IncomeManager : MonoBehaviour
         }
     }
 
-    private void TriggerNotification(ProductType type)
-    {
-        if (type == ProductType.Tea && teaNotificationIcon != null) teaNotificationIcon.SetActive(true);
-        if (type == ProductType.Coffee && coffeeNotificationIcon != null) coffeeNotificationIcon.SetActive(true);
-        // Diğer tipler için de ekleyebilirsin...
-    }
-
-    public void ClearNotification(int productTypeInt)
-    {
-        ProductType type = (ProductType)productTypeInt;
-
-        // O kategoriye ait tüm ürünleri "görüldü" olarak işaretle
-        foreach (var p in products)
-        {
-            if (p.config.productType == type)
-            {
-                p.isNewlyUnlocked = false;
-                p.hasBeenSeen = true;
-            }
-        }
-
-        // İkonu kapat
-        if (type == ProductType.Tea && teaNotificationIcon != null) teaNotificationIcon.SetActive(false);
-        if (type == ProductType.Coffee && coffeeNotificationIcon != null) coffeeNotificationIcon.SetActive(false);
-    }
 }

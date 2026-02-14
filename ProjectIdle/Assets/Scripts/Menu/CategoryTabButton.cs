@@ -10,9 +10,17 @@ public class CategoryTabButton : MonoBehaviour
 
     public void OnTabClick()
     {
+        // 1. Mevcut Panel Değiştirme Mantığı
         if (menuGroup != null)
         {
             menuGroup.ShowCategory(categoryIndex);
+        }
+
+        // 2. BİLDİRİM SİSTEMİ TETİKLEYİCİSİ (EKLENEN KISIM)
+        // IncomeManager üzerinden bildirimleri temizliyoruz
+        if (IncomeManager.Instance != null)
+        {
+            IncomeManager.Instance.OnMenuTabOpened(categoryIndex);
         }
     }
 }

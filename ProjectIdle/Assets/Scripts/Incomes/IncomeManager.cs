@@ -62,8 +62,10 @@ public class ProductData
     public double GetUpgradeCost()
     {
         if (level == 0) return config.baseUpgradeCost;
+
         double waveOffset = config.costSineAmplitude * Math.Sin((level * config.costSineFrequency) + config.costSinePhase);
-        double effectiveLevel = level + waveOffset;
+        double effectiveLevel = Math.Max(level, level + waveOffset);
+
         return config.baseUpgradeCost * Math.Pow(config.costGrowth, effectiveLevel);
     }
 

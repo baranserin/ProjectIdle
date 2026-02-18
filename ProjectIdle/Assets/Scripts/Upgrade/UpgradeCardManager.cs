@@ -1,13 +1,14 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 [System.Serializable]
 public class UpgradeCardData
 {
     public Sprite objectImage;
     public string objectName;
-    public int price;
+    public double price; // 👈 int'ten double'a çekildi
 
     public ProductType targetType;
     public float multiplier;
@@ -19,11 +20,10 @@ public class UpgradeCardData
     public float imageScale = 0.33f;
 
     [Header("Machine Upgrade")]
-    public bool unlocksMachineForThisType = false; // 👈 Bu kart ilgili türün makinesini açıyor mu?
+    public bool unlocksMachineForThisType = false;
 
     [HideInInspector] public bool isBought = false;
 }
-
 
 public class UpgradeCardManager : MonoBehaviour
 {
@@ -42,39 +42,28 @@ public class UpgradeCardManager : MonoBehaviour
 
     private int currentIndex = 0;
 
-    #region Unity
-
     void Start()
     {
         LoadUpgradesFromSave();
-
         int startIndex = FindFirstAvailableIndex();
         ShowCard(startIndex);
     }
-
-    #endregion
-
-    #region Public UI Methods
 
     public void ShowCard(int index)
     {
         if (index < 0 || index >= upgrades.Length) return;
 
         currentIndex = index;
-
         var upgrade = upgrades[index];
 
-        // Görsel
         objectImageUI.sprite = upgrade.objectImage;
         objectImageUI.SetNativeSize();
         RectTransform rt = objectImageUI.rectTransform;
         rt.anchoredPosition = upgrade.imageOffset;
         rt.localScale = Vector3.one * upgrade.imageScale;
 
-        // İsim & fiyat / durum
         objectNameUI.text = upgrade.objectName;
 
-        // Açıklama textlerini yönet
         foreach (var upg in upgrades)
         {
             if (upg.descriptionText != null)
@@ -88,38 +77,19 @@ public class UpgradeCardManager : MonoBehaviour
         UpdateCardVisual(currentIndex);
     }
 
-    public void NextCard()
-    {
-        if (upgrades.Length == 0) return;
-
-        int nextIndex = (currentIndex + 1) % upgrades.Length;
-        ShowCard(nextIndex);
-    }
-
-    public void PreviousCard()
-    {
-        if (upgrades.Length == 0) return;
-
-        int prevIndex = (currentIndex - 1 + upgrades.Length) % upgrades.Length;
-        ShowCard(prevIndex);
-    }
-
     public void BuyUpgrade()
     {
         var upgrade = upgrades[currentIndex];
 
         if (!IsUnlocked(currentIndex))
         {
-            Debug.Log("❌ Bu upgrade henüz kilitli. Önce önceki upgrade'i satın almalısın.");
+            Debug.Log("❌ Bu upgrade henüz kilitli.");
             return;
         }
 
-        if (upgrade.isBought)
-        {
-            Debug.Log("Upgrade zaten alınmış!");
-            return;
-        }
+        if (upgrade.isBought) return;
 
+        // IncomeManager.totalMoney double olmalı
         if (IncomeManager.Instance.totalMoney >= upgrade.price)
         {
             IncomeManager.Instance.totalMoney -= upgrade.price;
@@ -128,15 +98,12 @@ public class UpgradeCardManager : MonoBehaviour
             upgrade.isBought = true;
             SaveSingleUpgrade(currentIndex);
 
-            // 🔹 Eğer bu bir makine kartıysa, ilgili türün makinesini aç
             if (upgrade.unlocksMachineForThisType && IncomeManager.Instance != null)
             {
                 IncomeManager.Instance.UnlockMachine(upgrade.targetType);
             }
 
-            Debug.Log($"✅ Bought upgrade: {upgrade.objectName}, applied x{upgrade.multiplier} to {upgrade.targetType}");
             IncomeManager.Instance.UpdateUI();
-
             UpdateCardVisual(currentIndex);
 
             int nextIndex = FindFirstAvailableIndex();
@@ -148,10 +115,65 @@ public class UpgradeCardManager : MonoBehaviour
         }
     }
 
+    public void NextCard() { int next = (currentIndex + 1) % upgrades.Length; ShowCard(next); }
+    public void PreviousCard() { int prev = (currentIndex - 1 + upgrades.Length) % upgrades.Length; ShowCard(prev); }
 
-    #endregion
+    private void UpdateCardVisual(int index)
+    {
+        var upgrade = upgrades[index];
+        bool unlocked = IsUnlocked(index);
 
-    #region Visual Helpers
+        if (!unlocked)
+        {
+            priceTextUI.text = "LOCKED";
+            priceTextUI.color = Color.gray;
+            objectImageUI.color = new Color(1f, 1f, 1f, 0.4f);
+            return;
+        }
+
+        objectImageUI.color = Color.white;
+        if (upgrade.isBought)
+        {
+            priceTextUI.text = "BOUGHT";
+            priceTextUI.color = Color.green;
+        }
+        else
+        {
+            // Debug için fiyatın ne geldiğini konsola yazdıralım
+            // Debug.Log($"Card: {upgrade.objectName}, Price: {upgrade.price}");
+
+            priceTextUI.text = FormatMoney(upgrade.price);
+            priceTextUI.color = Color.white;
+        }
+    }
+
+    public string FormatMoney(double amount)
+    {
+        // Eğer miktar 0'dan küçük veya çok yakınsa 0 göster
+        if (amount <= 0) return "0";
+
+        if (amount >= 1e12d) return (amount / 1e12d).ToString("F2") + "T";
+        if (amount >= 1e9d) return (amount / 1e9d).ToString("F2") + "B";
+        if (amount >= 1e6d) return (amount / 1e6d).ToString("F2") + "M";
+        if (amount >= 1e3d) return (amount / 1e3d).ToString("F2") + "K";
+
+        return amount.ToString("F0"); // 1000 altındaki sayılar için virgülsüz
+    }
+
+    private bool IsUnlocked(int index)
+    {
+        if (index <= 0) return true;
+        return upgrades[index - 1].isBought;
+    }
+
+    private int FindFirstAvailableIndex()
+    {
+        for (int i = 0; i < upgrades.Length; i++)
+        {
+            if (IsUnlocked(i) && !upgrades[i].isBought) return i;
+        }
+        return 0;
+    }
 
     void UpdatePageIndicators()
     {
@@ -162,115 +184,31 @@ public class UpgradeCardManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Kartın durumuna göre (kilitli / alınmış / alınmamış) görünümü ayarla.
-    /// </summary>
-    private void UpdateCardVisual(int index)
-    {
-        var upgrade = upgrades[index];
-        bool unlocked = IsUnlocked(index);
+    #region Save & Load
 
-        if (!unlocked)
-        {
-            // Kilitliyse
-            priceTextUI.text = "LOCKED";
-            priceTextUI.color = Color.gray;
-            objectImageUI.color = new Color(1f, 1f, 1f, 0.4f);
-            return;
-        }
-
-        // Kilit açık ama satın alınmamış veya alınmış
-        objectImageUI.color = Color.white;
-
-        if (upgrade.isBought)
-        {
-            priceTextUI.text = "BOUGHT";
-            priceTextUI.color = Color.green;
-        }
-        else
-        {
-            priceTextUI.text = upgrade.price.ToString();
-            priceTextUI.color = Color.white;
-        }
-    }
-
-    #endregion
-
-    #region Unlock Logic (Sırayla açılma)
-
-    /// <summary>
-    /// index = 0 her zaman açık. Diğerleri bir önceki upgrade alındıysa açılır.
-    /// </summary>
-    private bool IsUnlocked(int index)
-    {
-        if (index <= 0) return true;
-        return upgrades[index - 1].isBought;
-    }
-
-    /// <summary>
-    /// İlk uygun (kilidi açık ve satın alınmamış) upgrade indexini bul.
-    /// Hepsi alınmışsa 0'ı döndür.
-    /// </summary>
-    private int FindFirstAvailableIndex()
-    {
-        for (int i = 0; i < upgrades.Length; i++)
-        {
-            if (IsUnlocked(i) && !upgrades[i].isBought)
-                return i;
-        }
-
-        // Hepsi alınmışsa en son kartı gösterebilirsin, ama ben 0'a döndürüyorum.
-        return 0;
-    }
-
-    #endregion
-
-    #region Save & Load (Aldığım upgradeleri kaydet)
-
-    private string GetUpgradeKey(int index)
-    {
-        // İstersen oyun ismi vs ekleyebilirsin: "MyGame_UpgradeBought_" + index
-        return "UpgradeBought_" + index;
-    }
-
-    /// <summary>
-    /// Tüm upgradelerin durumunu PlayerPrefs'ten yükler.
-    /// </summary>
     public void LoadUpgradesFromSave()
     {
         for (int i = 0; i < upgrades.Length; i++)
         {
-            string key = GetUpgradeKey(i);
-            int value = PlayerPrefs.GetInt(key, 0); // 0: alınmamış, 1: alınmış
-            upgrades[i].isBought = (value == 1);
+            upgrades[i].isBought = (PlayerPrefs.GetInt("UpgradeBought_" + i, 0) == 1);
         }
+    }
+
+    private void SaveSingleUpgrade(int index)
+    {
+        PlayerPrefs.SetInt("UpgradeBought_" + index, upgrades[index].isBought ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     public void ResetUpgrades()
     {
-        PlayerPrefs.DeleteAll();
         for (int i = 0; i < upgrades.Length; i++)
         {
             upgrades[i].isBought = false;
-            string key = GetUpgradeKey(i);
-            PlayerPrefs.DeleteKey(key);
+            PlayerPrefs.DeleteKey("UpgradeBought_" + i);
         }
         PlayerPrefs.Save();
-        LoadUpgradesFromSave();
-        currentIndex = 0;
-        // ShowCard zaten UpdateCardVisual'ı kendi içinde çağırıyor
         ShowCard(0);
-    }
-
-    /// <summary>
-    /// Sadece tek bir upgrade'in satın alma durumunu kaydeder.
-    /// Upgrade alınırken çağrıyoruz.
-    /// </summary>
-    private void SaveSingleUpgrade(int index)
-    {
-        string key = GetUpgradeKey(index);
-        PlayerPrefs.SetInt(key, upgrades[index].isBought ? 1 : 0);
-        PlayerPrefs.Save();
     }
 
     #endregion

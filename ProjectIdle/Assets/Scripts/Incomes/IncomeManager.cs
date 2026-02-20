@@ -84,7 +84,7 @@ public class ProductData
         if (IncomeManager.Instance != null)
             decoMul = IncomeManager.Instance.GetEffectiveDecorationMultiplier(config.productType);
 
-        return baseValue * localMul * decoMul;
+        return baseValue * localMul * decoMul * incomeMultiplier;
     }
 
     public void UpdateUI()

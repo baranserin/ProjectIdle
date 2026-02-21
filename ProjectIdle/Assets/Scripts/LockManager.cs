@@ -11,6 +11,9 @@ public class LockData
     public TextMeshProUGUI seviyeTexti;
     public int hedefSeviye;
     public Button acilacakButon;
+
+    [Header("Görsel Saydamlýk Kontrolü")]
+    public LockVisual gorselKontrol; // YENÝ EKLENEN BOÞLUK
 }
 
 public class LockManager : MonoBehaviour
@@ -27,6 +30,11 @@ public class LockManager : MonoBehaviour
             if (kural.acilacakButon != null)
             {
                 kural.acilacakButon.interactable = false;
+            }
+            // Baþlangýçta hedef resmi %50 saydam yap
+            if (kural.gorselKontrol != null)
+            {
+                kural.gorselKontrol.KilitliYap();
             }
         }
     }
@@ -52,6 +60,12 @@ public class LockManager : MonoBehaviour
                         if (kural.acilacakButon != null)
                         {
                             kural.acilacakButon.interactable = true;
+
+                            // 2. Resmin saydamlýðýný kaldýrýp tam görünür yap
+                            if (kural.gorselKontrol != null)
+                            {
+                                kural.gorselKontrol.KilidiAc();
+                            }
                         }
                     }
                 }

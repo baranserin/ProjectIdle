@@ -44,13 +44,16 @@ public class TutorialSystem : MonoBehaviour
     private Vector2 characterHiddenPos;
     private bool listenersRegistered = false;
 
+    // Çoklu buton takibi
+    private HashSet<int> clickedButtonsInStep = new HashSet<int>();
+    private int currentHandTargetIndex = 0;
+
     // ─────────────────────────────────────────
     void Start()
     {
         characterHiddenPos = characterGroup.anchoredPosition;
         RegisterListeners();
 
-        // İlk açılışta tutorial tamamlandıysa kapat
         if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 1)
         {
             CleanupAllUI();
@@ -72,28 +75,32 @@ public class TutorialSystem : MonoBehaviour
         if (restartButton != null)
             restartButton.onClick.AddListener(RestartTutorial);
 
+        // Her step'teki her butona listener ekle
         for (int i = 0; i < tutorialSteps.Count; i++)
         {
-            int idx = i;
-            if (tutorialSteps[i].targetButton != null)
+            int stepIdx = i;
+            List<RectTransform> buttons = tutorialSteps[i].targetButtons;
+            for (int j = 0; j < buttons.Count; j++)
             {
-                Button btn = tutorialSteps[i].targetButton.GetComponent<Button>();
+                int btnIdx = j;
+                if (buttons[j] == null) continue;
+                Button btn = buttons[j].GetComponent<Button>();
                 if (btn != null)
-                    btn.onClick.AddListener(() => OnTargetButtonClicked(idx));
+                    btn.onClick.AddListener(() => OnTargetButtonClicked(stepIdx, btnIdx));
             }
         }
     }
 
     void StartTutorialFromScratch()
     {
-        // State sıfırla
         currentStepIndex = -1;
         currentTextIndex = -1;
         handAnimating = false;
         characterVisible = false;
         isTyping = false;
+        clickedButtonsInStep.Clear();
+        currentHandTargetIndex = 0;
 
-        // UI başlangıç durumu
         characterGroup.anchoredPosition = characterHiddenPos;
         characterGroupCanvas.alpha = 0;
         darkPanel.alpha = 0;
@@ -149,19 +156,56 @@ public class TutorialSystem : MonoBehaviour
     public void OnScreenTapped() => HandleScreenTap();
 
     // ─────────────────────────────────────────
-    void OnTargetButtonClicked(int stepIndex)
+    void OnTargetButtonClicked(int stepIndex, int buttonIndex)
     {
         if (stepIndex != currentStepIndex) return;
         if (characterVisible) return;
 
-        handAnimating = false;
-        handPointer.gameObject.SetActive(false);
+        // Aynı butona tekrar tıklamayı engelle
+        if (clickedButtonsInStep.Contains(buttonIndex)) return;
 
-        int nextStep = currentStepIndex + 1;
-        if (nextStep < tutorialSteps.Count)
-            StartCoroutine(BeginStep(nextStep));
+        clickedButtonsInStep.Add(buttonIndex);
+
+        TutorialStep step = tutorialSteps[currentStepIndex];
+
+        // Tıklanmamış ilk butonu bul
+        int nextUnclicked = -1;
+        for (int i = 0; i < step.targetButtons.Count; i++)
+        {
+            if (!clickedButtonsInStep.Contains(i) && step.targetButtons[i] != null)
+            {
+                nextUnclicked = i;
+                break;
+            }
+        }
+
+        if (nextUnclicked == -1)
+        {
+            // Tüm butonlar tıklandı → sonraki adıma geç
+            handAnimating = false;
+            handPointer.gameObject.SetActive(false);
+
+            int nextStep = currentStepIndex + 1;
+            if (nextStep < tutorialSteps.Count)
+                StartCoroutine(BeginStep(nextStep));
+            else
+                EndTutorial();
+        }
         else
-            EndTutorial();
+        {
+            // El imlecini tıklanmamış sonraki butona taşı
+            currentHandTargetIndex = nextUnclicked;
+            stepStartTime = Time.time;
+
+            bool show = ShouldShowHand(step, nextUnclicked);
+            handPointer.gameObject.SetActive(show);
+            if (show)
+            {
+                Vector2 offset = GetHandOffset(step, nextUnclicked);
+                handPointer.position = step.targetButtons[nextUnclicked].position
+                                       + new Vector3(offset.x, offset.y, 0);
+            }
+        }
     }
 
     // ─────────────────────────────────────────
@@ -169,6 +213,9 @@ public class TutorialSystem : MonoBehaviour
     {
         currentStepIndex = stepIndex;
         currentTextIndex = 0;
+        clickedButtonsInStep.Clear();
+        currentHandTargetIndex = 0;
+
         TutorialStep step = tutorialSteps[stepIndex];
 
         yield return StartCoroutine(ShowCharacter());
@@ -218,7 +265,6 @@ public class TutorialSystem : MonoBehaviour
         if (tutorialText != null)
             tutorialText.gameObject.SetActive(false);
 
-        // Karakter fade out
         float t = 0;
         while (t < fadeDuration)
         {
@@ -228,22 +274,67 @@ public class TutorialSystem : MonoBehaviour
         }
         characterGroupCanvas.alpha = 0;
 
-        // Dark panel fade out
         yield return FadeCanvasGroup(darkPanel, 0.6f, 0, fadeDuration);
 
         darkPanel.gameObject.SetActive(false);
         characterGroup.gameObject.SetActive(false);
         characterGroup.anchoredPosition = characterHiddenPos;
 
-        // El pointer
+        // İlk tıklanabilir butona el imlecini yerleştir
         TutorialStep step = tutorialSteps[currentStepIndex];
-        if (step.targetButton != null)
+        currentHandTargetIndex = 0;
+
+        if (step.targetButtons != null && step.targetButtons.Count > 0 && step.targetButtons[0] != null)
         {
-            handPointer.gameObject.SetActive(true);
-            handPointer.position = step.targetButton.position + new Vector3(step.handPosition.x, step.handPosition.y, 0);
+            bool show = ShouldShowHand(step, 0);
+            handPointer.gameObject.SetActive(show);
+            if (show)
+            {
+                Vector2 offset = GetHandOffset(step, 0);
+                handPointer.position = step.targetButtons[0].position + new Vector3(offset.x, offset.y, 0);
+            }
             stepStartTime = Time.time;
             handAnimating = true;
         }
+    }
+
+    // ─────────────────────────────────────────
+    /// <summary>
+    /// Belirtilen buton için hand offset'ini döner.
+    /// handPositions listesinde bu indeks varsa onu, yoksa genel handPosition'ı kullanır.
+    /// </summary>
+    Vector2 GetHandOffset(TutorialStep step, int btnIndex)
+    {
+        if (step.handPositions != null && btnIndex < step.handPositions.Count)
+            return step.handPositions[btnIndex];
+        return step.handPosition;
+    }
+
+    /// <summary>
+    /// showHand listesinde bu indeks tanımlıysa ona bakar, tanımlı değilse varsayılan olarak true döner.
+    /// </summary>
+    bool ShouldShowHand(TutorialStep step, int btnIndex)
+    {
+        if (step.showHand != null && btnIndex < step.showHand.Count)
+            return step.showHand[btnIndex];
+        return true; // liste eksikse varsayılan: göster
+    }
+
+    void AnimateHand(TutorialStep step)
+    {
+        if (currentHandTargetIndex >= step.targetButtons.Count) return;
+        RectTransform target = step.targetButtons[currentHandTargetIndex];
+        if (target == null) return;
+
+        // Bu buton için hand gizliyse animasyon yapma
+        if (!ShouldShowHand(step, currentHandTargetIndex)) return;
+
+        float elapsed = Time.time - stepStartTime;
+        Vector2 offset = GetHandOffset(step, currentHandTargetIndex);
+        float xExtra = step.animateHorizontal ? Mathf.Sin(elapsed * handSpeed) * handMoveDistance : 0f;
+        float yExtra = step.animateVertical ? -Mathf.Sin(elapsed * handSpeed) * handMoveDistance : 0f;
+
+        handPointer.position = target.position + new Vector3(offset.x + xExtra, offset.y + yExtra, 0);
     }
 
     // ─────────────────────────────────────────
@@ -253,17 +344,10 @@ public class TutorialSystem : MonoBehaviour
         handAnimating = false;
         characterVisible = false;
         isTyping = false;
+        clickedButtonsInStep.Clear();
 
-        if (darkPanel != null)
-        {
-            darkPanel.alpha = 0;
-            darkPanel.gameObject.SetActive(false);
-        }
-        if (characterGroup != null)
-        {
-            characterGroup.gameObject.SetActive(false);
-            characterGroup.anchoredPosition = characterHiddenPos;
-        }
+        if (darkPanel != null) { darkPanel.alpha = 0; darkPanel.gameObject.SetActive(false); }
+        if (characterGroup != null) { characterGroup.gameObject.SetActive(false); characterGroup.anchoredPosition = characterHiddenPos; }
         if (characterGroupCanvas != null) characterGroupCanvas.alpha = 0;
         if (handPointer != null) handPointer.gameObject.SetActive(false);
         if (tutorialText != null) { tutorialText.text = ""; tutorialText.gameObject.SetActive(false); }
@@ -274,11 +358,7 @@ public class TutorialSystem : MonoBehaviour
     {
         PlayerPrefs.DeleteKey("TutorialCompleted");
         PlayerPrefs.Save();
-
-        // Tutorial GameObject'i aktifleştir (kapalıysa)
         gameObject.SetActive(true);
-
-        // Listener'lar zaten kayıtlı, tekrar ekleme
         StartTutorialFromScratch();
     }
 
@@ -300,15 +380,6 @@ public class TutorialSystem : MonoBehaviour
     }
 
     // ─────────────────────────────────────────
-    void AnimateHand(TutorialStep step)
-    {
-        float elapsed = Time.time - stepStartTime;
-        float offset = Mathf.Sin(elapsed * handSpeed) * handMoveDistance;
-        float x = step.handPosition.x + (step.animateHorizontal ? offset : 0);
-        float y = step.handPosition.y + (step.animateVertical ? -offset : 0);
-        handPointer.position = step.targetButton.position + new Vector3(x, y, 0);
-    }
-
     IEnumerator TypeText(string fullText)
     {
         isTyping = true;
@@ -328,10 +399,8 @@ public class TutorialSystem : MonoBehaviour
 
     bool IsScreenPressed()
     {
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            return true;
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-            return true;
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) return true;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) return true;
         return false;
     }
 
@@ -352,14 +421,21 @@ public class TutorialSystem : MonoBehaviour
 [System.Serializable]
 public class TutorialStep
 {
-    public RectTransform targetButton;
+    [Header("Hedef Butonlar (hepsi tıklanmalı)")]
+    public List<RectTransform> targetButtons = new List<RectTransform>();
 
     [Header("Bu Stepin Yazilari (sirayla gosterilir)")]
     [TextArea(2, 6)]
     public List<string> texts = new List<string>();
 
-    [Header("El Konumu (butona gore offset)")]
+    [Header("Genel El Konumu (butona gore offset) — tek buton varsa bu yeterli")]
     public Vector2 handPosition = new Vector2(0f, 0f);
+
+    [Header("Her Butona Ozel El Konumu (opsiyonel, targetButtons sirasiyla eslesmeli)")]
+    public List<Vector2> handPositions = new List<Vector2>();
+
+    [Header("Her Buton Icin Hand Goster mi? (targetButtons sirasiyla eslesmeli)")]
+    public List<bool> showHand = new List<bool>();
 
     [Header("El Animasyon Yonu")]
     public bool animateHorizontal = true;

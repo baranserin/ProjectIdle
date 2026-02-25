@@ -16,10 +16,11 @@ MonoBehaviour:
   m_GUID: 9360ac9ad3ae83d4ba0af6b88c3901d5
   m_SerializeEntries:
   - m_GUID: 05e479c3e9144a8469b6838e2d774259
-    m_Address: "Men\xFCAdlar\u0131_en"
+    m_Address: Game_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: e133a33c146c80247b79ffeeac099a3c, type: 2}

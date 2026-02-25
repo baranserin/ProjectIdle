@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
-  m_Name: "Men\xFCAdlar\u0131"
+  m_Name: Game
   m_EditorClassIdentifier: 
   m_SharedTableData: {fileID: 11400000, guid: cf68a53dea1c33a4dbd2d56158295b96, type: 2}
   m_Tables:

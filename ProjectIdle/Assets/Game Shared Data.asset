@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: "Men\xFCAdlar\u0131 Shared Data"
+  m_Name: Game Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: "Men\xFCAdlar\u0131"
+  m_TableCollectionName: Game
   m_TableCollectionNameGuidString: cf68a53dea1c33a4dbd2d56158295b96
   m_Entries:
-  - m_Id: 930766807040
-    m_Key: CafeMenuName
+  - m_Id: 2166189136961536
+    m_Key: New Entry
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: 9.Fennel
   m_EditorClassIdentifier: 
   productName: Fennel
-  baseUpgradeCost: 1000000
+  baseUpgradeCost: 4e+9
   costGrowth: 1.18
   baseIncome: 7500
   incomeGrowth: 1.09
-  incomeSineAmplitude: 2
-  incomeSineFrequency: 0.5
-  costSineAmplitude: 2
-  costSineFrequency: 0.3
+  incomeSineAmplitude: 1
+  incomeSineFrequency: 0.2
+  costSineAmplitude: 1.4
+  costSineFrequency: 0.18
   costSinePhase: 1.5707963267948966
   baseLevel: 0
   icon: {fileID: 0}

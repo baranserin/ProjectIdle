@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 2.Orange Tea
   m_EditorClassIdentifier: 
   productName: Orange Tea
-  baseUpgradeCost: 25
+  baseUpgradeCost: 30
   costGrowth: 1.12
   baseIncome: 4
   incomeGrowth: 1.07
-  incomeSineAmplitude: 1
-  incomeSineFrequency: 0.5
-  costSineAmplitude: 2
+  incomeSineAmplitude: 0.3
+  incomeSineFrequency: 0.35
+  costSineAmplitude: 0.6
   costSineFrequency: 0.3
   costSinePhase: 1.5707963267948966
   baseLevel: 0

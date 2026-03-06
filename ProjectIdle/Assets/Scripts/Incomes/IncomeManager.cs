@@ -197,9 +197,10 @@ public class IncomeManager : MonoBehaviour
     [Header("Income")]
     public double income;
     public GameObject PassiveIncomePanel;
-
     public void CheckUnlocks()
     {
+        bool notificationStateChanged = false;
+
         for (int i = 0; i < products.Count; i++)
         {
             var product = products[i];
@@ -207,21 +208,20 @@ public class IncomeManager : MonoBehaviour
 
             bool currentlyUnlocked = IsProductUnlocked(product);
 
-            // KRİTİK DÜZELTME: 
-            // 1. Ürün şu an kilitli değilse (Unlocked)
-            // 2. VE UI objesi henüz kapalıysa (İlk defa açılıyorsa)
-            // 3. VE Oyuncu bu bildirimi henüz görmediyse (hasBeenSeen == false)
-            if (currentlyUnlocked && !product.uiObject.activeSelf && !product.hasBeenSeen)
+            // KRİTİK DÜZELTME: Sadece unlocked ve görülmemiş olmasına bakıyoruz.
+            if (currentlyUnlocked && !product.hasBeenSeen)
             {
                 product.isNewlyUnlocked = true;
-
-                if (NotificationManager.Instance != null)
-                {
-                    NotificationManager.Instance.SetNotificationUI(product.config.productType, true);
-                }
+                notificationStateChanged = true;
             }
 
             product.uiObject.SetActive(currentlyUnlocked);
+        }
+
+        // Yeni açılan bir ürün varsa sistemi taramaya zorla
+        if (notificationStateChanged && NotificationManager.Instance != null)
+        {
+            NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
         }
     }
     // UI Butonlarından (Tab/Menü geçişleri) çağıracağın yeni metod
@@ -229,8 +229,11 @@ public class IncomeManager : MonoBehaviour
     {
         if (NotificationManager.Instance != null)
         {
-            // NotificationManager artık hem listeyi güncelliyor hem de 2 iconu kapatıyor
-            NotificationManager.Instance.ClearNotification(productTypeInt, products);
+            // İlgili kategorinin türünü belirle
+            ProductType type = (ProductType)productTypeInt;
+
+            // Yeni sisteme göre "Görüldü" olarak işaretle
+            NotificationManager.Instance.MarkCategoryAsSeen(type, products);
         }
     }
 
@@ -541,20 +544,24 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
         SaveData();
     }
-
     public void SaveData()
     {
         for (int i = 0; i < products.Count; i++)
         {
             PlayerPrefs.SetInt($"Product_{i}_Level", products[i].level);
-            PlayerPrefs.SetFloat($"Product_{i}_Multiplier", products[i].incomeMultiplier); // Bu satır artık hata vermeyecek
+            PlayerPrefs.SetFloat($"Product_{i}_Multiplier", products[i].incomeMultiplier);
+            // DÜZELTME: Bu satır for döngüsünün İÇİNDE olmalı
+            PlayerPrefs.SetInt($"Product_{i}_Seen", products[i].hasBeenSeen ? 1 : 0);
         }
+
         PlayerPrefs.SetString("TotalMoney", totalMoney.ToString());
         PlayerPrefs.SetString("PrestigeMultiplier", prestigeMultiplier.ToString());
         PlayerPrefs.SetInt("PrestigeLevel", prestigeLevel);
         PlayerPrefs.SetFloat("GlobalIncomeMultiplier", globalIncomeMultiplier);
+
         string timeNow = DateTime.Now.ToString("O");
         PlayerPrefs.SetString("lastExitTime", timeNow);
+
         PlayerPrefs.Save();
     }
 
@@ -577,7 +584,14 @@ public class IncomeManager : MonoBehaviour
             // Çarpan Yükleme (Kartlar veya özel geliştirmeler için)
             string multiplierKey = $"Product_{i}_Multiplier";
             products[i].incomeMultiplier = PlayerPrefs.GetFloat(multiplierKey, 1f);
-        }
+
+            string seenKey = $"Product_{i}_Seen";
+            if (PlayerPrefs.HasKey(seenKey))
+            {
+                products[i].hasBeenSeen = PlayerPrefs.GetInt(seenKey) == 1;
+                products[i].isNewlyUnlocked = !products[i].hasBeenSeen; // Görüldü değilse newlyUnlocked'dır.
+            }
+        } // DÜZELTME: Kapanmayan for döngüsü parantezi buraya eklendi!
 
         // 2. Genel Ekonomik Verileri Yükle
         // InvariantCulture kullanarak farklı cihaz dillerinde oluşabilecek nokta/virgül hatasını önlüyoruz
@@ -604,7 +618,7 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
 
         Debug.Log("<color=green>✅ Veriler başarıyla yüklendi.</color>");
-    } 
+    }
 
 
     public void InactiveIncome()

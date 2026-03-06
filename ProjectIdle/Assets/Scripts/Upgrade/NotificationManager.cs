@@ -29,39 +29,42 @@ public class NotificationManager : MonoBehaviour
         Instance = this;
     }
 
-    // Bildirimleri sadece açıp kapatan temel fonksiyon
-    public void SetNotificationUI(ProductType type, bool state)
+    // Tüm listeyi tarar ve gerçekten görülmemiş ürün varsa sadece o menünün bildirimini yakar
+    public void CheckAndUpdateAllNotifications(List<ProductData> allProducts)
     {
-        switch (type)
+        bool hasNewTea = false;
+        bool hasNewCoffee = false;
+        bool hasNewDessert = false;
+
+        foreach (var p in allProducts)
         {
-            case ProductType.Tea:
-                teaNotifications.SetActive(state);
-                break;
-            case ProductType.Coffee:
-                coffeeNotifications.SetActive(state);
-                break;
-            case ProductType.Dessert:
-                dessertNotifications.SetActive(state);
-                break;
+            // Ürün açık ama henüz görülmediyse (UI'da yeni ise)
+            if (p.isNewlyUnlocked && !p.hasBeenSeen)
+            {
+                if (p.config.productType == ProductType.Tea) hasNewTea = true;
+                else if (p.config.productType == ProductType.Coffee) hasNewCoffee = true;
+                else if (p.config.productType == ProductType.Dessert) hasNewDessert = true;
+            }
         }
+
+        teaNotifications.SetActive(hasNewTea);
+        coffeeNotifications.SetActive(hasNewCoffee);
+        dessertNotifications.SetActive(hasNewDessert);
     }
 
-    // Ürünleri "görüldü" olarak işaretleyen ve UI'ı kapatan fonksiyon (Eskiden IncomeManager'daydı)
-    public void ClearNotification(int productTypeInt, List<ProductData> products)
+    // Menüye tıklandığında o kategoriyi komple "Görüldü" olarak işaretler
+    public void MarkCategoryAsSeen(ProductType type, List<ProductData> allProducts)
     {
-        ProductType type = (ProductType)productTypeInt;
-
-        // O kategoriye ait ürünlerin durumunu güncelle
-        foreach (var p in products)
+        foreach (var p in allProducts)
         {
-            if (p.config.productType == type)
+            if (p.config.productType == type && p.isNewlyUnlocked)
             {
                 p.isNewlyUnlocked = false;
                 p.hasBeenSeen = true;
             }
         }
 
-        // UI ikonlarını söndür
-        SetNotificationUI(type, false);
+        // Durumlar güncellendikten sonra UI'ı tekrar check et ve kapatılması gerekenleri kapat
+        CheckAndUpdateAllNotifications(allProducts);
     }
 }

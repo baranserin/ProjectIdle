@@ -8,8 +8,9 @@ public class UpgradeCardData
 {
     public Sprite objectImage;
     public string objectName;
-    public double price; // 👈 int'ten double'a çekildi
-
+    public double price;
+    [HideInInspector] public double snapshotPrice;
+    [HideInInspector] public bool snapshotInitialized = false;
     public ProductType targetType;
     public float multiplier;
 
@@ -76,7 +77,30 @@ public class UpgradeCardManager : MonoBehaviour
         UpdatePageIndicators();
         UpdateCardVisual(currentIndex);
     }
+    double GetSnapshotPrice(int index)
+    {
+        var upgrade = upgrades[index];
 
+        if (upgrade.snapshotInitialized)
+            return upgrade.snapshotPrice;
+
+        double categoryIncome = IncomeManager.Instance.GetCategoryIncome(upgrade.targetType);
+
+        double[] targetSeconds =
+        {
+        60,120,300,600,1200,
+        2400,4800,9000,18000,36000
+    };
+
+        double price = categoryIncome * targetSeconds[index];
+
+        upgrade.snapshotPrice = price;
+        upgrade.snapshotInitialized = true;
+
+        PlayerPrefs.SetString("UpgradeSnapshot_" + index, price.ToString());
+
+        return price;
+    }
     public void BuyUpgrade()
     {
         var upgrade = upgrades[currentIndex];
@@ -89,10 +113,10 @@ public class UpgradeCardManager : MonoBehaviour
 
         if (upgrade.isBought) return;
 
-        // IncomeManager.totalMoney double olmalı
-        if (IncomeManager.Instance.totalMoney >= upgrade.price)
+        double price = GetSnapshotPrice(currentIndex);
+        if (IncomeManager.Instance.totalMoney >= price)
         {
-            IncomeManager.Instance.totalMoney -= upgrade.price;
+            IncomeManager.Instance.totalMoney -= price;
             IncomeManager.Instance.ApplyCategoryUpgrade(upgrade.targetType, upgrade.multiplier);
 
             upgrade.isBought = true;
@@ -142,7 +166,8 @@ public class UpgradeCardManager : MonoBehaviour
             // Debug için fiyatın ne geldiğini konsola yazdıralım
             // Debug.Log($"Card: {upgrade.objectName}, Price: {upgrade.price}");
 
-            priceTextUI.text = FormatMoney(upgrade.price);
+            double price = GetSnapshotPrice(index);
+            priceTextUI.text = FormatMoney(price);
             priceTextUI.color = Color.white;
         }
     }
@@ -188,9 +213,17 @@ public class UpgradeCardManager : MonoBehaviour
 
     public void LoadUpgradesFromSave()
     {
+        
         for (int i = 0; i < upgrades.Length; i++)
         {
             upgrades[i].isBought = (PlayerPrefs.GetInt("UpgradeBought_" + i, 0) == 1);
+            string key = "UpgradeSnapshot_" + i;
+
+            if (PlayerPrefs.HasKey(key))
+            {
+                upgrades[i].snapshotPrice = double.Parse(PlayerPrefs.GetString(key));
+                upgrades[i].snapshotInitialized = true;
+            }
         }
     }
 

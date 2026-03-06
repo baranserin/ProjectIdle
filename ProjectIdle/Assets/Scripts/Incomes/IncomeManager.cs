@@ -355,6 +355,20 @@ public class IncomeManager : MonoBehaviour
 
         return total;
     }
+    public double GetCategoryIncome(ProductType type)
+    {
+        double total = 0;
+
+        foreach (var p in products)
+        {
+            if (p.config.productType == type)
+            {
+                total += p.GetIncome();
+            }
+        }
+
+        return total;
+    }
 
     public void AddMoney(double amount)
     {
@@ -362,16 +376,18 @@ public class IncomeManager : MonoBehaviour
         UpdateUI();
     }
 
-    
-
     public int CalculateMaxBuyableLevels(ProductData p)
     {
         int maxLevels = 0;
         double availableMoney = totalMoney;
 
+        int originalLevel = p.level;
+
         while (true)
         {
-            double cost = p.config.baseUpgradeCost * Math.Pow(p.config.costGrowth, p.level + maxLevels);
+            p.level = originalLevel + maxLevels;
+            double cost = p.GetUpgradeCost();
+
             if (availableMoney >= cost)
             {
                 availableMoney -= cost;
@@ -380,16 +396,25 @@ public class IncomeManager : MonoBehaviour
             else break;
         }
 
+        p.level = originalLevel;
+
         return maxLevels;
     }
 
     public double CalculateTotalCost(ProductData p, int levelsToBuy)
     {
         double totalCost = 0;
+
+        int originalLevel = p.level;
+
         for (int i = 0; i < levelsToBuy; i++)
         {
-            totalCost += p.config.baseUpgradeCost * Math.Pow(p.config.costGrowth, p.level + i);
+            p.level = originalLevel + i;
+            totalCost += p.GetUpgradeCost();
         }
+
+        p.level = originalLevel;
+
         return totalCost;
     }
 

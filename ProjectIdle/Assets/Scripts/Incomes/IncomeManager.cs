@@ -197,6 +197,7 @@ public class IncomeManager : MonoBehaviour
     [Header("Income")]
     public double income;
     public GameObject PassiveIncomePanel;
+
     public void CheckUnlocks()
     {
         bool notificationStateChanged = false;
@@ -208,20 +209,29 @@ public class IncomeManager : MonoBehaviour
 
             bool currentlyUnlocked = IsProductUnlocked(product);
 
-            // KRİTİK DÜZELTME: Sadece unlocked ve görülmemiş olmasına bakıyoruz.
+            // Sadece unlocked ve görülmemiş olmasına bakıyoruz.
             if (currentlyUnlocked && !product.hasBeenSeen)
             {
                 product.isNewlyUnlocked = true;
                 notificationStateChanged = true;
+                Debug.Log($"<color=orange>[BİLDİRİM]</color> {product.config.productName} açıldı ama görülmedi! Bildirim tetikleniyor.");
             }
 
             product.uiObject.SetActive(currentlyUnlocked);
         }
 
         // Yeni açılan bir ürün varsa sistemi taramaya zorla
-        if (notificationStateChanged && NotificationManager.Instance != null)
+        if (notificationStateChanged)
         {
-            NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
+            if (NotificationManager.Instance != null)
+            {
+                Debug.Log("<color=yellow>[BİLDİRİM]</color> UI güncellenmesi için NotificationManager çağrılıyor...");
+                NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
+            }
+            else
+            {
+                Debug.LogError("<color=red>[HATA]</color> NotificationManager.Instance BULUNAMADI! Sahnede bu scriptin çalıştığından emin ol.");
+            }
         }
     }
     // UI Butonlarından (Tab/Menü geçişleri) çağıracağın yeni metod

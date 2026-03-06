@@ -323,15 +323,16 @@ public class IncomeManager : MonoBehaviour
     public void ResetAllData()
     {
         PlayerPrefs.DeleteAll();
-
         unlockedMachines.Clear();
-
         PlayerPrefs.Save();
 
         foreach (var p in products)
         {
             p.level = p.config.baseLevel;
             p.incomeMultiplier = 1f;
+            // EKLENEN İKİ SATIR: Veriler sıfırlanınca bildirim durumları da başa dönsün
+            p.hasBeenSeen = false;
+            p.isNewlyUnlocked = false;
         }
 
         totalMoney = 110f;
@@ -341,16 +342,13 @@ public class IncomeManager : MonoBehaviour
             decorationIncome.ResetDecorations();
 
         ActivateLocks();
-
         LoadMachineStates();
-
         SyncMachineProductUIs();
 
         if (upgradeCardManager != null)
             upgradeCardManager.ResetUpgrades();
 
         UpdateUI();
-
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
 
@@ -599,7 +597,6 @@ public class IncomeManager : MonoBehaviour
             if (PlayerPrefs.HasKey(seenKey))
             {
                 products[i].hasBeenSeen = PlayerPrefs.GetInt(seenKey) == 1;
-                products[i].isNewlyUnlocked = !products[i].hasBeenSeen; // Görüldü değilse newlyUnlocked'dır.
             }
         } // DÜZELTME: Kapanmayan for döngüsü parantezi buraya eklendi!
 

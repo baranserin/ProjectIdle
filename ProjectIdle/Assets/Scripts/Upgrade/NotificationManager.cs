@@ -29,16 +29,17 @@ public class NotificationManager : MonoBehaviour
         Instance = this;
     }
 
-    // Tüm listeyi tarar ve gerçekten görülmemiş ürün varsa sadece o menünün bildirimini yakar
     public void CheckAndUpdateAllNotifications(List<ProductData> allProducts)
     {
-        bool hasNewTea = false;
-        bool hasNewCoffee = false;
-        bool hasNewDessert = false;
+        // 1. ÖNCE MAKİNELERİ KONTROL ET: Paramız kapalı bir makineye yetiyor mu?
+        bool hasNewTea = IncomeManager.Instance != null && IncomeManager.Instance.CanAffordMachine(ProductType.Tea);
+        bool hasNewCoffee = IncomeManager.Instance != null && IncomeManager.Instance.CanAffordMachine(ProductType.Coffee);
+        bool hasNewDessert = IncomeManager.Instance != null && IncomeManager.Instance.CanAffordMachine(ProductType.Dessert);
 
+        // 2. SONRA ÜRÜNLERİ KONTROL ET: Yeni açılmış ve görülmemiş ürün var mı?
+        // (Eğer makineden dolayı true olduysa, true kalmaya devam eder)
         foreach (var p in allProducts)
         {
-            // Ürün açık ama henüz görülmediyse (UI'da yeni ise)
             if (p.isNewlyUnlocked && !p.hasBeenSeen)
             {
                 if (p.config.productType == ProductType.Tea) hasNewTea = true;
@@ -47,11 +48,11 @@ public class NotificationManager : MonoBehaviour
             }
         }
 
+        // 3. SONUCA GÖRE İKONLARI YAK VEYA SÖNDÜR
         teaNotifications.SetActive(hasNewTea);
         coffeeNotifications.SetActive(hasNewCoffee);
         dessertNotifications.SetActive(hasNewDessert);
     }
-
     // Menüye tıklandığında o kategoriyi komple "Görüldü" olarak işaretler
     public void MarkCategoryAsSeen(ProductType type, List<ProductData> allProducts)
     {

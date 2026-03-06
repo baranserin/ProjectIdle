@@ -315,7 +315,11 @@ public class IncomeManager : MonoBehaviour
 
         if (incomeText != null)
             incomeText.text = FormatMoneyStatic(income) + "/s";
-
+        // --- YENİ EKLENEN KISIM: Her saniye makine bildirimlerini kontrol et ---
+        if (NotificationManager.Instance != null)
+        {
+            NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
+        }
         RefreshUpgradeArrows();
         UpdateUI();
     }
@@ -597,6 +601,7 @@ public class IncomeManager : MonoBehaviour
             if (PlayerPrefs.HasKey(seenKey))
             {
                 products[i].hasBeenSeen = PlayerPrefs.GetInt(seenKey) == 1;
+
             }
         } // DÜZELTME: Kapanmayan for döngüsü parantezi buraya eklendi!
 
@@ -932,7 +937,6 @@ public class IncomeManager : MonoBehaviour
         }
     }
 
-
     // Bunlar artık BuyMachine metoduna listenin kaçıncı elemanı olduğunu gönderiyor
     public void BuyTea() => BuyMachine(0);      // Liste başında Tea varsa
     public void BuyCoffee() => BuyMachine(1);   // İkinci sırada Coffee varsa
@@ -963,7 +967,6 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
-
     // Reset kısmında kullanılacak
     private void ActivateLocks()
     {
@@ -974,11 +977,9 @@ public class IncomeManager : MonoBehaviour
         }
     }
 
-    // IncomeManager.cs içinde
     public void RefreshUpgradeArrows()
     {
         // Panel objesini bul ve onun içindeki UpdateUpgradeArrow fonksiyonunu tetikle
-        // (Panel kapalı olsa bile çalışması için)
         var panel = FindObjectOfType<ProductPurchasePanel>(true);
         if (panel != null)
         {
@@ -986,4 +987,17 @@ public class IncomeManager : MonoBehaviour
         }
     }
 
+    // Paramızın henüz açılmamış bir makineye yetip yetmediğini kontrol eder
+    public bool CanAffordMachine(ProductType type)
+    {
+        foreach (var m in machineLocks)
+        {
+            // Eğer o türde bir makine varsa, henüz AÇILMAMIŞSA ve paramız YETİYORSA
+            if (m.type == type && !IsMachineUnlocked(type) && totalMoney >= m.price)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

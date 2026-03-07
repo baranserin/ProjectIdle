@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Text.RegularExpressions;
-using System.Collections.Generic; // Liste yapýsýný kullanabilmek için gerekli
+using System.Collections.Generic; // Liste yapï¿½sï¿½nï¿½ kullanabilmek iï¿½in gerekli
 
-// Unity Inspector'da gruplar halinde görünmesini saðlayacak özel veri yapýmýz
+// Unity Inspector'da gruplar halinde gï¿½rï¿½nmesini saï¿½layacak ï¿½zel veri yapï¿½mï¿½z
 [System.Serializable]
 public class LockData
 {
@@ -12,26 +12,26 @@ public class LockData
     public int hedefSeviye;
     public Button acilacakButon;
 
-    [Header("Görsel Saydamlýk Kontrolü")]
-    public LockVisual gorselKontrol; // YENÝ EKLENEN BOÞLUK
+    [Header("Gï¿½rsel Saydamlï¿½k Kontrolï¿½")]
+    public LockVisual gorselKontrol; // YENï¿½ EKLENEN BOï¿½LUK
 }
 
 public class LockManager : MonoBehaviour
 {
-    [Header("Kilit Açma Kurallarý (Artý butonuna basarak ekle)")]
-    // LockData taslaðýmýzdan oluþan sonsuz uzunlukta bir liste
+    [Header("Kilit Aï¿½ma Kurallarï¿½ (Artï¿½ butonuna basarak ekle)")]
+    // LockData taslaï¿½ï¿½mï¿½zdan oluï¿½an sonsuz uzunlukta bir liste
     public List<LockData> kilitKurallari;
 
     void Start()
     {
-        // Oyun baþladýðýnda listedeki tüm butonlarý otomatik olarak kilitler
+        // Oyun baï¿½ladï¿½ï¿½ï¿½nda listedeki tï¿½m butonlarï¿½ otomatik olarak kilitler
         foreach (var kural in kilitKurallari)
         {
             if (kural.acilacakButon != null)
             {
                 kural.acilacakButon.interactable = false;
             }
-            // Baþlangýçta hedef resmi %50 saydam yap
+            // Baï¿½langï¿½ï¿½ta hedef resmi %50 saydam yap
             if (kural.gorselKontrol != null)
             {
                 kural.gorselKontrol.KilitliYap();
@@ -39,10 +39,10 @@ public class LockManager : MonoBehaviour
         }
     }
 
-    // Bu fonksiyonu ürünlerin "Upgrade" butonlarýna baðlayacaksýn
+    // Bu fonksiyonu ï¿½rï¿½nlerin "Upgrade" butonlarï¿½na baï¿½layacaksï¿½n
     public void SeviyeleriKontrolEt()
     {
-        // Týklama yapýldýðýnda listedeki bütün kurallarý tek tek kontrol et
+        // Tï¿½klama yapï¿½ldï¿½ï¿½ï¿½nda listedeki bï¿½tï¿½n kurallarï¿½ tek tek kontrol et
         foreach (var kural in kilitKurallari)
         {
             if (kural.seviyeTexti != null)
@@ -54,14 +54,14 @@ public class LockManager : MonoBehaviour
                 {
                     int gercekSeviye = int.Parse(sadeceSayi);
 
-                    // Hedef seviyeye ulaþýldýysa veya geçildiyse kilidi aç
+                    // Hedef seviyeye ulaï¿½ï¿½ldï¿½ysa veya geï¿½ildiyse kilidi aï¿½
                     if (gercekSeviye >= kural.hedefSeviye)
                     {
                         if (kural.acilacakButon != null)
                         {
                             kural.acilacakButon.interactable = true;
 
-                            // 2. Resmin saydamlýðýný kaldýrýp tam görünür yap
+                            // 2. Resmin saydamlï¿½ï¿½ï¿½nï¿½ kaldï¿½rï¿½p tam gï¿½rï¿½nï¿½r yap
                             if (kural.gorselKontrol != null)
                             {
                                 kural.gorselKontrol.KilidiAc();

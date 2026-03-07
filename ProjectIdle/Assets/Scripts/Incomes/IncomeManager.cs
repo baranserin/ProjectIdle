@@ -144,6 +144,7 @@ public class MachineLockData
     public GameObject buyButton;
     public TextMeshProUGUI priceText;
     public GameObject firstProductUI;
+    [NonSerialized] public bool hasBeenSeen = false; //Makineyi alabileceğini bir kez gördü mü?
 }
 #endregion
 
@@ -234,16 +235,56 @@ public class IncomeManager : MonoBehaviour
             }
         }
     }
-    // UI Butonlarından (Tab/Menü geçişleri) çağıracağın yeni metod
     public void OnMenuTabOpened(int productTypeInt)
     {
         if (NotificationManager.Instance != null)
         {
-            // İlgili kategorinin türünü belirle
             ProductType type = (ProductType)productTypeInt;
 
-            // Yeni sisteme göre "Görüldü" olarak işaretle
-            NotificationManager.Instance.MarkCategoryAsSeen(type, products);
+            // 1. SADECE MAKİNELERİ GÖRÜLDÜ YAP
+            foreach (var m in machineLocks)
+            {
+                if (m.type == type && !IsMachineUnlocked(type) && totalMoney >= m.price)
+                {
+                    bool isButtonInteractable = true;
+                    if (m.buyButton != null)
+                    {
+                        UnityEngine.UI.Button btn = m.buyButton.GetComponent<UnityEngine.UI.Button>();
+                        if (btn != null && !btn.interactable)
+                        {
+                            isButtonInteractable = false;
+                        }
+                    }
+
+                    if (isButtonInteractable)
+                    {
+                        m.hasBeenSeen = true;
+                    }
+                }
+            }
+
+            // 2. ÜRÜNLERİ (İTEMLERİ) SİLMİYORUZ! Sadece ışıkları tekrar hesaplatıyoruz.
+            // Eğer o menüde hâlâ görülmemiş bir item varsa, ışık yanmaya devam edecek!
+            NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
+        }
+    }
+
+    public void MarkProductAsSeen(int index)
+    {
+        if (index >= 0 && index < products.Count)
+        {
+            var p = products[index];
+            if (p.isNewlyUnlocked || !p.hasBeenSeen)
+            {
+                p.isNewlyUnlocked = false;
+                p.hasBeenSeen = true;
+
+                // Ürün de görüldüğü için ışıkları son kez kontrol et (Başka kilitli şey kalmadıysa ışık söner)
+                if (NotificationManager.Instance != null)
+                {
+                    NotificationManager.Instance.CheckAndUpdateAllNotifications(products);
+                }
+            }
         }
     }
 
@@ -352,6 +393,11 @@ public class IncomeManager : MonoBehaviour
         if (upgradeCardManager != null)
             upgradeCardManager.ResetUpgrades();
 
+        // Makinelerin görülme durumunu sıfırla
+        foreach (var m in machineLocks)
+        {
+            m.hasBeenSeen = false;
+        }
         UpdateUI();
         Debug.Log("🔁 ResetAllData tamamlandı.");
     }
@@ -573,6 +619,11 @@ public class IncomeManager : MonoBehaviour
 
         string timeNow = DateTime.Now.ToString("O");
         PlayerPrefs.SetString("lastExitTime", timeNow);
+        // Makinelerin görülme durumunu kaydet
+        for (int i = 0; i < machineLocks.Count; i++)
+        {
+            PlayerPrefs.SetInt($"MachineLock_{i}_Seen", machineLocks[i].hasBeenSeen ? 1 : 0);
+        }
 
         PlayerPrefs.Save();
     }
@@ -603,9 +654,14 @@ public class IncomeManager : MonoBehaviour
                 products[i].hasBeenSeen = PlayerPrefs.GetInt(seenKey) == 1;
 
             }
-        } // DÜZELTME: Kapanmayan for döngüsü parantezi buraya eklendi!
+            
+        }
+        // Makinelerin görülme durumunu yükle
+        for (int m = 0; m < machineLocks.Count; m++)
+        {
+            machineLocks[m].hasBeenSeen = PlayerPrefs.GetInt($"MachineLock_{m}_Seen", 0) == 1;
+        }
 
-        // 2. Genel Ekonomik Verileri Yükle
         // InvariantCulture kullanarak farklı cihaz dillerinde oluşabilecek nokta/virgül hatasını önlüyoruz
         string totalMoneyStr = PlayerPrefs.GetString("TotalMoney", "110");
         totalMoney = double.Parse(totalMoneyStr, System.Globalization.CultureInfo.InvariantCulture);
@@ -980,22 +1036,31 @@ public class IncomeManager : MonoBehaviour
     public void RefreshUpgradeArrows()
     {
         // Panel objesini bul ve onun içindeki UpdateUpgradeArrow fonksiyonunu tetikle
-        var panel = FindObjectOfType<ProductPurchasePanel>(true);
+        var panel = FindFirstObjectByType<ProductPurchasePanel>(FindObjectsInactive.Include);
         if (panel != null)
         {
             panel.UpdateUpgradeArrow();
         }
     }
-
-    // Paramızın henüz açılmamış bir makineye yetip yetmediğini kontrol eder
     public bool CanAffordMachine(ProductType type)
     {
         foreach (var m in machineLocks)
         {
-            // Eğer o türde bir makine varsa, henüz AÇILMAMIŞSA ve paramız YETİYORSA
-            if (m.type == type && !IsMachineUnlocked(type) && totalMoney >= m.price)
+            // Parası yetiyorsa ve daha önce görülmediyse
+            if (m.type == type && !IsMachineUnlocked(type) && totalMoney >= m.price && !m.hasBeenSeen)
             {
-                return true;
+                // YENİ: Butonun LockManager tarafından açılıp açılmadığını kontrol et
+                if (m.buyButton != null)
+                {
+                    UnityEngine.UI.Button btn = m.buyButton.GetComponent<UnityEngine.UI.Button>();
+                    // Eğer buton varsa ve hala kilitliyse (tıklanamıyorsa), bildirim GÖSTERME
+                    if (btn != null && !btn.interactable)
+                    {
+                        continue;
+                    }
+                }
+
+                return true; // Şartlar sağlandı, bildirim yanabilir!
             }
         }
         return false;

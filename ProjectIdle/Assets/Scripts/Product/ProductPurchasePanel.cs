@@ -43,32 +43,27 @@ public class ProductPurchasePanel : MonoBehaviour
 
     private void OnEnable()
     {
-        // --- YENİ EKLENEN KISIM: Panel ekranda görünür olduğunda çalışır ---
+        // --- BİLDİRİM SİLME KISMI BURAYA GERİ DÖNDÜ ---
+        // Panel her görünür olduğunda (butonla açıldığında) otomatik çalışır
         if (IncomeManager.Instance != null && NotificationManager.Instance != null)
         {
-            var im = IncomeManager.Instance;
-
-            // Index sınırların içinde mi kontrol et
-            if (productIndex >= 0 && productIndex < im.products.Count)
+            if (productIndex >= 0 && productIndex < IncomeManager.Instance.products.Count)
             {
-                var product = im.products[productIndex];
+                var product = IncomeManager.Instance.products[productIndex];
 
-                Debug.Log($"<color=cyan>[PANEL AÇILDI]</color> Index: {productIndex} | Ürün: {product.config.productName}");
-
-                // Ürün daha önce GÖRÜLMEDİYSE (Yeni açıldıysa)
-                if (product.isNewlyUnlocked && !product.hasBeenSeen)
+                // Ürün yeni açıldıysa veya henüz popup'ı görülmediyse
+                if (product.isNewlyUnlocked || !product.hasBeenSeen)
                 {
-                    Debug.Log($"<color=green>[BİLDİRİM SİLİNDİ]</color> {product.config.productName} paneline tıklandı ve bildirim kapatıldı!");
-
+                    // Artık görüldü olarak işaretle
                     product.isNewlyUnlocked = false;
                     product.hasBeenSeen = true;
 
-                    // Bildirim ikonlarını tekrar kontrol ettiriyoruz
-                    NotificationManager.Instance.CheckAndUpdateAllNotifications(im.products);
+                    // Sadece bu ürün görüldüğü için ana bildirim ikonlarını tekrar hesapla
+                    NotificationManager.Instance.CheckAndUpdateAllNotifications(IncomeManager.Instance.products);
                 }
             }
         }
-        // -----------------------------------------------------------------
+        // ----------------------------------------------
 
         Refresh();
     }
@@ -80,7 +75,6 @@ public class ProductPurchasePanel : MonoBehaviour
         var im = IncomeManager.Instance;
         if (im == null || productIndex < 0 || productIndex >= im.products.Count) return;
 
-        // Only refresh if data actually changed
         if (_lastMoney != im.totalMoney || _lastLevel != P.level || _lastMode != im.currentBuyMode)
         {
             Refresh();
@@ -90,38 +84,7 @@ public class ProductPurchasePanel : MonoBehaviour
     public void ShowForProduct(int index)
     {
         productIndex = index;
-        gameObject.SetActive(true);
-
-        // --- DEDEKTİF KISMI BAŞLIYOR ---
-        if (IncomeManager.Instance != null && NotificationManager.Instance != null)
-        {
-            var product = IncomeManager.Instance.products[index];
-
-            // Konsola ürünün şu anki durumunu yazdırıyoruz
-            Debug.Log($"<color=cyan>[PANEL AÇILDI]</color> Tıklanan: {product.config.productName} | NewlyUnlocked: {product.isNewlyUnlocked} | HasBeenSeen: {product.hasBeenSeen}");
-
-            // Ürün daha önce GÖRÜLMEDİYSE (Yeni açıldıysa)
-            if (!product.hasBeenSeen)
-            {
-                Debug.Log($"<color=green>[BİLDİRİM SİLİNİYOR]</color> {product.config.productName} artık görüldü olarak işaretlendi!");
-
-                product.isNewlyUnlocked = false;
-                product.hasBeenSeen = true;
-
-                // Durum değiştiği için bildirim ikonlarını tekrar kontrol ettiriyoruz
-                NotificationManager.Instance.CheckAndUpdateAllNotifications(IncomeManager.Instance.products);
-            }
-            else
-            {
-                Debug.Log($"<color=yellow>[BİLGİ]</color> {product.config.productName} zaten daha önceden görülmüş, bildirim silme kodu atlandı.");
-            }
-        }
-        else
-        {
-            Debug.LogError("<color=red>[HATA]</color> IncomeManager veya NotificationManager bulunamadı!");
-        }
-        // ---------------------------------------------
-
+        gameObject.SetActive(true); // Bu satır çalıştığı an otomatik olarak yukarıdaki OnEnable() tetiklenir!
         Refresh();
     }
 
@@ -129,7 +92,6 @@ public class ProductPurchasePanel : MonoBehaviour
     {
         IncomeManager.Instance.UpgradeProduct(productIndex);
         Refresh();
-        // Update arrows globally after a purchase
         UpdateUpgradeArrow();
     }
 
@@ -156,7 +118,6 @@ public class ProductPurchasePanel : MonoBehaviour
     }
     #endregion
 
-    // --- RESTORED METHOD ---
     public void UpdateUpgradeArrow()
     {
         var im = IncomeManager.Instance;
@@ -180,7 +141,6 @@ public class ProductPurchasePanel : MonoBehaviour
                 double cost = im.CalculateTotalCost(product, levelsToBuy);
                 bool canAfford = im.totalMoney >= cost;
 
-                // Toggle the arrow based on affordability
                 product.upgradeArrow.SetActive(canAfford);
             }
         }
@@ -193,11 +153,9 @@ public class ProductPurchasePanel : MonoBehaviour
 
         if (titleText != null) titleText.text = P.config.productName;
 
-        // 1. Current Income
         if (currentIncomeText != null)
             currentIncomeText.text = IncomeManager.FormatMoneyStatic(P.GetIncome()) + "/s";
 
-        // 2. Calculate Levels to Buy
         int levelsToBuy = im.currentBuyMode switch
         {
             IncomeManager.BuyMode.x1 => 1,
@@ -210,7 +168,6 @@ public class ProductPurchasePanel : MonoBehaviour
         double totalCost = im.CalculateTotalCost(P, levelsToBuy);
         bool canAfford = im.totalMoney >= totalCost;
 
-        // 3. Update Buy Button & Cost
         if (costText != null)
         {
             costText.text = IncomeManager.FormatMoneyStatic(totalCost);
@@ -231,11 +188,10 @@ public class ProductPurchasePanel : MonoBehaviour
             buyButtonLabel.color = canAfford ? affordableTextColor : unaffordableTextColor;
         }
 
-        // 4. Income Difference Prediction
         int originalLevel = P.level;
         P.level = originalLevel + levelsToBuy;
         double newIncome = P.GetIncome();
-        P.level = originalLevel; // Reset back
+        P.level = originalLevel;
 
         double incomeDiff = newIncome - P.GetIncome();
 
@@ -243,9 +199,7 @@ public class ProductPurchasePanel : MonoBehaviour
         {
             if (incomeDiff > 0)
             {
-                // Fark 0'dan b�y�kse, en az 0.1 olacak �ekilde s�n�rla
                 double visibleDiff = System.Math.Max(incomeDiff, 0.1);
-
                 incomeIncreaseText.text = "+" + IncomeManager.FormatMoneyStatic(visibleDiff) + "/s";
 
                 if (ColorUtility.TryParseHtmlString("#1CC717", out Color customGreen))
@@ -260,7 +214,6 @@ public class ProductPurchasePanel : MonoBehaviour
         if (nextIncomeText != null)
             nextIncomeText.text = IncomeManager.FormatMoneyStatic(newIncome) + "/s";
 
-        // 5. Update Cache
         _lastMoney = im.totalMoney;
         _lastLevel = P.level;
         _lastMode = im.currentBuyMode;
